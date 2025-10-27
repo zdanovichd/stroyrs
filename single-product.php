@@ -30,6 +30,9 @@
                         </h1>
                     </div>
                 </div>
+                <div class="product__content">
+                    
+                </div>
             </div>
         </section>
 
