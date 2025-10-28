@@ -46,11 +46,11 @@
         <section class="categories">
             <div class="categories__wrapper">
                 <article class="category">
-                    <img src="https://placehold.co/300x265" alt="Сортовой прокат" class="category__image" />
-                    <a href="#" class="category__title-link">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/categ/категория.png" alt="Сортовой прокат" class="category__image" />
+                    <a href="/product-category/sortovoi-prokat/" class="category__title-link">
                         <p class="category__title">Сортовой прокат</p>
                     </a>
-                    <a href="#" class="category__button" aria-label="Открыть категорию">
+                    <a href="/product-category/sortovoi-prokat/" class="category__button" aria-label="Открыть категорию">
                         <span class="category__icon">
                             <svg viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1 12.5L13 0.5M13 0.5V9.09701M13 0.5H3.91429" stroke="white"
@@ -61,11 +61,11 @@
                 </article>
 
                 <article class="category category--wide">
-                    <img src="https://placehold.co/450x265" alt="Метизы" class="category__image" />
-                    <a href="#" class="category__title-link">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/categ/категория-2.png" alt="Метизы" class="category__image" />
+                    <a href="/product-category/metizy/" class="category__title-link">
                         <p class="category__title">Метизы</p>
                     </a>
-                    <a href="#" class="category__button" aria-label="Открыть категорию">
+                    <a href="/product-category/metizy/" class="category__button" aria-label="Открыть категорию">
                         <span class="category__icon">
                             <svg viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1 12.5L13 0.5M13 0.5V9.09701M13 0.5H3.91429" stroke="white"
@@ -76,11 +76,11 @@
                 </article>
 
                 <article class="category">
-                    <img src="https://placehold.co/300x265" alt="Листовой прокат" class="category__image" />
-                    <a href="#" class="category__title-link">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/categ/категория-3.png" alt="Листовой прокат" class="category__image" />
+                    <a href="/product-category/listovoj-prokat/" class="category__title-link">
                         <p class="category__title">Листовой прокат</p>
                     </a>
-                    <a href="#" class="category__button" aria-label="Открыть категорию">
+                    <a href="/product-category/listovoj-prokat/" class="category__button" aria-label="Открыть категорию">
                         <span class="category__icon">
                             <svg viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1 12.5L13 0.5M13 0.5V9.09701M13 0.5H3.91429" stroke="white"
@@ -90,72 +90,12 @@
                     </a>
                 </article>
 
-                <article class="category">
-                    <img src="https://placehold.co/300x265" alt="Цветные металлы" class="category__image" />
-                    <a href="#" class="category__title-link">
-                        <p class="category__title">Цветные металлы</p>
-                    </a>
-                    <a href="#" class="category__button" aria-label="Открыть категорию">
-                        <span class="category__icon">
-                            <svg viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 12.5L13 0.5M13 0.5V9.09701M13 0.5H3.91429" stroke="white"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </span>
-                    </a>
-                </article>
-
-                <article class="category">
-                    <img src="https://placehold.co/300x265" alt="Нержавеющая сталь" class="category__image" />
-                    <a href="#" class="category__title-link">
-                        <p class="category__title">Нержавеющая сталь</p>
-                    </a>
-                    <a href="#" class="category__button" aria-label="Открыть категорию">
-                        <span class="category__icon">
-                            <svg viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 12.5L13 0.5M13 0.5V9.09701M13 0.5H3.91429" stroke="white"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </span>
-                    </a>
-                </article>
-
-                <article class="category">
-                    <img src="https://placehold.co/300x265" alt="Трубы бесшовные" class="category__image" />
-                    <a href="#" class="category__title-link">
-                        <p class="category__title">Трубы бесшовные</p>
-                    </a>
-                    <a href="#" class="category__button" aria-label="Открыть категорию">
-                        <span class="category__icon">
-                            <svg viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 12.5L13 0.5M13 0.5V9.09701M13 0.5H3.91429" stroke="white"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </span>
-                    </a>
-                </article>
-
-                <article class="category category--wide">
-                    <img src="https://placehold.co/450x265" alt="Трубы" class="category__image" />
-                    <a href="#" class="category__title-link">
+                <article class="category category">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/categ/категория-5.png" alt="Трубы" class="category__image" />
+                    <a href="/product-category/truba-profilnaya/" class="category__title-link">
                         <p class="category__title">Трубы</p>
                     </a>
-                    <a href="#" class="category__button" aria-label="Открыть категорию">
-                        <span class="category__icon">
-                            <svg viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 12.5L13 0.5M13 0.5V9.09701M13 0.5H3.91429" stroke="white"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </span>
-                    </a>
-                </article>
-
-                <article class="category">
-                    <img src="https://placehold.co/300x265" alt="ВГП, электросварные трубы" class="category__image" />
-                    <a href="#" class="category__title-link">
-                        <p class="category__title">ВГП, электросварные трубы</p>
-                    </a>
-                    <a href="#" class="category__button" aria-label="Открыть категорию">
+                    <a href="/product-category/truba-profilnaya/" class="category__button" aria-label="Открыть категорию">
                         <span class="category__icon">
                             <svg viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1 12.5L13 0.5M13 0.5V9.09701M13 0.5H3.91429" stroke="white"
@@ -166,11 +106,11 @@
                 </article>
 
                 <article class="category category--wide">
-                    <img src="https://placehold.co/450x265" alt="Инженерные системы" class="category__image" />
-                    <a href="#" class="category__title-link">
-                        <p class="category__title">Инженерные системы</p>
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/categ/категория-6.png" alt="ВГП, электросварные трубы" class="category__image" />
+                    <a href="/product-category/truba-kruglaya/" class="category__title-link">
+                        <p class="category__title">ВГП, электросварные трубы</p>
                     </a>
-                    <a href="#" class="category__button" aria-label="Открыть категорию">
+                    <a href="/product-category/truba-kruglaya/" class="category__button" aria-label="Открыть категорию">
                         <span class="category__icon">
                             <svg viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1 12.5L13 0.5M13 0.5V9.09701M13 0.5H3.91429" stroke="white"
@@ -181,11 +121,11 @@
                 </article>
 
                 <article class="category">
-                    <img src="https://placehold.co/300x265" alt="Сетка металлическая" class="category__image" />
-                    <a href="#" class="category__title-link">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/categ/категория-7.png" alt="Сетка металлическая" class="category__image" />
+                    <a href="/product-category/setka-metallicheskaya/" class="category__title-link">
                         <p class="category__title">Сетка металлическая</p>
                     </a>
-                    <a href="#" class="category__button" aria-label="Открыть категорию">
+                    <a href="/product-category/setka-metallicheskaya/" class="category__button" aria-label="Открыть категорию">
                         <span class="category__icon">
                             <svg viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1 12.5L13 0.5M13 0.5V9.09701M13 0.5H3.91429" stroke="white"
@@ -225,89 +165,46 @@
             <div class="popular-products__slider swiper">
                 <div class="swiper-wrapper">
                     <!-- Пример одного слайда -->
-                    <div class="swiper-slide product-card">
-                        <img src="https://placehold.co/320x283" alt="Арматура" class="product-card__image" />
-                        <div class="product-card__content">
-                            <h3 class="product-card__name">Арматура</h3>
-                            <div class="product-card__price">
-                                <span class="product-card__price-label">Цена:</span>
-                                <span class="product-card__price-value">10 000 ₽</span>
-                            </div>
-                            <button class="product-card__button">Добавить в корзину</button>
-                        </div>
-                    </div>
+                    <?php
+$args = array(
+    'post_type' => 'product',
+    'posts_per_page' => 7,
+    'post_status' => 'publish',
+    'meta_query' => array(
+        array(
+            'key' => '_stock_status',
+            'value' => 'instock'
+        )
+    )
+);
 
-                    <div class="swiper-slide product-card">
-                        <img src="https://placehold.co/320x283" alt="Арматура" class="product-card__image" />
-                        <div class="product-card__content">
-                            <h3 class="product-card__name">Арматура</h3>
-                            <div class="product-card__price">
-                                <span class="product-card__price-label">Цена:</span>
-                                <span class="product-card__price-value">10 000 ₽</span>
-                            </div>
-                            <button class="product-card__button">Добавить в корзину</button>
-                        </div>
-                    </div>
+$products = new WP_Query($args);
 
-                    <div class="swiper-slide product-card">
-                        <img src="https://placehold.co/320x283" alt="Арматура" class="product-card__image" />
-                        <div class="product-card__content">
-                            <h3 class="product-card__name">Арматура</h3>
-                            <div class="product-card__price">
-                                <span class="product-card__price-label">Цена:</span>
-                                <span class="product-card__price-value">10 000 ₽</span>
-                            </div>
-                            <button class="product-card__button">Добавить в корзину</button>
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide product-card">
-                        <img src="https://placehold.co/320x283" alt="Арматура" class="product-card__image" />
-                        <div class="product-card__content">
-                            <h3 class="product-card__name">Арматура</h3>
-                            <div class="product-card__price">
-                                <span class="product-card__price-label">Цена:</span>
-                                <span class="product-card__price-value">10 000 ₽</span>
-                            </div>
-                            <button class="product-card__button">Добавить в корзину</button>
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide product-card">
-                        <img src="https://placehold.co/320x283" alt="Арматура" class="product-card__image" />
-                        <div class="product-card__content">
-                            <h3 class="product-card__name">Арматура</h3>
-                            <div class="product-card__price">
-                                <span class="product-card__price-label">Цена:</span>
-                                <span class="product-card__price-value">10 000 ₽</span>
-                            </div>
-                            <button class="product-card__button">Добавить в корзину</button>
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide product-card">
-                        <img src="https://placehold.co/320x283" alt="Арматура" class="product-card__image" />
-                        <div class="product-card__content">
-                            <h3 class="product-card__name">Арматура</h3>
-                            <div class="product-card__price">
-                                <span class="product-card__price-label">Цена:</span>
-                                <span class="product-card__price-value">10 000 ₽</span>
-                            </div>
-                            <button class="product-card__button">Добавить в корзину</button>
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide product-card">
-                        <img src="https://placehold.co/320x283" alt="Арматура" class="product-card__image" />
-                        <div class="product-card__content">
-                            <h3 class="product-card__name">Арматура</h3>
-                            <div class="product-card__price">
-                                <span class="product-card__price-label">Цена:</span>
-                                <span class="product-card__price-value">10 000 ₽</span>
-                            </div>
-                            <button class="product-card__button">Добавить в корзину</button>
-                        </div>
-                    </div>
+if ($products->have_posts()) :
+    while ($products->have_posts()) : $products->the_post();
+        global $product;
+        ?>
+        <div class="swiper-slide product-card">
+            <?php echo $product->get_image('medium', array('class' => 'product-card__image')); ?>
+            
+            <div class="product-card__content">
+                <h3 class="product-card__name"><a href="<?php echo get_permalink($product->get_id()); ?>" class="product-card__link"><?php the_title(); ?></a></h3>
+                <div class="product-card__price">
+                    <span class="product-card__price-label">Цена:</span>
+                    <span class="product-card__price-value"><?php echo $product->get_price(); ?> ₽</span>
+                </div>
+                <button class="product-card__button" data-product-id="<?php echo $product->get_id(); ?>">
+                    Добавить в корзину
+                </button>
+            </div>
+        </div>
+    <?php
+    endwhile;
+    wp_reset_postdata();
+else :
+    echo '<p>Товары не найдены</p>';
+endif;
+?>
                 </div>
             </div>
         </section>
@@ -408,15 +305,15 @@
                 <div class="swiper-wrapper">
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="https://placehold.co/320x283" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/71d3debfe5770f702575ab5ed74c08be5b0c9e93.jpg" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
-                                    <h3 class="project-card__name">Строительство завода</h3>
-                                    <time class="project-card__year" datetime="2025">2025</time>
+                                    <h3 class="project-card__name">Гостинично-деловой комплекс Hilton Moscow Strogino</h3>
+                                    <time class="project-card__year" datetime="2024">2024</time>
                                 </div>
                                 <p class="project-card__description">
-                                    Поставка 500 тонн металлопроката
+                                    Изготовление, поставка и монтаж металлоконструкции для перепланировки помещений спортивного зала
                                 </p>
                             </div>
                         </a>
@@ -424,15 +321,15 @@
 
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="https://placehold.co/320x283" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/2de8c231d98b089186a82d9516ef02d180a506fa.jpg" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
-                                    <h3 class="project-card__name">Строительство завода</h3>
-                                    <time class="project-card__year" datetime="2025">2025</time>
+                                    <h3 class="project-card__name">Металлопрокат для школ</h3>
+                                    <time class="project-card__year" datetime="2024">2024</time>
                                 </div>
                                 <p class="project-card__description">
-                                    Поставка 500 тонн металлопроката
+                                    Поставка металлопроката для программы реконструкции школ 
                                 </p>
                             </div>
                         </a>
@@ -440,15 +337,15 @@
 
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="https://placehold.co/320x283" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/71d3debfe5770f702575ab5ed74c08be5b0c9e93.jpg" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
-                                    <h3 class="project-card__name">Строительство завода</h3>
-                                    <time class="project-card__year" datetime="2025">2025</time>
+                                    <h3 class="project-card__name">Городские поликлиники</h3>
+                                    <time class="project-card__year" datetime="2024">2024</time>
                                 </div>
                                 <p class="project-card__description">
-                                    Поставка 500 тонн металлопроката
+                                    Поставка металлопроката для модернизации медицинских учреждений Москвы
                                 </p>
                             </div>
                         </a>
@@ -456,15 +353,15 @@
 
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="https://placehold.co/320x283" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/2de8c231d98b089186a82d9516ef02d180a506fa.jpg" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
-                                    <h3 class="project-card__name">Строительство завода</h3>
-                                    <time class="project-card__year" datetime="2025">2025</time>
+                                    <h3 class="project-card__name">СберСити</h3>
+                                    <time class="project-card__year" datetime="2024">2024</time>
                                 </div>
                                 <p class="project-card__description">
-                                    Поставка 500 тонн металлопроката
+                                    Более 1000 тонн металлопроката для строительства квартала СБЕРСИТИ
                                 </p>
                             </div>
                         </a>
@@ -472,31 +369,15 @@
 
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="https://placehold.co/320x283" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/71d3debfe5770f702575ab5ed74c08be5b0c9e93.jpg" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
-                                    <h3 class="project-card__name">Строительство завода</h3>
-                                    <time class="project-card__year" datetime="2025">2025</time>
+                                    <h3 class="project-card__name">ОЗЭП на станции «Столбово»</h3>
+                                    <time class="project-card__year" datetime="2024">2024</time>
                                 </div>
                                 <p class="project-card__description">
-                                    Поставка 500 тонн металлопроката
-                                </p>
-                            </div>
-                        </a>
-                    </article>
-
-                    <article class="project-card swiper-slide">
-                        <a href="#" class="project-card__link">
-                            <img src="https://placehold.co/320x283" alt="" class="project-card__image" />
-
-                            <div class="project-card__content">
-                                <div class="project-card__header">
-                                    <h3 class="project-card__name">Строительство завода</h3>
-                                    <time class="project-card__year" datetime="2025">2025</time>
-                                </div>
-                                <p class="project-card__description">
-                                    Поставка 500 тонн металлопроката
+                                    Строительные материалы для ОЗЭП на станции «Столбово» — объединенного здания эксплуатационного персонала Троицкой линии метрополитена.
                                 </p>
                             </div>
                         </a>
@@ -582,7 +463,7 @@
             </div>
         </section>
 
-        <section class="stocks">
+        <!-- <section class="stocks">
             <div class="stocks__wrapper">
                 <div class="stocks__header">
                     <h2 class="stocks__title">
@@ -637,7 +518,7 @@
                     </article>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section class="about">
             <div class="about__top">
@@ -1041,7 +922,7 @@
 
         </section>
 
-        <section class="blog">
+        <!-- <section class="blog">
             <div class="blog__header">
                 <h2 class="blog__title">
                     Блог
@@ -1212,7 +1093,7 @@
                     </article>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section class="contacts">
             <div class="contacts__wrapper">
