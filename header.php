@@ -85,7 +85,7 @@ $header_class = is_front_page() ? 'header--dark' : '';
                 <p class="header__description">Оптовая и розничная <br>продажа металлопроката</p>
             </a>
             <div class="header__mail">
-                <a href="mailto:info@email.ru">
+                <a href="mailto:info@stroyrs.ru">
                     <svg viewBox="0 0 24 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_197_646)">
                             <path
@@ -98,7 +98,7 @@ $header_class = is_front_page() ? 'header--dark' : '';
                             </clipPath>
                         </defs>
                     </svg>
-                    info@email.ru
+                    info@stroyrs.ru
                 </a>
             </div>
             <div class="header__contacts">

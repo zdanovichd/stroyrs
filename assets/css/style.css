@@ -1,6 +1,6 @@
 @font-face {
     font-family: "Inter-Tight";
-    src: url("/assets/fonts/InterTight-VariableFont_wght.ttf") format("truetype");
+    src: url("../fonts/InterTight-VariableFont_wght.ttf") format("truetype");
     font-weight: 100 900;
     font-display: swap;
 }
@@ -3545,6 +3545,8 @@ html {
 }
 
 .product-card__buttons .product-card__button {
+    background-color: var(--color-accent);
+    color: var(--color-white);
     width: 100%;
 }
 
