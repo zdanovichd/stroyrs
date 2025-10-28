@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
-	<head>
-	   <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
-		<?php wp_head() ?>
-		<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/swiper-bundle.min.css">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <?php wp_head() ?>
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/swiper-bundle.min.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/style.css">
 
     <script src="<?php echo get_template_directory_uri(); ?>/assets/js/swiper-bundle.min.js" defer></script>
     <script src="<?php echo get_template_directory_uri(); ?>/assets/js/script.js" defer></script>
-	</head>
+</head>
+
 <body>
-     <?php get_header() ?>
-     <main>
+    <?php get_header() ?>
+    <main>
         <section class="hero">
             <img class="hero__banner" src="<?php echo get_template_directory_uri(); ?>/assets/img/banner.webp" alt="">
             <div class="overlay overlay-hero"></div>
@@ -137,7 +139,7 @@
             </div>
         </section>
 
-        <section class="popular-products">
+        <!-- <section class="popular-products">
             <div class="popular-products__header">
                 <h2 class="popular-products__title">
                     <span class="popular-products__title-accent">Популярные</span> товары
@@ -163,51 +165,51 @@
             </div>
 
             <div class="popular-products__slider swiper">
-                <div class="swiper-wrapper">
+                <div class="swiper-wrapper"> -->
                     <!-- Пример одного слайда -->
                     <?php
-$args = array(
-    'post_type' => 'product',
-    'posts_per_page' => 7,
-    'post_status' => 'publish',
-    'meta_query' => array(
-        array(
-            'key' => '_stock_status',
-            'value' => 'instock'
-        )
-    )
-);
+                    // $args = array(
+                    //     'post_type' => 'product',
+                    //     'posts_per_page' => 7,
+                    //     'post_status' => 'publish',
+                    //     'meta_query' => array(
+                    //         array(
+                    //             'key' => '_stock_status',
+                    //             'value' => 'instock'
+                    //         )
+                    //     )
+                    // );
 
-$products = new WP_Query($args);
+                    // $products = new WP_Query($args);
 
-if ($products->have_posts()) :
-    while ($products->have_posts()) : $products->the_post();
-        global $product;
-        ?>
-        <div class="swiper-slide product-card">
-            <?php echo $product->get_image('medium', array('class' => 'product-card__image')); ?>
-            
-            <div class="product-card__content">
-                <h3 class="product-card__name"><a href="<?php echo get_permalink($product->get_id()); ?>" class="product-card__link"><?php the_title(); ?></a></h3>
-                <div class="product-card__price">
-                    <span class="product-card__price-label">Цена:</span>
-                    <span class="product-card__price-value"><?php echo $product->get_price(); ?> ₽</span>
-                </div>
-                <button class="product-card__button" data-product-id="<?php echo $product->get_id(); ?>">
-                    Добавить в корзину
-                </button>
+                    // if ($products->have_posts()) :
+                    //     while ($products->have_posts()) : $products->the_post();
+                    //         global $product;
+                    ?>
+                            <!-- <div class="swiper-slide product-card">
+                                <?php// echo $product->get_image('medium', array('class' => 'product-card__image')); ?>
+
+                                <div class="product-card__content">
+                                    <h3 class="product-card__name"><a href="<?php// echo get_permalink($product->get_id()); ?>" class="product-card__link"><?php// the_title(); ?></a></h3>
+                                    <div class="product-card__price">
+                                        <span class="product-card__price-label">Цена:</span>
+                                        <span class="product-card__price-value"><?php//echo $product->get_price(); ?> ₽</span>
+                                    </div>
+                                    <button class="product-card__button" data-product-id="<?php// echo $product->get_id(); ?>">
+                                        Добавить в корзину
+                                    </button>
+                                </div>
+                            </div> -->
+                    <?php
+                    //     endwhile;
+                    //     wp_reset_postdata();
+                    // else :
+                    //     echo '<p>Товары не найдены</p>';
+                    // endif;
+                    ?>
+                <!-- </div>
             </div>
-        </div>
-    <?php
-    endwhile;
-    wp_reset_postdata();
-else :
-    echo '<p>Товары не найдены</p>';
-endif;
-?>
-                </div>
-            </div>
-        </section>
+        </section> -->
 
         <section class="advantages">
             <div class="advantages__hero">
@@ -1237,6 +1239,7 @@ endif;
         </section>
     </main>
     <?php get_footer() ?>
-	<?php wp_footer() ?>
-	</body>
+    <?php wp_footer() ?>
+</body>
+
 </html>
