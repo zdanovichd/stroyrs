@@ -3683,6 +3683,7 @@ html {
     width: 100%;
     height: 32.9375rem;
     object-fit: cover;
+    cursor: zoom-in;
 }
 
 .product__images-top {

@@ -136,35 +136,35 @@ if (!is_a($product, 'WC_Product')) {
 
                             <ul class="customer-info__list">
                                 <li class="customer-info__item">
-                                    
-                                        <span class="customer-info__label">
-                                                <img class="customer-info__icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/pay.svg" alt="">
-                                            Оплата
-                                        </span>
-                                        <span class="customer-info__text">информация</span>
+
+                                    <span class="customer-info__label">
+                                        <img class="customer-info__icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/pay.svg" alt="">
+                                        Оплата
+                                    </span>
+                                    <span class="customer-info__text">информация</span>
                                 </li>
                                 <li class="customer-info__item">
-                                    
-                                        <span class="customer-info__label">
-                                                <img class="customer-info__icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/delivery-car.svg" alt="">
-                                            Доставка
-                                        </span>
-                                        <span class="customer-info__text">информация</span>
+
+                                    <span class="customer-info__label">
+                                        <img class="customer-info__icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/delivery-car.svg" alt="">
+                                        Доставка
+                                    </span>
+                                    <span class="customer-info__text">информация</span>
                                 </li>
                                 <li class="customer-info__item">
-                                        <span class="customer-info__label">
-                                                <img class="customer-info__icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/backpack.svg" alt="">
-                                            Самовывоз
-                                        </span>
-                                        <span class="customer-info__text">информация</span>
+                                    <span class="customer-info__label">
+                                        <img class="customer-info__icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/backpack.svg" alt="">
+                                        Самовывоз
+                                    </span>
+                                    <span class="customer-info__text">информация</span>
                                 </li>
                                 <li class="customer-info__item">
-                                    
-                                        <span class="customer-info__label">
-                                                <img class="customer-info__icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/back-arrow.svg" alt="">
-                                            Возврат
-                                        </span>
-                                        <span class="customer-info__text">информация</span>
+
+                                    <span class="customer-info__label">
+                                        <img class="customer-info__icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/back-arrow.svg" alt="">
+                                        Возврат
+                                    </span>
+                                    <span class="customer-info__text">информация</span>
                                 </li>
                             </ul>
                         </section>
@@ -182,94 +182,109 @@ if (!is_a($product, 'WC_Product')) {
                             }
                             ?>
                         </div>
-                        
+
                         <?php
-// Получаем данные товара
-// global $product;
+                        // global $product;
+                        // if ( ! is_a( $product, 'WC_Product' ) ) {
+                        //     $product = wc_get_product( get_the_ID() );
+                        // }
+                        // if ( ! $product ) return;
+                        ?>
 
-// Подготовим массивы для цен
-$meter_prices = array();
-$ton_prices = array();
+                        <div class="product__prices">
 
-// Если это вариативный товар
-if ($product->is_type('variable')) {
-    $variations = $product->get_available_variations();
-    
-    foreach ($variations as $variation) {
-        $variation_obj = wc_get_product($variation['variation_id']);
-        $price = $variation_obj->get_price();
-        
-        // Определяем тип цены по атрибутам вариации
-        $attributes = $variation_obj->get_attributes();
-        
-        if (isset($attributes['pa_edinicza-izmereniya'])) {
-            $unit = $attributes['pa_edinicza-izmereniya'];
-            
-            if ($unit == 'metr') {
-                $meter_prices[] = wc_price($price);
-            } elseif ($unit == 'tonna') {
-                $ton_prices[] = wc_price($price);
-            }
-        }
-    }
-} 
-// Если это простой товар
-elseif ($product->is_type('simple')) {
-    $price = $product->get_price();
-    
-    // Можно использовать мета-поля или таксономии для определения типа цены
-    $price_type = get_post_meta($product->get_id(), '_price_type', true);
-    
-    if ($price_type == 'meter') {
-        $meter_prices[] = wc_price($price);
-    } elseif ($price_type == 'ton') {
-        $ton_prices[] = wc_price($price);
-    } else {
-        // Если тип не указан, показываем в обеих категориях
-        $meter_prices[] = wc_price($price);
-        $ton_prices[] = wc_price($price);
-    }
-}
+                            <?php if ($product->is_type('variable')) : ?>
 
-// Убираем дубликаты
-$meter_prices = array_unique($meter_prices);
-$ton_prices = array_unique($ton_prices);
-?>
+                                <?php
+                                $variations = $product->get_available_variations();
+                                $variation_data = [];
 
-<div class="product__prices">
-    <?php if (!empty($meter_prices)) : ?>
-        <div class="product__price-group">
-            <div class="product__price-label">Цена за метр:</div>
-            <?php foreach ($meter_prices as $price) : ?>
-                <div class="product__price-value product__price-value_per-meter"><?php echo $price; ?>/м.п.</div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-    
-    <?php if (!empty($ton_prices)) : ?>
-        <div class="product__price-group">
-            <div class="product__price-label">Цена за тонну:</div>
-            <?php foreach ($ton_prices as $price) : ?>
-                <div class="product__price-value product__price-value_per-ton"><?php echo $price; ?>/т.</div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-</div>
-                        
+                                foreach ($variations as $variation) {
+                                    $var_obj = wc_get_product($variation['variation_id']);
+                                    if (! $var_obj) continue;
+
+                                    $attrs = $variation['attributes'];
+                                    $unit = sanitize_title($attrs['attribute_pa_edinicza-izmereniya'] ?? '');
+
+                                    if (! $unit) continue;
+
+                                    $regular_price = (float) $var_obj->get_regular_price();
+                                    $sale_price    = (float) $var_obj->get_sale_price();
+                                    $active_price  = (float) $var_obj->get_price();
+
+                                    $variation_data[$unit] = [
+                                        'label'         => $unit === 'metr' ? 'Цена за метр' : 'Цена за тонну',
+                                        'regular_price' => $regular_price,
+                                        'sale_price'    => $sale_price,
+                                        'active_price'  => $active_price,
+                                        'suffix'        => $unit === 'metr' ? '/м.п.' : '/т.',
+                                    ];
+                                }
+                                ?>
+
+                                <?php if (! empty($variation_data)) : ?>
+                                    <div class="product__price-group">
+                                        <?php
+                                        $first_key = array_key_first($variation_data);
+                                        foreach ($variation_data as $unit => $data) :
+                                            $checked = $unit === $first_key ? 'checked' : '';
+                                            $is_sale = $data['sale_price'] && $data['sale_price'] < $data['regular_price'];
+                                        ?>
+
+                                            <label class="product__unit-option" style="display:flex;align-items:center;margin-bottom:8px;cursor:pointer;gap:8px;">
+                                                <input
+                                                    type="radio"
+                                                    name="unit"
+                                                    value="<?php echo esc_attr($unit); ?>"
+                                                    <?php echo $checked; ?>
+                                                    style="accent-color:#d40000;width:18px;height:18px;">
+                                                <span class="product__unit-label" style="font-weight:500;"><?php echo esc_html($data['label']); ?>:</span>
+                                                <span class="product__unit-price" style="font-size:18px;font-weight:600;color:#000;">
+                                                    <?php echo wc_price($data['active_price']); ?>
+                                                    <span style="font-size:14px;font-weight:400;color:#555;"><?php echo esc_html($data['suffix']); ?></span>
+                                                </span>
+                                                <?php if ($is_sale) : ?>
+                                                    <span class="product__unit-regular" style="text-decoration:line-through;color:#888;margin-left:4px;">
+                                                        <?php echo wc_price($data['regular_price']) . $data['suffix']; ?>
+                                                    </span>
+                                                <?php endif; ?>
+                                            </label>
+
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
+
+                            <?php elseif ($product->is_type('simple')) : ?>
+
+                                <div class="product__price-group">
+                                    <label class="product__unit-option" style="display:flex;align-items:center;gap:8px;">
+                                        <input type="radio" checked disabled style="accent-color:#d40000;width:18px;height:18px;">
+                                        <span class="product__unit-label" style="font-weight:500;">Цена:</span>
+                                        <span class="product__unit-price" style="font-size:18px;font-weight:600;color:#000;">
+                                            <?php echo $product->get_price_html(); ?>
+                                        </span>
+                                    </label>
+                                </div>
+
+                            <?php endif; ?>
+
+                        </div>
+
+
                         <div class="product__divider"></div>
-                        
+
                         <div class="product__summary">
                             <div class="product__total">
                                 <span class="product__total-label">Общая сумма:</span>
                                 <span class="product__total-value">5 000 ₽</span>
                             </div>
-                            
+
                             <div class="product__weight">
                                 <span class="product__weight-label">Вес:</span>
                                 <span class="product__weight-value">10 кг</span>
                             </div>
                         </div>
-                        
+
                         <div class="product__actions">
                             <button class="product__button product__button_primary" type="button">Добавить в корзину</button>
                             <button class="product__button product__button_secondary" type="button">Купить в один клик</button>

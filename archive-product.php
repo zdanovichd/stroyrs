@@ -78,7 +78,7 @@
                     </div>
 
                 </div>
-                <div class="tag-cloud">
+                <!-- <div class="tag-cloud">
                     <p class="tag-cloud__description">Часто ищут:</p>
                     <div class="tag-cloud__inner">
                         <a href="#" class="tag-cloud__item">Кликабельный тег</a>
@@ -89,7 +89,7 @@
                         <a href="#" class="tag-cloud__item">Тег</a>
                         <a href="#" class="tag-cloud__item">Тег</a>
                     </div>
-                </div>
+                </div> -->
                 <div class="catalog__content">
 
                     <!-- ФИЛЬТРЫ -->
@@ -274,8 +274,6 @@
 
                     </aside>
 
-
-
                     <!-- СПИСОК ТОВАРОВ -->
                     <section class="catalog-grid" aria-labelledby="catalog-grid-title">
                         <!-- <div class="catalog-grid__items"> -->
@@ -399,7 +397,7 @@
                             echo __('No products found');
                         }
                         ?>
-                        <div class="tag-cloud">
+                        <!-- <div class="tag-cloud">
                             <div class="tag-cloud__inner">
                                 <a href="#" class="tag-cloud__item">Кликабельный тег</a>
                                 <a href="#" class="tag-cloud__item">Тег</a>
@@ -409,7 +407,7 @@
                                 <a href="#" class="tag-cloud__item">Тег</a>
                                 <a href="#" class="tag-cloud__item">Тег</a>
                             </div>
-                        </div>
+                        </div> -->
                     </section>
 
                 </div>
