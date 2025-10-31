@@ -294,7 +294,7 @@ if (!is_a($product, 'WC_Product')) {
             </div>
         </section>
 
-        <section class="popular-products popular-products-catalog">
+        <!-- <section class="popular-products popular-products-catalog">
             <div class="popular-products__header">
                 <h2 class="popular-products__title">
                     <span class="popular-products__title-accent">Популярные</span> товары
@@ -321,7 +321,6 @@ if (!is_a($product, 'WC_Product')) {
 
             <div class="popular-products__slider swiper">
                 <div class="swiper-wrapper">
-                    <!-- Пример одного слайда -->
                     <article class="swiper-slide product-card product-card-catalog">
                         <img src="https://placehold.co/320x283" alt="Арматура" class="product-card__image" />
                         <div class="product-card__content">
@@ -582,7 +581,17 @@ if (!is_a($product, 'WC_Product')) {
                     </article>
                 </div>
             </div>
-        </section>
+        </section> -->
+
+        <?php 
+            get_template_part(
+                'template-parts/popular-products', 
+                '',
+                array( // массив с параметрами
+                    'title' => '<span>Популярные</span> товары'
+                )
+            );
+        ?>
 
         <section class="text-block">
             <div class="text-block__wrapper">

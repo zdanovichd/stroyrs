@@ -582,6 +582,16 @@ html {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    transition: var(--transition-default);
+}
+
+.category__link {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: inherit;
+    text-decoration: none;
+    height: 100%;
 }
 
 .category:hover {
@@ -669,7 +679,7 @@ html {
     color: var(--color-black);
 }
 
-.popular-products__title-accent {
+.popular-products__title span {
     color: var(--color-accent);
 }
 
