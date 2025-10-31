@@ -7,16 +7,9 @@ if (!is_a($product, 'WC_Product')) {
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <?php wp_head() ?>
-    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/swiper-bundle.min.css">
-    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/style.css">
-
-    <script src="<?php echo get_template_directory_uri(); ?>/assets/js/swiper-bundle.min.js" defer></script>
-    <script src="<?php echo get_template_directory_uri(); ?>/assets/js/script.js" defer></script>
-</head>
+<?php 
+    get_template_part('template-parts/head');
+?>
 
 <body>
     <?php get_header() ?>

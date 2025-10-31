@@ -749,6 +749,13 @@ html {
     height: 17.6875rem;
     object-fit: cover;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), white;
+
+}
+
+.product-card__image,
+.product__image {
+    z-index: -1;
+    filter: brightness(90%);
 }
 
 .product-card__content {
@@ -3564,6 +3571,9 @@ html {
     background-color: var(--color-accent);
     color: var(--color-white);
     width: 100%;
+    display: flex;
+    align-items:center;
+    justify-content: center;
 }
 
 .product-card__favorite {
@@ -3704,6 +3714,7 @@ html {
     flex-direction: row;
     align-items: center;
     justify-content: end;
+    z-index: 1;
 }
 
 .product__images-sale {
