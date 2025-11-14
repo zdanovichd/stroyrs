@@ -408,7 +408,7 @@
             </div>
         </section>
 
-        <section class="popular-products popular-products-catalog">
+        <!-- <section class="popular-products popular-products-catalog">
             <div class="popular-products__header">
                 <h2 class="popular-products__title">
                     <span class="popular-products__title-accent">Популярные</span> товары
@@ -435,7 +435,6 @@
 
             <div class="popular-products__slider swiper">
                 <div class="swiper-wrapper">
-                    <!-- Пример одного слайда -->
                     <article class="swiper-slide product-card product-card-catalog">
                         <img src="https://placehold.co/320x283" alt="Арматура" class="product-card__image" />
                         <div class="product-card__content">
@@ -696,9 +695,9 @@
                     </article>
                 </div>
             </div>
-        </section>
+        </section> -->
 
-        <section class="text-block">
+        <!-- <section class="text-block">
             <div class="text-block__wrapper">
                 <h2 class="text-block__title">
                     <span>Сео</span> текст
@@ -713,7 +712,7 @@
                     </p>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section class="consult">
             <div class="consult__wrapper">

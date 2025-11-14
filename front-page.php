@@ -43,13 +43,13 @@
         ?>
 
         <?php 
-            get_template_part(
-                'template-parts/popular-products', 
-                '',
-                array( // массив с параметрами
-                    'title' => '<span>Популярные</span> товары'
-                )
-            );
+            // get_template_part(
+            //     'template-parts/popular-products', 
+            //     '',
+            //     array( // массив с параметрами
+            //         'title' => '<span>Популярные</span> товары'
+            //     )
+            // );
         ?>
 
 
