@@ -155,7 +155,7 @@
 
 
                         <!-- Фильтры -->
-                        <div class="sidebar-filters">
+                        <!-- <div class="sidebar-filters">
                             <div class="filters__header">
                                 <h2 class="filters__title">Фильтры</h2>
                                 <button class="filters__clear" disabled>Очистить</button>
@@ -263,7 +263,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                     </aside>
 
