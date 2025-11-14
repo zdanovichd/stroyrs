@@ -7,7 +7,7 @@
 
 <body>
     <?php get_header() ?>
-    <main>
+    <main class="main-page">
         <section class="hero">
             <img class="hero__banner" src="<?php echo get_template_directory_uri(); ?>/assets/img/banner.webp" alt="">
             <div class="overlay overlay-hero"></div>

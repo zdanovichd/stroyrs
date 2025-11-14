@@ -1,6 +1,10 @@
 <?php
 
-add_theme_support('woocommerce');
+
+add_action( 'after_setup_theme', 'woocommerce_support' );
+function woocommerce_support() {
+    add_theme_support( 'woocommerce' );
+}
 
 
 // В functions.php добавляем кастомизацию хлебных крошек
@@ -19,31 +23,6 @@ function custom_woocommerce_breadcrumbs() {
         'home'        => 'Главная',
     );
 }
-
-// Добавляем микроразметку для хлебных крошек
-// add_filter('woocommerce_breadcrumb_main_term', 'add_breadcrumb_schema_markup');
-// function add_breadcrumb_schema_markup($breadcrumb) {
-//     static $position = 1;
-    
-//     if (isset($breadcrumb[1])) {
-//         $breadcrumb[1] = str_replace(
-//             '<li class="breadcrumb__item"',
-//             '<li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"',
-//             $breadcrumb[1]
-//         );
-        
-//         // Добавляем мета-теги с позицией
-//         $breadcrumb[1] = str_replace(
-//             '</a>',
-//             '</a><meta itemprop="position" content="' . $position . '" />',
-//             $breadcrumb[1]
-//         );
-        
-//         $position++;
-//     }
-    
-//     return $breadcrumb;
-// }
 
 
 // Обработчик AJAX для бесконечной прокрутки
@@ -107,4 +86,339 @@ function wrap_first_word($title) {
         return '<span>' . $words[0] . '</span> ' . $words[1];
     }
     return '<span>' . $title . '</span>';
+}
+
+add_action( 'woocommerce_after_quantity_input_field', 'ab_quantity_plus' );
+  
+function ab_quantity_plus() {
+   echo '<div class="plus"><span>&plus;</span></div>';
+}
+  
+add_action( 'woocommerce_before_quantity_input_field', 'ab_quantity_minus' );
+  
+function ab_quantity_minus() {
+   echo '<div class="minus"><span>&minus;</span></div>';
+}
+
+
+// переопределение шаблона товара
+add_filter('template_include', function($template) {
+    if (is_singular('product')) {
+        // Путь к твоему кастомному шаблону
+        $custom_template = get_stylesheet_directory() . '/woocommerce/single-product.php';
+        if (file_exists($custom_template)) {
+            return $custom_template;
+        }
+    }
+    return $template;
+}, 99);
+
+// переопределение шаблона каталога
+add_filter('template_include', function($template) {
+    // Архив товаров (Shop)
+    if (is_post_type_archive('product')) {
+        $custom_archive = get_stylesheet_directory() . '/woocommerce/archive-product.php';
+        if (file_exists($custom_archive)) {
+            return $custom_archive;
+        }
+    }
+
+    // Архив категории товара или тега товара
+    if (is_tax('product_cat') || is_tax('product_tag')) {
+        $custom_archive = get_stylesheet_directory() . '/woocommerce/archive-product.php';
+        if (file_exists($custom_archive)) {
+            return $custom_archive;
+        }
+    }
+
+    if (is_cart()) {
+        $custom_cart = get_stylesheet_directory() . '/woocommerce/cart/cart.php';
+        if (file_exists($custom_cart)) {
+            return $custom_cart;
+        }
+    }
+
+    return $template;
+}, 99);
+
+
+// Убедитесь что WooCommerce AJAX скрипты загружены
+// function add_woocommerce_ajax_support() {
+//     if (class_exists('WooCommerce')) {
+//         wp_enqueue_script('wc-add-to-cart');
+//         wp_enqueue_script('wc-cart-fragments');
+//     }
+// }
+// add_action('wp_enqueue_scripts', 'add_woocommerce_ajax_support', 20);
+
+add_action('wp_ajax_woocommerce_add_to_cart', 'debug_ajax_add_to_cart', 1);
+add_action('wp_ajax_nopriv_woocommerce_add_to_cart', 'debug_ajax_add_to_cart', 1);
+function debug_ajax_add_to_cart() {
+    error_log(print_r($_POST, true));
+}
+
+
+// Добавьте в functions.php для отладки вариаций
+add_action('wp_ajax_woocommerce_add_to_cart', 'debug_variation_issue', 5);
+add_action('wp_ajax_nopriv_woocommerce_add_to_cart', 'debug_variation_issue', 5);
+
+function debug_variation_issue() {
+    error_log('=== VARIATION DEBUG START ===');
+    
+    // Логируем все полученные данные
+    error_log('POST data: ' . print_r($_POST, true));
+    
+    if (isset($_POST['variation_id'])) {
+        $variation_id = intval($_POST['variation_id']);
+        $product_id = intval($_POST['product_id']);
+        
+        // Проверяем существование вариации
+        $variation = wc_get_product($variation_id);
+        error_log('Variation exists: ' . ($variation ? 'YES' : 'NO'));
+        
+        if ($variation) {
+            error_log('Variation type: ' . $variation->get_type());
+            error_log('Variation status: ' . $variation->get_status());
+            error_log('Variation purchasable: ' . ($variation->is_purchasable() ? 'YES' : 'NO'));
+            error_log('Variation in stock: ' . ($variation->is_in_stock() ? 'YES' : 'NO'));
+            error_log('Variation price: ' . $variation->get_price());
+            error_log('Variation attributes: ' . print_r($variation->get_attributes(), true));
+            
+            // Проверяем родительский товар
+            $parent_product = wc_get_product($product_id);
+            error_log('Parent product exists: ' . ($parent_product ? 'YES' : 'NO'));
+            if ($parent_product) {
+                error_log('Parent product status: ' . $parent_product->get_status());
+                error_log('Parent product purchasable: ' . ($parent_product->is_purchasable() ? 'YES' : 'NO'));
+            }
+        }
+        
+        // Проверяем переданные атрибуты
+        $passed_attributes = array();
+        foreach ($_POST as $key => $value) {
+            if (strpos($key, 'attribute_') === 0) {
+                $passed_attributes[$key] = $value;
+            }
+        }
+        error_log('Passed attributes: ' . print_r($passed_attributes, true));
+    }
+    
+    error_log('=== VARIATION DEBUG END ===');
+}
+
+
+// Обновление количества товара в корзине
+add_action('wp_ajax_custom_update_cart_quantity', 'custom_update_cart_quantity');
+add_action('wp_ajax_nopriv_custom_update_cart_quantity', 'custom_update_cart_quantity');
+function custom_update_cart_quantity() {
+    try {
+        // Проверяем nonce
+        if (!wp_verify_nonce($_POST['nonce'], 'cart-ajax-nonce')) {
+            wp_send_json_error('Invalid nonce');
+            return;
+        }
+
+        // Инициализируем WooCommerce если нужно
+        if (!function_exists('WC')) {
+            wp_send_json_error('WooCommerce not loaded');
+            return;
+        }
+
+        $cart_item_key = sanitize_text_field($_POST['cart_item_key']);
+        $quantity = max(0, intval($_POST['quantity']));
+
+        // Проверяем существование товара в корзине
+        if (!WC()->cart->get_cart_item($cart_item_key)) {
+            wp_send_json_error('Cart item not found');
+            return;
+        }
+
+        // Обновляем количество или удаляем если 0
+        if ($quantity === 0) {
+            WC()->cart->remove_cart_item($cart_item_key);
+        } else {
+            WC()->cart->set_quantity($cart_item_key, $quantity);
+        }
+
+        // Пересчитываем итоги
+        WC()->cart->calculate_totals();
+        
+        // Сохраняем корзину в сессии
+        WC()->cart->set_session();
+        WC()->cart->maybe_set_cart_cookies();
+
+        // Получаем обновленные данные
+        $cart_data = get_cart_ajax_data();
+        wp_send_json_success($cart_data);
+
+    } catch (Exception $e) {
+        wp_send_json_error('Error: ' . $e->getMessage());
+    }
+}
+
+// Удаление товара из корзины
+add_action('wp_ajax_custom_remove_cart_item', 'custom_remove_cart_item');
+add_action('wp_ajax_nopriv_custom_remove_cart_item', 'custom_remove_cart_item');
+function custom_remove_cart_item() {
+    try {
+        // Проверяем nonce
+        if (!wp_verify_nonce($_POST['nonce'], 'cart-ajax-nonce')) {
+            wp_send_json_error('Invalid nonce');
+            return;
+        }
+
+        if (!function_exists('WC')) {
+            wp_send_json_error('WooCommerce not loaded');
+            return;
+        }
+
+        $cart_item_key = sanitize_text_field($_POST['cart_item_key']);
+
+        if (WC()->cart->get_cart_item($cart_item_key)) {
+            WC()->cart->remove_cart_item($cart_item_key);
+            WC()->cart->calculate_totals();
+            WC()->cart->set_session();
+            WC()->cart->maybe_set_cart_cookies();
+        }
+
+        $cart_data = get_cart_ajax_data();
+        wp_send_json_success($cart_data);
+
+    } catch (Exception $e) {
+        wp_send_json_error('Error: ' . $e->getMessage());
+    }
+}
+
+// Массовое удаление товаров из корзины
+add_action('wp_ajax_custom_bulk_remove_cart_items', 'custom_bulk_remove_cart_items');
+add_action('wp_ajax_nopriv_custom_bulk_remove_cart_items', 'custom_bulk_remove_cart_items');
+function custom_bulk_remove_cart_items() {
+    try {
+        // Проверяем nonce
+        if (!wp_verify_nonce($_POST['nonce'], 'cart-ajax-nonce')) {
+            wp_send_json_error('Invalid nonce');
+            return;
+        }
+
+        if (!function_exists('WC')) {
+            wp_send_json_error('WooCommerce not loaded');
+            return;
+        }
+
+        $cart_item_keys = isset($_POST['cart_item_keys']) ? $_POST['cart_item_keys'] : array();
+
+        if (!empty($cart_item_keys) && is_array($cart_item_keys)) {
+            foreach ($cart_item_keys as $cart_item_key) {
+                $cart_item_key = sanitize_text_field($cart_item_key);
+                if (WC()->cart->get_cart_item($cart_item_key)) {
+                    WC()->cart->remove_cart_item($cart_item_key);
+                }
+            }
+            
+            WC()->cart->calculate_totals();
+            WC()->cart->set_session();
+            WC()->cart->maybe_set_cart_cookies();
+        }
+
+        $cart_data = get_cart_ajax_data();
+        wp_send_json_success($cart_data);
+
+    } catch (Exception $e) {
+        wp_send_json_error('Error: ' . $e->getMessage());
+    }
+}
+
+// Вспомогательная функция для получения данных корзины
+function get_cart_ajax_data() {
+    if (!function_exists('WC') || !WC()->cart) {
+        return ['cart_tbody' => '', 'cart_totals' => ''];
+    }
+
+    // Формируем tbody
+    ob_start();
+    foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+        $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
+        
+        if (!$_product || !$_product->exists() || $cart_item['quantity'] <= 0) {
+            continue;
+        }
+
+        $product_permalink = apply_filters('woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink($cart_item) : '', $cart_item, $cart_item_key);
+        ?>
+        <tr class="woocommerce-cart-form__cart-item" data-cart_item_key="<?php echo esc_attr($cart_item_key); ?>">
+            <td class="product-checkbox">
+                <input type="checkbox" class="cart-item-checkbox" value="<?php echo esc_attr($cart_item_key); ?>" name="cart_item[]">
+            </td>
+            <td class="product-thumbnail">
+                <?php
+                $thumbnail = apply_filters('woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key);
+                if ($product_permalink) {
+                    printf('<a href="%s">%s</a>', esc_url($product_permalink), $thumbnail);
+                } else {
+                    echo $thumbnail;
+                }
+                ?>
+            </td>
+            <td class="product-name">
+                <?php
+                if (!$product_permalink) {
+                    echo wp_kses_post(apply_filters('woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key) . '&nbsp;');
+                } else {
+                    echo wp_kses_post(apply_filters('woocommerce_cart_item_name', sprintf('<a href="%s">%s</a>', esc_url($product_permalink), $_product->get_name()), $cart_item, $cart_item_key));
+                }
+                ?>
+            </td>
+            <td class="product-price">
+                <?php
+                echo apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($_product), $cart_item, $cart_item_key);
+                ?>
+            </td>
+            <td class="product-quantity">
+                <?php
+                if ($_product->is_sold_individually()) {
+                    $min_quantity = 1;
+                    $max_quantity = 1;
+                } else {
+                    $min_quantity = 0;
+                    $max_quantity = $_product->get_max_purchase_quantity();
+                }
+
+                $product_quantity = woocommerce_quantity_input(
+                    array(
+                        'input_name'   => "cart[{$cart_item_key}][qty]",
+                        'input_value'  => $cart_item['quantity'],
+                        'max_value'    => $max_quantity,
+                        'min_value'    => $min_quantity,
+                        'product_name' => $_product->get_name(),
+                    ),
+                    $_product,
+                    false
+                );
+
+                echo apply_filters('woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item);
+                ?>
+            </td>
+            <td class="product-subtotal">
+                <?php
+                echo apply_filters('woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal($_product, $cart_item['quantity']), $cart_item, $cart_item_key);
+                ?>
+            </td>
+            <td class="product-remove">
+                <a href="#" class="remove" data-cart_item_key="<?php echo esc_attr($cart_item_key); ?>">&times;</a>
+            </td>
+        </tr>
+        <?php
+    }
+    $cart_tbody = ob_get_clean();
+
+    // Totals
+    ob_start();
+    woocommerce_cart_totals();
+    $cart_totals = ob_get_clean();
+
+    return [
+        'cart_tbody' => $cart_tbody,
+        'cart_totals' => $cart_totals,
+        'items_count' => WC()->cart->get_cart_contents_count()
+    ];
 }

@@ -164,27 +164,27 @@ $header_class = is_front_page() ? 'header--dark' : '';
                         <li class="menu__item">
                             <a class="menu__link" href="/catalog">Каталог</a>
                         </li>
-                        <li class="menu__item">
+                        <!-- <li class="menu__item">
                             <a class="menu__link" href="#">Услуги</a>
-                        </li>
-                        <li class="menu__item">
+                        </li> -->
+                        <!-- <li class="menu__item">
                             <a class="menu__link" href="#">Цены</a>
-                        </li>
-                        <li class="menu__item">
+                        </li> -->
+                        <!-- <li class="menu__item">
                             <a class="menu__link" href="#">Акции</a>
-                        </li>
-                        <li class="menu__item">
+                        </li> -->
+                        <!-- <li class="menu__item">
                             <a class="menu__link" href="#">О компании</a>
-                        </li>
+                        </li> -->
                         <li class="menu__item">
-                            <a class="menu__link" href="#">Контакты</a>
+                            <a class="menu__link" href="/kontakty">Контакты</a>
                         </li>
                     </ul>
                 </nav>
             </noindex>
             <div class="user-actions">
                 <!-- Дропдаун выбора города -->
-                <div class="user-actions__item location">
+                <!-- <div class="user-actions__item location">
                     <div class="city-select">
                         <button class="city-select__trigger" type="button" aria-expanded="false">
                             <svg class="city-select__location" viewBox="0 0 18 23" fill="none"
@@ -242,10 +242,10 @@ $header_class = is_front_page() ? 'header--dark' : '';
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Остальные кнопки -->
-                <div class="user-actions__item">
+                <!-- <div class="user-actions__item">
                     <button class="user-actions__button icon-button" type="button" data-action="favorite">
                         <span class="icon-button__icon">
                             <svg viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -256,9 +256,9 @@ $header_class = is_front_page() ? 'header--dark' : '';
                             </svg>
                         </span>
                     </button>
-                </div>
+                </div> -->
 
-                <div class="user-actions__item">
+                <!-- <div class="user-actions__item">
                     <button class="user-actions__button icon-button" type="button" data-action="search">
                         <span class="icon-button__icon">
                             <svg viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -269,9 +269,9 @@ $header_class = is_front_page() ? 'header--dark' : '';
                             </svg>
                         </span>
                     </button>
-                </div>
+                </div> -->
 
-                <div class="user-actions__item">
+                <!-- <div class="user-actions__item">
                     <button class="user-actions__button icon-button" type="button" data-action="profile">
                         <span class="icon-button__icon">
                             <svg viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -284,10 +284,10 @@ $header_class = is_front_page() ? 'header--dark' : '';
                             </svg>
                         </span>
                     </button>
-                </div>
+                </div> -->
 
                 <div class="user-actions__item">
-                    <button class="user-actions__button icon-button" type="button" data-action="cart">
+                    <a href="<?php echo esc_url( wc_get_cart_url() ); ?>" class="user-actions__button icon-button" type="button" data-action="cart">
                         <span class="icon-button__icon">
                             <!-- svg + rect /w /h -->
                             <svg viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -304,7 +304,7 @@ $header_class = is_front_page() ? 'header--dark' : '';
                             </svg>
 
                         </span>
-                    </button>
+                    </a>
                 </div>
 
                 <div class="user-actions__item">

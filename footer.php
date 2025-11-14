@@ -109,31 +109,29 @@
                     <div class="footer__nav-inner">
                         <div class="footer__menu">
                             <ul>
-                                <li><a href="#">Услуги</a></li>
+                                <!-- <li><a href="#">Услуги</a></li>
                                 <li><a href="#">Цены</a></li>
                                 <li><a href="#">Акции</a></li>
-                                <li><a href="#">О компании</a></li>
-                                <li><a href="#">Контакты</a></li>
-                                <li><a href="#">Доставка и оплата</a></li>
+                                <li><a href="#">О компании</a></li> -->
+                                <li><a href="/kontakty">Контакты</a></li>
+                                <!-- <li><a href="#">Доставка и оплата</a></li>
                                 <li><a href="#">Блог</a></li>
                                 <li><a href="#">Отзывы</a></li>
-                                <li><a href="#">FAQ</a></li>
+                                <li><a href="#">FAQ</a></li> -->
                             </ul>
                         </div>
 
                         <div class="footer__catalog">
                             <p class="footer__title">Каталог:</p>
                             <ul>
-                                <li><a href="#">Сортовой прокат</a></li>
-                                <li><a href="#">Метизы</a></li>
-                                <li><a href="#">Листовой прокат</a></li>
-                                <li><a href="#">Цветные металлы</a></li>
-                                <li><a href="#">Нержавеющая сталь</a></li>
-                                <li><a href="#">Трубы бесшовные</a></li>
-                                <li><a href="#">Трубы</a></li>
-                                <li><a href="#">ПВГ, электросварные трубы</a></li>
-                                <li><a href="#">Инженерные системы</a></li>
-                                <li><a href="#">Сетка металлическая</a></li>
+                                <li><a href="/product-category/sortovoi-prokat/">Сортовой прокат</a></li>
+                                <li><a href="/product-category/metizy/">Метизы</a></li>
+                                <li><a href="/product-category/listovoj-prokat/">Листовой прокат</a></li>
+                                <li><a href="/product-category/vgp-elektrosvarnye-truby/">ВГП, электросварные трубы</a></li>
+                                <li><a href="/product-category/setka-metallicheskaya/">Сетка металлическая</a></li>
+                                <li><a href="/product-category/armatura/">Арматура, катанка</a></li>
+                                <li><a href="/product-category/truba-profilnaya/">Трубы</a></li>
+                                <li><a href="/product-category/profnastil/">Профнастил (профлист)</a></li>
                             </ul>
                         </div>
                     </div>
@@ -232,6 +230,9 @@
                 <div class="form__group">
                     <input type="tel" class="form__input" placeholder="Телефон" />
                 </div>
+                <!-- <div class="form__group">
+                    <textarea rows="3" cols="50" class="form__input" placeholder="Комментарий"></textarea>
+                </div> -->
                 <button type="submit" class="button button--red form__button">
                     Оставить заявку
                     <span class="button__icon">

@@ -2,7 +2,7 @@
     <div class="categories__wrapper">
         <article class="category">
             <a href="/product-category/sortovoi-prokat/" class="category__link" aria-label="Сортовой прокат">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/categ/категория-9.png" alt="Сортовой прокат" class="category__image" />
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/categ/категория-18.png" alt="Сортовой прокат" class="category__image" />
                 <p class="category__title">Сортовой прокат</p>
                 <button class="category__button" aria-label="Открыть категорию">
                     <span class="category__icon">
@@ -17,7 +17,7 @@
 
         <article class="category category--wide">
             <a href="/product-category/metizy/" class="category__link" aria-label="Метизы">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/categ/категория-10.png" alt="Метизы" class="category__image" />
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/categ/категория-17.png" alt="Метизы" class="category__image" />
                 <p class="category__title">Метизы</p>
                 <button class="category__button" aria-label="Открыть категорию">
                     <span class="category__icon">

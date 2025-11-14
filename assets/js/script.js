@@ -303,10 +303,10 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
-let breadcrumbs = document.querySelector('.breadcrumbs');
+let main = document.querySelector('main');
 
-if (breadcrumbs) {
-    breadcrumbs.style.paddingTop = `${headerHeight}px`;
+if (main && !main.classList.contains('main-page')) {
+    main.style.paddingTop = `${headerHeight}px`;
 }
 
 
@@ -412,15 +412,12 @@ document.querySelectorAll('.filter-group__toggle').forEach(btn => {
     });
 });
 
-document.querySelectorAll('.product-card__favorite').forEach(btn => {
-
-    btn.addEventListener('click', () => {
-        btn.classList.toggle('product-card__favorite-active');
-        
-    });
-
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.product-card__favorite');
+    if (!btn) return; // клик не по кнопке — выходим
+    
+    btn.classList.toggle('product-card__favorite-active');
 });
-
 
 
 
@@ -511,3 +508,36 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Observer started watching last product');
     }
 });
+
+document.addEventListener('click', function(e) {
+    // Проверяем, был ли клик по кнопке плюс или минус
+    const minusBtn = e.target.closest('.quantity .minus');
+    const plusBtn = e.target.closest('.quantity .plus');
+
+    // Если клик не по нужным кнопкам — ничего не делаем
+    if (!minusBtn && !plusBtn) return;
+
+    // Находим соответствующий input в этой же обертке .quantity
+    const quantity = e.target.closest('.quantity').querySelector('input.qty');
+    if (!quantity) return;
+
+    const step = parseFloat(quantity.step) || 1;
+    const min = parseFloat(quantity.min) || 1;
+    const current = parseFloat(quantity.value) || 0;
+
+    if (minusBtn) {
+        // Уменьшаем
+        const newValue = Math.max(current - step, min);
+        quantity.value = newValue;
+        quantity.dispatchEvent(new Event('change'));
+    }
+
+    if (plusBtn) {
+        // Увеличиваем
+        const newValue = current + step;
+        quantity.value = newValue;
+        quantity.dispatchEvent(new Event('change'));
+    }
+});
+
+
