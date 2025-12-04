@@ -24,68 +24,73 @@
                         <p>
                             <?php
                             if (is_product_category()) {
-                                // Для страницы категории
                                 $current_category = get_queried_object();
                                 echo '[' . $current_category->count . ']';
                             } elseif (is_shop()) {
-                                // Для главной страницы магазина
                                 $product_count = wp_count_posts('product');
                                 echo '[' . $product_count->publish . ']';
-                            } else {
-                                // Для других страниц
-                                echo '';
                             }
                             ?>
                         </p>
                     </div>
-                    <div class="catalog-sort" data-sort>
-                        <button class="catalog-sort__toggle" aria-haspopup="listbox"
-                            aria-labelledby="catalog-sort-label catalog-sort-current" aria-expanded="false"
-                            type="button">
-                            <span class="catalog-sort__current" id="catalog-sort-current">Сначала дешевле</span>
-                            <svg class="catalog-sort__icon" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                                <path d="M16 18V6M16 6L20 10.125M16 6L12 10.125" stroke="#E8364B" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M8 6V18M8 18L12 13.875M8 18L4 13.875" stroke="#E8364B" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
+                    
+                    <!-- Блок сортировки -->
+                    <!-- В секции сортировки обновите выбор по умолчанию -->
+<div class="catalog-sort" data-sort>
+    <button class="catalog-sort__toggle" aria-haspopup="listbox"
+        aria-labelledby="catalog-sort-label catalog-sort-current" aria-expanded="false"
+        type="button">
+        <span class="catalog-sort__current" id="catalog-sort-current">
+            <?php 
+            $sort_options = [
+                'default' => 'По умолчанию',
+                'price-asc' => 'Сначала дешевле',
+                'price-desc' => 'Сначала дороже',
+                'rating-desc' => 'По рейтингу',
+                'name-asc' => 'От А до Я',
+                'name-desc' => 'От Я до А'
+            ];
+            
+            $current_sort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
+            echo isset($sort_options[$current_sort]) ? $sort_options[$current_sort] : 'По умолчанию';
+            ?>
+        </span>
+        <svg class="catalog-sort__icon" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <path d="M16 18V6M16 6L20 10.125M16 6L12 10.125" stroke="#E8364B" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M8 6V18M8 18L12 13.875M8 18L4 13.875" stroke="#E8364B" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    </button>
 
-                        </button>
-
-                        <ul class="catalog-sort__menu" role="listbox" aria-labelledby="catalog-sort-label"
-                            tabindex="-1">
-                            <li class="catalog-sort__option catalog-sort__option--selected" role="option"
-                                aria-selected="true" data-value="price-asc">
-                                Сначала дешевле</li>
-                            <li class="catalog-sort__option" role="option" aria-selected="false"
-                                data-value="price-desc">Сначала дороже</li>
-                            <li class="catalog-sort__option" role="option" aria-selected="false"
-                                data-value="rating-desc">Рейтинг по убыванию</li>
-
-                            <li class="catalog-sort__option" role="option" aria-selected="false" data-value="name-asc">
-                                От А до Я</li>
-                            <li class="catalog-sort__option" role="option" aria-selected="false" data-value="name-desc">
-                                От Я до А</li>
-                        </ul>
-                    </div>
-
+    <ul class="catalog-sort__menu" role="listbox" aria-labelledby="catalog-sort-label"
+        tabindex="-1">
+        <li class="catalog-sort__option <?php echo ($current_sort == 'default') ? 'catalog-sort__option--selected' : ''; ?>" 
+            role="option" aria-selected="<?php echo ($current_sort == 'default') ? 'true' : 'false'; ?>" 
+            data-value="default">По умолчанию</li>
+        <li class="catalog-sort__option <?php echo ($current_sort == 'price-asc') ? 'catalog-sort__option--selected' : ''; ?>" 
+            role="option" aria-selected="<?php echo ($current_sort == 'price-asc') ? 'true' : 'false'; ?>" 
+            data-value="price-asc">Сначала дешевле</li>
+        <li class="catalog-sort__option <?php echo ($current_sort == 'price-desc') ? 'catalog-sort__option--selected' : ''; ?>" 
+            role="option" aria-selected="<?php echo ($current_sort == 'price-desc') ? 'true' : 'false'; ?>" 
+            data-value="price-desc">Сначала дороже</li>
+        <li class="catalog-sort__option <?php echo ($current_sort == 'rating-desc') ? 'catalog-sort__option--selected' : ''; ?>" 
+            role="option" aria-selected="<?php echo ($current_sort == 'rating-desc') ? 'true' : 'false'; ?>" 
+            data-value="rating-desc">По рейтингу</li>
+        <li class="catalog-sort__option <?php echo ($current_sort == 'name-asc') ? 'catalog-sort__option--selected' : ''; ?>" 
+            role="option" aria-selected="<?php echo ($current_sort == 'name-asc') ? 'true' : 'false'; ?>" 
+            data-value="name-asc">От А до Я</li>
+        <li class="catalog-sort__option <?php echo ($current_sort == 'name-desc') ? 'catalog-sort__option--selected' : ''; ?>" 
+            role="option" aria-selected="<?php echo ($current_sort == 'name-desc') ? 'true' : 'false'; ?>" 
+            data-value="name-desc">От Я до А</li>
+    </ul>
+</div>
                 </div>
-                <!-- <div class="tag-cloud">
-                    <p class="tag-cloud__description">Часто ищут:</p>
-                    <div class="tag-cloud__inner">
-                        <a href="#" class="tag-cloud__item">Кликабельный тег</a>
-                        <a href="#" class="tag-cloud__item">Тег</a>
-                        <a href="#" class="tag-cloud__item">Кликабельный тег</a>
-                        <a href="#" class="tag-cloud__item">Кликабельный тег</a>
-                        <a href="#" class="tag-cloud__item">Кликабельный тег</a>
-                        <a href="#" class="tag-cloud__item">Тег</a>
-                        <a href="#" class="tag-cloud__item">Тег</a>
-                    </div>
-                </div> -->
-                <div class="catalog__content">
 
-                    <!-- ФИЛЬТРЫ -->
+                <div class="catalog__content">
+                    <!-- Фильтры и сайдбар остаются без изменений -->
+                    
                     <aside class="catalog-sidebar" aria-label="Фильтры каталога">
 
                         <!-- Категории -->
@@ -269,144 +274,121 @@
 
                     <!-- СПИСОК ТОВАРОВ -->
                     <section class="catalog-grid" aria-labelledby="catalog-grid-title">
-                        <!-- <div class="catalog-grid__items"> -->
-
                         <?php
-                        // Определяем параметры запроса в зависимости от контекста
-                        // if (is_product_category()) {
-                        //     // Для страницы категории
-                        //     $current_category = get_queried_object();
-                        //     $args = array(
-                        //         'post_type' => 'product',
-                        //         'posts_per_page' => 12,
-                        //         'post_status' => 'publish',
-                        //         'tax_query' => array(
-                        //             array(
-                        //                 'taxonomy' => 'product_cat',
-                        //                 'field' => 'id',
-                        //                 'terms' => $current_category->term_id,
-                        //             )
-                        //         )
-                        //     );
-                        // } elseif (is_shop()) {
-                        //     // Для главной страницы магазина
-                        //     $args = array(
-                        //         'post_type' => 'product',
-                        //         'posts_per_page' => 12,
-                        //         'post_status' => 'publish'
-                        //     );
-                        // } else {
-                        //     // Для других случаев (поиск, теги и т.д.)
-                        //     global $wp_query;
-                        //     $args = $wp_query->query_vars;
-                        //     $args['posts_per_page'] = 12;
-                        // }
+// Получаем текущую сортировку из URL
+$current_sort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
 
-                        // $products = new WP_Query($args);
+// Определяем параметры запроса
+$args = [
+    'post_type' => 'product',
+    'posts_per_page' => 12,
+    'post_status' => 'publish',
+    'paged' => max(1, get_query_var('paged')),
+    'ignore_sticky_posts' => 1,
+];
 
-                        // if ($products->have_posts()) {
-                        //     while ($products->have_posts()) {
-                        //         $products->the_post();
-                        //         wc_get_template_part('content', 'product');
-                        //     }
-                        //     wp_reset_postdata();
-                        // } else {
-                        //     echo __('No products found');
-                        // }
-                        ?>
+// Добавляем сортировку
+switch($current_sort) {
+    case 'price-asc':
+        $args['meta_key'] = '_price';
+        $args['orderby'] = 'meta_value_num';
+        $args['order'] = 'ASC';
+        break;
+        
+    case 'price-desc':
+        $args['meta_key'] = '_price';
+        $args['orderby'] = 'meta_value_num';
+        $args['order'] = 'DESC';
+        break;
+        
+    case 'rating-desc':
+        $args['meta_key'] = '_wc_average_rating';
+        $args['orderby'] = 'meta_value_num';
+        $args['order'] = 'DESC';
+        break;
+        
+    case 'name-asc':
+        $args['orderby'] = 'title';
+        $args['order'] = 'ASC';
+        break;
+        
+    case 'name-desc':
+        $args['orderby'] = 'title';
+        $args['order'] = 'DESC';
+        break;
+        
+    case 'default':
+    default:
+        // Для главной страницы магазина
+        if (is_shop()) {
+            $args['orderby'] = 'menu_order title';
+            $args['order'] = 'ASC';
+        } elseif (is_product_category()) {
+            // Для категорий тоже используем menu_order
+            $args['orderby'] = 'menu_order title';
+            $args['order'] = 'ASC';
+        }
+        break;
+}
 
-                        <!-- другие карточки -->
-                        <!-- </div> -->
-                        <?php
-                        // Определяем параметры запроса в зависимости от контекста
-                        $current_category = null;
+// Добавляем фильтр по категории если мы в категории
+if (is_product_category()) {
+    $current_category = get_queried_object();
+    $args['tax_query'] = [
+        [
+            'taxonomy' => 'product_cat',
+            'field' => 'id',
+            'terms' => $current_category->term_id,
+        ]
+    ];
+}
 
-                        if (is_product_category()) {
-                            // Для страницы категории
-                            $current_category = get_queried_object();
-                            $args = array(
-                                'post_type' => 'product',
-                                'posts_per_page' => 12,
-                                'post_status' => 'publish',
-                                'paged' => 1,
-                            );
+// Применяем фильтр для приоритетной сортировки если это главная страница и сортировка по умолчанию
+if (is_shop() && $current_sort === 'default') {
+    add_filter('posts_clauses', 'custom_priority_orderby', 10, 2);
+}
 
-                            if ($current_category) {
-                                $args['tax_query'] = array(
-                                    array(
-                                        'taxonomy' => 'product_cat',
-                                        'field' => 'id',
-                                        'terms' => $current_category->term_id,
-                                    )
-                                );
-                            }
-                        } elseif (is_shop()) {
-                            // Для главной страницы магазина
-                            $args = array(
-                                'post_type' => 'product',
-                                'posts_per_page' => 12,
-                                'post_status' => 'publish',
-                                'paged' => 1,
-                            );
-                        } else {
-                            // Для других случаев
-                            $args = array(
-                                'post_type' => 'product',
-                                'posts_per_page' => 12,
-                                'post_status' => 'publish',
-                                'paged' => 1,
-                            );
-                        }
+$products = new WP_Query($args);
 
-                        $products = new WP_Query($args);
+// Убираем фильтр после создания запроса
+remove_filter('posts_clauses', 'custom_priority_orderby', 10);
 
-                        if ($products->have_posts()) {
-                            echo '<div class="catalog-grid__items" id="products-container">';
-                            while ($products->have_posts()) {
-                                $products->the_post();
-                                wc_get_template_part('content', 'product');
-                            }
-                            echo '</div>';
-
-                            // Добавляем данные для бесконечной прокрутки
-                            if ($products->max_num_pages > 1) {
-                                $category_id = '';
-                                if ($current_category && is_product_category()) {
-                                    $category_id = $current_category->term_id;
-                                }
-
-                                echo '<div id="infinite-scroll-data" 
-                  data-page="2" 
-                  data-max-pages="' . $products->max_num_pages . '" 
-                  data-category="' . $category_id . '"
-                  data-ajax-url="' . admin_url('admin-ajax.php') . '"></div>';
-                                echo '<div id="infinite-scroll-loader" style="display: none; text-align: center; padding: 20px;">
+if ($products->have_posts()) {
+    echo '<div class="catalog-grid__items" id="products-container">';
+    while ($products->have_posts()) {
+        $products->the_post();
+        wc_get_template_part('content', 'product');
+    }
+    echo '</div>';
+    
+    // Добавляем данные для бесконечной прокрутки
+    if ($products->max_num_pages > 1) {
+        $category_id = '';
+        if (isset($current_category) && is_product_category()) {
+            $category_id = $current_category->term_id;
+        }
+        
+        echo '<div id="infinite-scroll-data" 
+              data-page="2" 
+              data-max-pages="' . $products->max_num_pages . '" 
+              data-category="' . $category_id . '"
+              data-sort="' . $current_sort . '"
+              data-ajax-url="' . admin_url('admin-ajax.php') . '"></div>';
+        echo '<div id="infinite-scroll-loader" style="display: none; text-align: center; padding: 20px;">
                 <div>Загрузка товаров...</div>
               </div>';
-                            }
-
-                            wp_reset_postdata();
-                        } else {
-                            echo __('No products found');
-                        }
-                        ?>
-                        <!-- <div class="tag-cloud">
-                            <div class="tag-cloud__inner">
-                                <a href="#" class="tag-cloud__item">Кликабельный тег</a>
-                                <a href="#" class="tag-cloud__item">Тег</a>
-                                <a href="#" class="tag-cloud__item">Кликабельный тег</a>
-                                <a href="#" class="tag-cloud__item">Кликабельный тег</a>
-                                <a href="#" class="tag-cloud__item">Кликабельный тег</a>
-                                <a href="#" class="tag-cloud__item">Тег</a>
-                                <a href="#" class="tag-cloud__item">Тег</a>
-                            </div>
-                        </div> -->
+    }
+    
+    wp_reset_postdata();
+} else {
+    echo __('No products found');
+}
+?>
                     </section>
-
                 </div>
-
             </div>
         </section>
+
 
         <!-- <section class="popular-products popular-products-catalog">
             <div class="popular-products__header">
@@ -738,6 +720,10 @@
                             </label>
 
                             <button type="submit" class="consult__button">Отправить заявку</button>
+
+                            <div class="consult__policy">
+                                Нажимая «Отправить заявку», вы принимаете условия <a href="/politika-konfidentsialnosti">Политики конфиденциальности</a> и даете согласие на обработку ваших персональных данных
+                            </div>
                         </div>
                     </form>
                 </div>

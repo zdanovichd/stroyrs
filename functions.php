@@ -26,58 +26,58 @@ function custom_woocommerce_breadcrumbs() {
 
 
 // Обработчик AJAX для бесконечной прокрутки
-add_action('wp_ajax_load_more_products', 'load_more_products_handler');
-add_action('wp_ajax_nopriv_load_more_products', 'load_more_products_handler');
+// add_action('wp_ajax_load_more_products', 'load_more_products_handler');
+// add_action('wp_ajax_nopriv_load_more_products', 'load_more_products_handler');
 
-function load_more_products_handler() {
-    // Логируем полученные данные
-    error_log('AJAX Request: ' . print_r($_POST, true));
+// function load_more_products_handler() {
+//     // Логируем полученные данные
+//     error_log('AJAX Request: ' . print_r($_POST, true));
     
-    $page = intval($_POST['page']);
-    $posts_per_page = intval($_POST['posts_per_page']) ?: 12;
+//     $page = intval($_POST['page']);
+//     $posts_per_page = intval($_POST['posts_per_page']) ?: 12;
     
-    $args = array(
-        'post_type' => 'product',
-        'posts_per_page' => $posts_per_page,
-        'post_status' => 'publish',
-        'paged' => $page,
-    );
+//     $args = array(
+//         'post_type' => 'product',
+//         'posts_per_page' => $posts_per_page,
+//         'post_status' => 'publish',
+//         'paged' => $page,
+//     );
     
-    // Если передан ID категории
-    if (isset($_POST['category']) && !empty($_POST['category'])) {
-        $args['tax_query'] = array(
-            array(
-                'taxonomy' => 'product_cat',
-                'field' => 'id',
-                'terms' => intval($_POST['category']),
-            )
-        );
-    }
+//     // Если передан ID категории
+//     if (isset($_POST['category']) && !empty($_POST['category'])) {
+//         $args['tax_query'] = array(
+//             array(
+//                 'taxonomy' => 'product_cat',
+//                 'field' => 'id',
+//                 'terms' => intval($_POST['category']),
+//             )
+//         );
+//     }
     
-    error_log('WP_Query args: ' . print_r($args, true));
+//     error_log('WP_Query args: ' . print_r($args, true));
     
-    $products = new WP_Query($args);
+//     $products = new WP_Query($args);
     
-    error_log('Found posts: ' . $products->found_posts);
-    error_log('Max pages: ' . $products->max_num_pages);
+//     error_log('Found posts: ' . $products->found_posts);
+//     error_log('Max pages: ' . $products->max_num_pages);
     
-    ob_start();
+//     ob_start();
     
-    if ($products->have_posts()) {
-        while ($products->have_posts()) {
-            $products->the_post();
-            wc_get_template_part('content', 'product');
-        }
-        wp_reset_postdata();
-    }
+//     if ($products->have_posts()) {
+//         while ($products->have_posts()) {
+//             $products->the_post();
+//             wc_get_template_part('content', 'product');
+//         }
+//         wp_reset_postdata();
+//     }
     
-    $html = ob_get_clean();
+//     $html = ob_get_clean();
     
-    wp_send_json_success(array(
-        'html' => $html,
-        'max_pages' => $products->max_num_pages
-    ));
-}
+//     wp_send_json_success(array(
+//         'html' => $html,
+//         'max_pages' => $products->max_num_pages
+//     ));
+// }
 
 // Добавьте в functions.php
 function wrap_first_word($title) {
@@ -422,3 +422,347 @@ function get_cart_ajax_data() {
         'items_count' => WC()->cart->get_cart_contents_count()
     ];
 }
+
+
+
+// // Обработчик AJAX для бесконечной прокрутки с поддержкой сортировки
+// add_action('wp_ajax_load_more_products', 'load_more_products_handler');
+// add_action('wp_ajax_nopriv_load_more_products', 'load_more_products_handler');
+
+// function load_more_products_handler() {
+//     // Логируем полученные данные
+//     error_log('AJAX Request: ' . print_r($_POST, true));
+    
+//     $page = intval($_POST['page']);
+//     $posts_per_page = intval($_POST['posts_per_page']) ?: 12;
+//     $sort = isset($_POST['sort']) ? sanitize_text_field($_POST['sort']) : 'default';
+    
+//     $args = array(
+//         'post_type' => 'product',
+//         'posts_per_page' => $posts_per_page,
+//         'post_status' => 'publish',
+//         'paged' => $page,
+//     );
+    
+//     // Если передан ID категории
+//     if (isset($_POST['category']) && !empty($_POST['category'])) {
+//         $args['tax_query'] = array(
+//             array(
+//                 'taxonomy' => 'product_cat',
+//                 'field' => 'id',
+//                 'terms' => intval($_POST['category']),
+//             )
+//         );
+//     }
+    
+//     // Добавляем параметры сортировки
+//     switch($sort) {
+//         case 'price-asc':
+//             $args['orderby'] = 'meta_value_num';
+//             $args['meta_key'] = '_price';
+//             $args['order'] = 'ASC';
+//             break;
+//         case 'price-desc':
+//             $args['orderby'] = 'meta_value_num';
+//             $args['meta_key'] = '_price';
+//             $args['order'] = 'DESC';
+//             break;
+//         case 'rating-desc':
+//             $args['orderby'] = 'meta_value_num';
+//             $args['meta_key'] = '_wc_average_rating';
+//             $args['order'] = 'DESC';
+//             break;
+//         case 'name-asc':
+//             $args['orderby'] = 'title';
+//             $args['order'] = 'ASC';
+//             break;
+//         case 'name-desc':
+//             $args['orderby'] = 'title';
+//             $args['order'] = 'DESC';
+//             break;
+//         case 'default':
+//         default:
+//             // Применяем приоритетную сортировку для главной страницы
+//             if (isset($_POST['category']) && empty($_POST['category'])) {
+//                 // Это главная страница магазина
+//                 $args['orderby'] = 'menu_order title';
+//                 $args['order'] = 'ASC';
+//                 // Можно добавить фильтр для приоритетной сортировки
+//                 add_filter('posts_clauses', 'custom_priority_orderby', 10, 2);
+//             }
+//             break;
+//     }
+    
+//     error_log('WP_Query args with sorting: ' . print_r($args, true));
+    
+//     $products = new WP_Query($args);
+    
+//     error_log('Found posts: ' . $products->found_posts);
+//     error_log('Max pages: ' . $products->max_num_pages);
+    
+//     ob_start();
+    
+//     if ($products->have_posts()) {
+//         while ($products->have_posts()) {
+//             $products->the_post();
+//             wc_get_template_part('content', 'product');
+//         }
+//         wp_reset_postdata();
+//     }
+    
+//     $html = ob_get_clean();
+    
+//     // Удаляем фильтр после выполнения запроса
+//     remove_filter('posts_clauses', 'custom_priority_orderby', 10);
+    
+//     wp_send_json_success(array(
+//         'html' => $html,
+//         'max_pages' => $products->max_num_pages
+//     ));
+// }
+
+// // Функция для приоритетной сортировки по категориям (если нужно)
+// function custom_priority_orderby($clauses, $query) {
+//     global $wpdb;
+    
+//     // Проверяем, что это запрос товаров
+//     if (is_admin() || !$query->is_main_query() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] !== 'product') {
+//         return $clauses;
+//     }
+    
+//     // Получаем приоритетные категории
+//     $priority_categories = get_priority_categories(); // Эта функция должна быть определена
+    
+//     if (!empty($priority_categories)) {
+//         // Подготавливаем CASE выражение для приоритетной сортировки
+//         $case_conditions = "CASE ";
+//         $priority_counter = 1;
+        
+//         foreach ($priority_categories as $cat_id) {
+//             $case_conditions .= "WHEN EXISTS (
+//                 SELECT 1 FROM {$wpdb->term_relationships} tr
+//                 INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+//                 WHERE tr.object_id = {$wpdb->posts}.ID 
+//                 AND tt.term_id = {$cat_id}
+//                 AND tt.taxonomy = 'product_cat'
+//             ) THEN {$priority_counter} ";
+//             $priority_counter++;
+//         }
+        
+//         $case_conditions .= "ELSE {$priority_counter} END";
+        
+//         // Добавляем сортировку в запрос
+//         $clauses['join'] .= " LEFT JOIN {$wpdb->term_relationships} tr ON {$wpdb->posts}.ID = tr.object_id";
+//         $clauses['join'] .= " LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id";
+//         $clauses['where'] .= " AND tt.taxonomy = 'product_cat'";
+        
+//         $clauses['orderby'] = "{$case_conditions}, {$wpdb->posts}.menu_order ASC, {$wpdb->posts}.post_title ASC";
+//     }
+    
+//     return $clauses;
+// }
+
+// Функция для получения приоритетных категорий
+function get_priority_categories() {
+    // Замените ID категорий на нужные вам
+    return [
+        16, // Арматура
+        24, // Труба круглая
+        21, // Труба профильная
+        36, // Швеллер
+    ];
+}
+
+
+
+// // Функция для получения приоритетных категорий
+// function get_priority_categories() {
+//     // Укажите ID категорий в нужном порядке
+//     return [
+//         15 => 1, // Металлопрокат - приоритет 1
+//         22 => 2, // Трубы - приоритет 2
+//         18 => 3, // Арматура - приоритет 3
+//         12 => 4, // Листовой металл - приоритет 4
+//         // Добавьте другие категории: ID => приоритет
+//     ];
+// }
+
+// Функция для простой приоритетной сортировки
+function custom_priority_orderby($clauses, $query) {
+    global $wpdb;
+    
+    // Проверяем, что это запрос товаров
+    if (is_admin() || !$query->is_main_query() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] !== 'product') {
+        return $clauses;
+    }
+    
+    // Получаем приоритетные категории
+    $priority_categories = get_priority_categories();
+    
+    if (!empty($priority_categories)) {
+        // Создаем условие для сортировки
+        $case_conditions = "CASE ";
+        
+        foreach ($priority_categories as $cat_id => $priority) {
+            $case_conditions .= "WHEN (
+                SELECT COUNT(*) FROM {$wpdb->term_relationships} tr
+                INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+                WHERE tr.object_id = {$wpdb->posts}.ID 
+                AND tt.term_id = {$cat_id}
+                AND tt.taxonomy = 'product_cat'
+            ) > 0 THEN {$priority} ";
+        }
+        
+        $case_conditions .= "ELSE 999 END"; // Все остальные получают низкий приоритет
+        
+        // Добавляем сортировку
+        $clauses['fields'] .= ", ({$case_conditions}) as category_priority";
+        $clauses['orderby'] = "category_priority ASC, {$wpdb->posts}.menu_order ASC, {$wpdb->posts}.post_title ASC";
+    }
+    
+    return $clauses;
+}
+
+// Функция для сортировки по умолчанию (приоритетная)
+function custom_default_sorting($query) {
+    // Только для главного запроса товаров на фронтенде
+    if (is_admin() || !$query->is_main_query() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] !== 'product') {
+        return;
+    }
+    
+    // Только если не выбрана другая сортировка через GET параметр
+    if (isset($_GET['sort']) && $_GET['sort'] !== 'default') {
+        return;
+    }
+    
+    // Для главной страницы магазина
+    if (is_shop()) {
+        // Добавляем фильтр для приоритетной сортировки
+        add_filter('posts_clauses', 'custom_priority_orderby', 10, 2);
+        
+        // Устанавливаем базовую сортировку
+        $query->set('orderby', 'menu_order title');
+        $query->set('order', 'ASC');
+    }
+}
+add_action('pre_get_posts', 'custom_default_sorting', 20);
+
+// Удаляем фильтр после выполнения запроса
+add_action('wp', function() {
+    remove_filter('posts_clauses', 'custom_priority_orderby', 10);
+});
+
+// Обработчик AJAX для бесконечной прокрутки с поддержкой сортировки
+add_action('wp_ajax_load_more_products', 'load_more_products_handler');
+add_action('wp_ajax_nopriv_load_more_products', 'load_more_products_handler');
+
+function load_more_products_handler() {
+    $page = intval($_POST['page']);
+    $posts_per_page = intval($_POST['posts_per_page']) ?: 12;
+    $sort = isset($_POST['sort']) ? sanitize_text_field($_POST['sort']) : 'default';
+    $category_id = isset($_POST['category']) && !empty($_POST['category']) ? intval($_POST['category']) : 0;
+    
+    $args = array(
+        'post_type' => 'product',
+        'posts_per_page' => $posts_per_page,
+        'post_status' => 'publish',
+        'paged' => $page,
+        'ignore_sticky_posts' => 1,
+    );
+    
+    // Если передан ID категории
+    if ($category_id > 0) {
+        $args['tax_query'] = array(
+            array(
+                'taxonomy' => 'product_cat',
+                'field' => 'id',
+                'terms' => $category_id,
+            )
+        );
+    }
+    
+    // Добавляем параметры сортировки
+    switch($sort) {
+        case 'price-asc':
+            $args['meta_key'] = '_price';
+            $args['orderby'] = 'meta_value_num';
+            $args['order'] = 'ASC';
+            break;
+            
+        case 'price-desc':
+            $args['meta_key'] = '_price';
+            $args['orderby'] = 'meta_value_num';
+            $args['order'] = 'DESC';
+            break;
+            
+        case 'rating-desc':
+            $args['meta_key'] = '_wc_average_rating';
+            $args['orderby'] = 'meta_value_num';
+            $args['order'] = 'DESC';
+            break;
+            
+        case 'name-asc':
+            $args['orderby'] = 'title';
+            $args['order'] = 'ASC';
+            break;
+            
+        case 'name-desc':
+            $args['orderby'] = 'title';
+            $args['order'] = 'DESC';
+            break;
+            
+        case 'default':
+        default:
+            // Для главной страницы магазина используем приоритетную сортировку
+            if ($category_id === 0) {
+                add_filter('posts_clauses', 'custom_priority_orderby', 10, 2);
+                $args['orderby'] = 'menu_order title';
+                $args['order'] = 'ASC';
+            } else {
+                // Для категорий используем стандартную сортировку
+                $args['orderby'] = 'menu_order title';
+                $args['order'] = 'ASC';
+            }
+            break;
+    }
+    
+    $products = new WP_Query($args);
+    
+    ob_start();
+    
+    if ($products->have_posts()) {
+        while ($products->have_posts()) {
+            $products->the_post();
+            wc_get_template_part('content', 'product');
+        }
+        wp_reset_postdata();
+    }
+    
+    $html = ob_get_clean();
+    
+    // Удаляем фильтр после выполнения запроса
+    remove_filter('posts_clauses', 'custom_priority_orderby', 10);
+    
+    wp_send_json_success(array(
+        'html' => $html,
+        'max_pages' => $products->max_num_pages,
+        'current_page' => $page
+    ));
+}
+
+// Дополнительная функция для отладки сортировки
+function debug_priority_sorting($posts, $query) {
+    if (!is_admin() && $query->is_main_query() && isset($query->query_vars['post_type']) && $query->query_vars['post_type'] === 'product') {
+        error_log('Total products: ' . count($posts));
+        foreach ($posts as $post) {
+            $categories = wp_get_post_terms($post->ID, 'product_cat');
+            $cat_names = array_map(function($cat) {
+                return $cat->name . ' (ID: ' . $cat->term_id . ')';
+            }, $categories);
+            error_log('Product ' . $post->ID . ' - ' . $post->post_title . ' - Categories: ' . implode(', ', $cat_names));
+        }
+    }
+    return $posts;
+}
+// add_filter('the_posts', 'debug_priority_sorting', 10, 2);
+?>

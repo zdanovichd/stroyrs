@@ -30,7 +30,7 @@ get_template_part('template-parts/head');
 
                     <div class="contacts__actions">
                         <div>
-                            <a href="tel:+74953637297" class="contacts__phone">8 (495) 363-72-97</a>
+                            <a href="tel:+79067057786" class="contacts__phone">+7 (906) 705-77-86</a>
                             <span>Время работы: пн – пт 9:00 – 19:00</span>
                         </div>                        
                         <button class="button button--red contacts__button feedback-button" type="button"
@@ -47,14 +47,12 @@ get_template_part('template-parts/head');
 
                     <div class="contacts__info">
                         <div>
-                            <span>Фактический адрес:</span>
-                            <a href="https://yandex.ru/maps/-/CLRozB4w" class="contacts__address">г. Москва, ул. Горбунова
-                                2, стр. 3</a>
+                            <span>Адрес производства:</span>
+                            <a href="https://yandex.ru/maps/-/CLgQZLMy" target="_blank" class="contacts__address">г. Подольск, Нефтебазовский проезд, 8Бс11</a>
                         </div>
                         <div>
                             <span>Юридический адрес:</span>
-                            <a href="https://yandex.ru/maps/-/CLRozB4w" class="contacts__address">г. Москва, ул. Горбунова
-                                2, стр. 3</a>
+                            <a href="https://yandex.ru/maps/-/CLRozB4w" target="_blank" class="contacts__address">г. Москва, уг. Горбунова, 2с3, оф. В412</a>
                         </div>
                     </div>
 
@@ -65,7 +63,7 @@ get_template_part('template-parts/head');
                         <div class="contacts__divider-line contacts__divider-line--vertical"></div>
                     </div>
 
-                    <a href="mailto:info@stroyrs.ru" class="contacts__email">info@stroyrs.ru</a>
+                    <a href="mailto:az@stroyrs.ru" class="contacts__email">az@stroyrs.ru</a>
                 </div>
 
                 <div class="contacts__map">
@@ -88,7 +86,7 @@ get_template_part('template-parts/head');
                     </div>
                     <div class="requisites__item">
                         <p class="requisites__item-name">Юридический адрес</p>
-                        <p class="requisites__item-value">Полный юридический адрес</p>
+                        <p class="requisites__item-value"><a href="https://yandex.ru/maps/-/CLRozB4w" target="_blank">г. Москва, уг. Горбунова, 2с3, оф. В412</a></p>
                     </div>
                     <div class="requisites__item">
                         <p class="requisites__item-name">ОГРН</p>
@@ -104,15 +102,15 @@ get_template_part('template-parts/head');
                     </div>
                     <div class="requisites__item">
                         <p class="requisites__item-name">Банк</p>
-                        <p class="requisites__item-value">Полное наименование банка</p>
+                        <p class="requisites__item-value">ПАО Сбербанк г. Москва</p>
                     </div>
                     <div class="requisites__item">
                         <p class="requisites__item-name">Корреспондентский счет</p>
-                        <p class="requisites__item-value">1234567891234</p>
+                        <p class="requisites__item-value">30101810400000000225</p>
                     </div>
                     <div class="requisites__item">
                         <p class="requisites__item-name">Расчетный счет</p>
-                        <p class="requisites__item-value">1234567891234</p>
+                        <p class="requisites__item-value">40702810740000111890</p>
                     </div>
                     <div class="requisites__item">
                         <p class="requisites__item-name">БИК</p>
@@ -120,13 +118,13 @@ get_template_part('template-parts/head');
                     </div>
                     <div class="requisites__item">
                         <p class="requisites__item-name">Email / сайт</p>
-                        <p class="requisites__item-value"><a href="mailto:info@stroyrs.ru">info@stroyrs.ru</a> / <a href="/">https://stroyrs.ru/</a></p>
+                        <p class="requisites__item-value"><a href="mailto:az@stroyrs.ru">az@stroyrs.ru</a> / <a href="/">https://stroyrs.ru/</a></p>
                     </div>
                 </div>
                 <div class="requisites__links">
                     <a class="requisites__link requisites__link-accent" href="#">[Скачать реквизиты в PDF]</a>
-                    <a class="requisites__link" href="#">Политика конфиденциальности</a>
-                    <a class="requisites__link" href="#">Пользовательское соглашение</a>
+                    <a class="requisites__link" href="/politika-konfidentsialnosti">Политика конфиденциальности</a>
+                    <a class="requisites__link" href="/polzovatelskoe-soglashenie">Пользовательское соглашение</a>
                 </div>
             </div>
         </section>

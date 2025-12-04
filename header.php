@@ -85,7 +85,7 @@ $header_class = is_front_page() ? 'header--dark' : '';
                 <p class="header__description">Оптовая и розничная <br>продажа металлопроката</p>
             </a>
             <div class="header__mail">
-                <a href="mailto:info@stroyrs.ru">
+                <a href="mailto:az@stroyrs.ru">
                     <svg viewBox="0 0 24 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_197_646)">
                             <path
@@ -98,20 +98,20 @@ $header_class = is_front_page() ? 'header--dark' : '';
                             </clipPath>
                         </defs>
                     </svg>
-                    info@stroyrs.ru
+                    az@stroyrs.ru
                 </a>
             </div>
             <div class="header__contacts">
                 <div class="header__contacts-top">
                     <div class="header__socials">
-                        <a class="header__social" href="#">
+                        <a class="header__social" href="tel:+79067057786">
                             <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M12.5562 11.5478L12.1007 12.0272C12.1007 12.0272 11.0181 13.167 8.06309 10.0559C5.10811 6.94485 6.19069 5.80509 6.19069 5.80509L6.47749 5.50312C7.18409 4.75925 7.25069 3.56497 6.63419 2.6931L5.37325 0.909613C4.61027 -0.169501 3.13595 -0.31205 2.26145 0.608642L0.691848 2.26114C0.258228 2.71766 -0.0323518 3.30945 0.0028882 3.96595C0.0930381 5.64547 0.810707 9.25912 4.81535 13.4753C9.06209 17.9463 13.0468 18.1239 14.6763 17.9631C15.1917 17.9123 15.6399 17.6343 16.0011 17.254L17.4217 15.7585C18.3806 14.7489 18.1102 13.0182 16.8833 12.312L14.9728 11.2123C14.1672 10.7487 13.1858 10.8848 12.5562 11.5478Z"
                                     fill="var(--color-header)" />
                             </svg>
                         </a>
-                        <a class="header__social" href="#">
+                        <a class="header__social" href="https://wa.me/79067056954" target="_blank">
                             <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_197_639)">
                                     <path
@@ -125,7 +125,7 @@ $header_class = is_front_page() ? 'header--dark' : '';
                                 </defs>
                             </svg>
                         </a>
-                        <a class="header__social" href="#">
+                        <a class="header__social" href="#" target="_blank">
                             <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_197_641)">
                                     <path
@@ -139,8 +139,8 @@ $header_class = is_front_page() ? 'header--dark' : '';
                                 </defs>
                             </svg>
                         </a>
-                        <a class="header__phone" href="tel:+74952410680">
-                            +7 (495) 241-06-80
+                        <a class="header__phone" href="tel:+79067057786">
+                            +7 (906) 705-77-86
                         </a>
                     </div>
                 </div>
@@ -164,9 +164,9 @@ $header_class = is_front_page() ? 'header--dark' : '';
                         <li class="menu__item">
                             <a class="menu__link" href="/catalog">Каталог</a>
                         </li>
-                        <!-- <li class="menu__item">
-                            <a class="menu__link" href="#">Услуги</a>
-                        </li> -->
+                        <li class="menu__item">
+                            <a class="menu__link" href="/uslugi">Услуги</a>
+                        </li>
                         <!-- <li class="menu__item">
                             <a class="menu__link" href="#">Цены</a>
                         </li> -->
@@ -534,8 +534,8 @@ $header_class = is_front_page() ? 'header--dark' : '';
                                             </defs>
                                         </svg>
                                     </a>
-                                    <a class="header__phone" href="tel:+74952410680">
-                                        +7 (495) 241-06-80
+                                    <a class="header__phone" href="tel:+79067057786">
+                                        +7 (906) 705-77-86
                                     </a>
                                 </div>
                                 <button class="header__button feedback-button" type="button"
@@ -548,7 +548,7 @@ $header_class = is_front_page() ? 'header--dark' : '';
                                 </button>
                             </div>
                             <div class="side-menu__inner">
-                                <a href="mailto:info@stroyrs.ru" class="side-menu__mail">info@stroyrs.ru</a>
+                                <a href="mailto:az@stroyrs.ru" class="side-menu__mail">az@stroyrs.ru</a>
                             </div>
                         </div>
                     </div>

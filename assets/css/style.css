@@ -236,7 +236,7 @@ html {
     font-variation-settings: "wght" 500;
     font-size: .9375rem;
     line-height: 1.3em;
-
+    text-transform: uppercase;
 }
 
 .user-actions {
@@ -543,6 +543,7 @@ html {
     width: 16.1875rem;
     height: 6.5rem;
     justify-content: space-between;
+    text-decoration: none;
 
 }
 
@@ -1811,6 +1812,10 @@ html {
     border: none;
     outline: none;
     font-family: inherit;
+}
+
+.consult__policy a {
+    color: #F9F9F9;
 }
 
 .reviews {
@@ -4538,6 +4543,7 @@ html {
 .page-contacts .contacts__address {
     text-decoration: none;
     color: var(--color-black);
+    line-height: 1em;
 }
 
 .page-contacts .contacts__divider {
@@ -4853,6 +4859,61 @@ th.product-quantity {
 .summary-item.total {
     font-weight: 500;
     font-variation-settings: "wght" 500;
+}
+
+.uslugi {}
+
+.uslugi__wrapper {
+    margin: 3.125rem 1.875rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3.125rem;
+}
+
+.uslugi__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.uslugi__title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.uslugi__title h1 {
+    font-weight: 600;
+    font-variation-settings: "wght" 600;
+    font-size: 3.5rem;
+    line-height: 1.1em;
+    letter-spacing: -0.01em;
+}
+
+.uslugi__title h1 span {
+    color: var(--color-accent);
+}
+
+.page__content {
+    margin: 3.125rem 1.875rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.page__content p {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.page__content h1 {
+    font-weight: 600;
+    font-variation-settings: "wght" 600;
+    font-size: 3.5rem;
+    line-height: 1.1em;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
 }
 
 
@@ -7790,13 +7851,13 @@ th.product-quantity {
     }
 
     .page-contacts .contacts__divider-line--horizontal {
-        width: 19.5rem;
+        width: 18rem;
         bottom: 0;
         left: -0.1875rem;
     }
 
     .page-contacts .contacts__divider-line--vertical {
-        height: 6.0625rem;
+        height: 12rem;
         bottom: 0;
         left: -0.1875rem;
     }
@@ -8107,4 +8168,59 @@ th.product-quantity {
         gap: .625rem;
     }
 
+    .uslugi {}
+
+    .uslugi__wrapper {
+        margin: 3.125rem 1.875rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 3.125rem;
+    }
+
+    .uslugi__header {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: start;
+        gap: 3.125rem;
+    }
+
+    .uslugi__title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1.25rem;
+    }
+
+    .uslugi__title h1 {
+        font-weight: 600;
+        font-variation-settings: "wght" 600;
+        font-size: 1.625rem;
+        line-height: 1.1em;
+        letter-spacing: -0.01em;
+    }
+
+    .uslugi__title h1 span {
+        color: var(--color-accent);
+    }
+
+    .page__content {
+        margin: 3.125rem 1.875rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .page__content p {
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+
+    .page__content h1 {
+        font-weight: 600;
+        font-variation-settings: "wght" 600;
+        font-size: 1.625rem;
+        line-height: 1.1em;
+        letter-spacing: -0.01em;
+        margin-bottom: 1.25rem;
+    }
 }

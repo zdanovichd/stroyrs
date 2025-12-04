@@ -88,16 +88,15 @@
                         <p><span>ОГРН:</span> 1215000083902</p>
                         <p>
                             <span>ЮРИДИЧЕСКИЙ АДРЕС:</span>
-                            Московская область, г.о. Химки,<br />
-                            г. Химки, мкр. Сходня, ул. Ленинградская 1, кв. 56
+                            г. Москва, <br />ул. Горбунова, 2с3, оф. В412
                         </p>
                     </div>
 
                     <div class="footer__links">
-                        <a href="#" class="footer__link">
-                            <noindex>Условия использования</noindex>
+                        <a href="/polzovatelskoe-soglashenie" class="footer__link">
+                            <noindex>Пользовательское соглашение</noindex>
                         </a>
-                        <a href="#" class="footer__link">
+                        <a href="/politika-konfidentsialnosti" class="footer__link">
                             <noindex>Политика конфиденциальности</noindex>
                         </a>
                     </div>
@@ -109,10 +108,10 @@
                     <div class="footer__nav-inner">
                         <div class="footer__menu">
                             <ul>
-                                <!-- <li><a href="#">Услуги</a></li>
-                                <li><a href="#">Цены</a></li>
-                                <li><a href="#">Акции</a></li>
-                                <li><a href="#">О компании</a></li> -->
+                                <li><a href="/uslugi">Услуги</a></li>
+                                <!-- <li><a href="#">Цены</a></li> -->
+                                <!-- <li><a href="#">Акции</a></li> -->
+                                <!-- <li><a href="#">О компании</a></li> -->
                                 <li><a href="/kontakty">Контакты</a></li>
                                 <!-- <li><a href="#">Доставка и оплата</a></li>
                                 <li><a href="#">Блог</a></li>
@@ -137,8 +136,8 @@
                     </div>
                     <div class="footer__nav-inner">
                         <div class="footer__links">
-                            <a href="#" class="footer__link">Условия использования</a>
-                            <a href="#" class="footer__link">Политика конфиденциальности</a>
+                            <a href="/polzovatelskoe-soglashenie" class="footer__link">Пользовательское соглашение</a>
+                            <a href="/politika-konfidentsialnosti" class="footer__link">Политика конфиденциальности</a>
                         </div>
                         <div class="footer__copyright">
                             <a href="#" class="footer__link">©2025 Все права защищены</a>
@@ -165,17 +164,17 @@
                     <div class="footer__contacts-inner">
                         <div class="footer__inner">
                             <p class="footer__phone">
-                                <a href="tel:+74953637297">8 (495) 363-72-97</a>
+                                <a href="tel:+79067057786">+7 (906) 705-77-86</a>
                             </p>
                             <p class="footer__email">
-                                <a href="mailto:info@stroyrs.ru">info@stroyrs.ru</a>
+                                <a href="mailto:az@stroyrs.ru">az@stroyrs.ru</a>
                             </p>
                             <p class="footer__address">
-                                <a href="https://yandex.ru/maps/-/CLRozB4w">г. Москва, ул Горбунова 2, стр. 3</a>
+                                <a href="https://yandex.ru/maps/-/CLRozB4w" target="_blank">г. Москва, ул. Горбунова, 2с3, оф. В412</a>
                             </p>
                         </div>
                         <div class="footer__socials">
-                            <a class="footer__social" href="#">
+                            <a class="footer__social" href="https://wa.me/79067056954" target="_blank">
                                 <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_197_639)">
                                         <path
@@ -242,8 +241,7 @@
                         </svg>
                     </span>
                 </button>
-                <p class="form__note">Нажимая «Оставить заявку», вы соглашаетесь с <a href="#">Условиями
-                        использования</a> и <a href="#">Политикой конфиденциальности</a></p>
+                <p class="form__note">Нажимая «Оставить заявку», вы принимаете условия <a href="/politika-konfidentsialnosti">Политики конфиденциальности</a> и даете согласие на обработку ваших персональных данных</p>
             </form>
         </div>
         <div class="modal__overlay" data-micromodal-close></div>

@@ -310,48 +310,313 @@ if (main && !main.classList.contains('main-page')) {
 }
 
 
-// Сортировка
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
+    // === СОРТИРОВКА ===
     const sort = document.querySelector('[data-sort]');
-    const toggle = sort.querySelector('.catalog-sort__toggle');
-    const menu = sort.querySelector('.catalog-sort__menu');
-    const current = sort.querySelector('.catalog-sort__current');
-    const options = sort.querySelectorAll('.catalog-sort__option');
+    
+    if (sort) {
+        const toggle = sort.querySelector('.catalog-sort__toggle');
+        const menu = sort.querySelector('.catalog-sort__menu');
+        const current = sort.querySelector('.catalog-sort__current');
+        const options = sort.querySelectorAll('.catalog-sort__option');
 
-    // Открыть/закрыть меню
-    toggle.addEventListener('click', () => {
-        const expanded = toggle.getAttribute('aria-expanded') === 'true';
-        toggle.setAttribute('aria-expanded', String(!expanded));
-        menu.classList.toggle('catalog-sort__menu--open', !expanded);
-    });
-
-    // Выбор пункта
-    options.forEach(option => {
-        option.addEventListener('click', () => {
-            options.forEach(o => o.classList.remove('catalog-sort__option--selected'));
-            options.forEach(o => o.setAttribute('aria-selected', 'false'));
-
-            option.classList.add('catalog-sort__option--selected');
-            option.setAttribute('aria-selected', 'true');
-
-            current.textContent = option.textContent;
-
-            toggle.setAttribute('aria-expanded', 'false');
-            menu.classList.remove('catalog-sort__menu--open');
-
-            // (Можно добавить логику сортировки здесь)
-            console.log('Выбрано значение:', option.dataset.value);
+        // Открыть/закрыть меню
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const expanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', String(!expanded));
+            menu.classList.toggle('catalog-sort__menu--open', !expanded);
         });
-    });
 
-    // Закрытие при клике вне
-    document.addEventListener('click', (e) => {
-        if (!sort.contains(e.target)) {
-            toggle.setAttribute('aria-expanded', 'false');
-            menu.classList.remove('catalog-sort__menu--open');
+        // Выбор пункта сортировки
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                const selectedValue = option.dataset.value;
+                const selectedText = option.textContent;
+                
+                // Обновляем UI
+                options.forEach(o => {
+                    o.classList.remove('catalog-sort__option--selected');
+                    o.setAttribute('aria-selected', 'false');
+                });
+                
+                option.classList.add('catalog-sort__option--selected');
+                option.setAttribute('aria-selected', 'true');
+                current.textContent = selectedText;
+                
+                toggle.setAttribute('aria-expanded', 'false');
+                menu.classList.remove('catalog-sort__menu--open');
+                
+                // Применяем сортировку
+                applySorting(selectedValue);
+            });
+        });
+
+        // Закрытие при клике вне
+        document.addEventListener('click', (e) => {
+            if (!sort.contains(e.target)) {
+                toggle.setAttribute('aria-expanded', 'false');
+                menu.classList.remove('catalog-sort__menu--open');
+            }
+        });
+    }
+    
+    // === БЕСКОНЕЧНАЯ ПРОКРУТКА ===
+    initInfiniteScroll();
+});
+
+// Функция применения сортировки
+function applySorting(sortValue) {
+    // Получаем текущий URL
+    const url = new URL(window.location.href);
+    
+    // Если выбрано "По умолчанию", удаляем параметр sort
+    if (sortValue === 'default') {
+        url.searchParams.delete('sort');
+    } else {
+        // Иначе добавляем/обновляем параметр sort
+        url.searchParams.set('sort', sortValue);
+    }
+    
+    // Также удаляем параметр page (если есть) при смене сортировки
+    url.searchParams.delete('paged');
+    url.searchParams.delete('page');
+    
+    // Обновляем страницу с новым параметром сортировки
+    window.location.href = url.toString();
+}
+
+// Функция для инициализации бесконечной прокрутки
+function initInfiniteScroll() {
+    console.log('Infinite Scroll: Script loaded');
+    
+    let isLoading = false;
+    const dataElement = document.getElementById('infinite-scroll-data');
+    const loader = document.getElementById('infinite-scroll-loader');
+    
+    if (!dataElement) {
+        console.log('Infinite Scroll: No data element found');
+        return;
+    }
+    
+    let currentPage = parseInt(dataElement.dataset.page);
+    const maxPages = parseInt(dataElement.dataset.maxPages);
+    const categoryId = dataElement.dataset.category;
+    const ajaxUrl = dataElement.dataset.ajaxUrl;
+    
+    // Получаем текущую сортировку из URL или data-атрибута
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentSort = urlParams.get('sort') || 'default';
+    
+    // Обновляем data-атрибут сортировки если он не совпадает
+    if (dataElement.dataset.sort !== currentSort) {
+        dataElement.dataset.sort = currentSort;
+        // При смене сортировки начинаем с первой страницы
+        dataElement.dataset.page = '2';
+        currentPage = 2;
+    }
+
+    function loadMoreProducts() {
+    if (isLoading || currentPage > maxPages) {
+        console.log('Infinite Scroll: Cannot load - isLoading:', isLoading, 'currentPage:', currentPage, 'maxPages:', maxPages);
+        return;
+    }
+    
+    isLoading = true;
+    console.log('Infinite Scroll: Loading page:', currentPage, 'Sort:', currentSort);
+    
+    if (loader) loader.style.display = 'block';
+    
+    const formData = new FormData();
+    formData.append('action', 'load_more_products');
+    formData.append('page', currentPage);
+    formData.append('posts_per_page', 12);
+    formData.append('sort', currentSort); // Добавляем параметр сортировки
+    
+    if (categoryId) {
+        formData.append('category', categoryId);
+    }
+    
+    fetch(ajaxUrl, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.data.html) {
+            const productsContainer = document.getElementById('products-container');
+            if (productsContainer) {
+                productsContainer.insertAdjacentHTML('beforeend', data.data.html);
+                
+                // Создаем новый наблюдатель для последнего элемента
+                setTimeout(() => {
+                    const lastProduct = productsContainer.lastElementChild;
+                    if (lastProduct) {
+                        observer.observe(lastProduct);
+                        console.log('Infinite Scroll: New observer attached to last product');
+                    }
+                }, 100);
+                
+                currentPage++;
+                dataElement.dataset.page = currentPage;
+                
+                // Обновляем максимальное количество страниц
+                if (data.data.max_pages) {
+                    dataElement.dataset.maxPages = data.data.max_pages;
+                }
+                
+                if (currentPage > maxPages) {
+                    console.log('Infinite Scroll: Reached max pages');
+                    observer.disconnect();
+                }
+                
+                // Инициализируем события для новых товаров
+                initNewProducts();
+            }
+        } else {
+            console.log('Infinite Scroll: No more products or empty response');
+            observer.disconnect();
+            if (loader) {
+                loader.innerHTML = '<div>Все товары загружены</div>';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 2000);
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Infinite Scroll: Error:', error);
+        if (loader) {
+            loader.innerHTML = '<div>Ошибка загрузки. Попробуйте еще раз.</div>';
+        }
+    })
+    .finally(() => {
+        isLoading = false;
+        if (loader) {
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 300);
         }
     });
-});
+}
+
+    // Используем Intersection Observer для наблюдения за последним товаром
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !isLoading && currentPage <= maxPages) {
+                console.log('Infinite Scroll: Last product is visible, loading more...');
+                loadMoreProducts();
+            }
+        });
+    }, {
+        rootMargin: '100px' // Начинаем загрузку за 100px до появления элемента
+    });
+
+    // Начинаем наблюдение за последним товаром
+    const productsContainer = document.getElementById('products-container');
+    if (productsContainer && productsContainer.lastElementChild) {
+        observer.observe(productsContainer.lastElementChild);
+        console.log('Infinite Scroll: Observer started watching last product');
+    } else {
+        console.log('Infinite Scroll: No products container or last element found');
+    }
+    
+    // Также добавляем резервный скролл-обработчик на случай проблем с Intersection Observer
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+        
+        scrollTimeout = setTimeout(() => {
+            const scrollPosition = window.innerHeight + window.scrollY;
+            const pageBottom = document.body.offsetHeight - 300;
+            
+            if (scrollPosition >= pageBottom && !isLoading && currentPage <= maxPages) {
+                console.log('Infinite Scroll: Scroll trigger activated');
+                loadMoreProducts();
+            }
+        }, 200);
+    });
+}
+
+// Функция для инициализации событий на новых товарах
+function initNewProducts() {
+    // Здесь можно добавить код для инициализации событий
+    // на новых загруженных товарах
+    
+    // Пример: инициализация добавления в корзину
+    const addToCartButtons = document.querySelectorAll('.add_to_cart_button');
+    addToCartButtons.forEach(button => {
+        // Убедимся, что обработчик не добавлен дважды
+        if (!button.hasAttribute('data-initialized')) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Ваша логика добавления в корзину
+                console.log('Add to cart clicked on new product');
+            });
+            button.setAttribute('data-initialized', 'true');
+        }
+    });
+    
+    // Пример: инициализация кнопок избранного
+    const favoriteButtons = document.querySelectorAll('.product-card__favorite');
+    favoriteButtons.forEach(button => {
+        if (!button.hasAttribute('data-initialized')) {
+            button.addEventListener('click', function() {
+                this.classList.toggle('active');
+                console.log('Favorite button clicked');
+            });
+            button.setAttribute('data-initialized', 'true');
+        }
+    });
+}
+
+// // Сортировка
+// document.addEventListener('DOMContentLoaded', () => {
+//     const sort = document.querySelector('[data-sort]');
+//     const toggle = sort.querySelector('.catalog-sort__toggle');
+//     const menu = sort.querySelector('.catalog-sort__menu');
+//     const current = sort.querySelector('.catalog-sort__current');
+//     const options = sort.querySelectorAll('.catalog-sort__option');
+
+//     // Открыть/закрыть меню
+//     toggle.addEventListener('click', () => {
+//         const expanded = toggle.getAttribute('aria-expanded') === 'true';
+//         toggle.setAttribute('aria-expanded', String(!expanded));
+//         menu.classList.toggle('catalog-sort__menu--open', !expanded);
+//     });
+
+//     // Выбор пункта
+//     options.forEach(option => {
+//         option.addEventListener('click', () => {
+//             options.forEach(o => o.classList.remove('catalog-sort__option--selected'));
+//             options.forEach(o => o.setAttribute('aria-selected', 'false'));
+
+//             option.classList.add('catalog-sort__option--selected');
+//             option.setAttribute('aria-selected', 'true');
+
+//             current.textContent = option.textContent;
+
+//             toggle.setAttribute('aria-expanded', 'false');
+//             menu.classList.remove('catalog-sort__menu--open');
+
+//             // (Можно добавить логику сортировки здесь)
+//             console.log('Выбрано значение:', option.dataset.value);
+//         });
+//     });
+
+//     // Закрытие при клике вне
+//     document.addEventListener('click', (e) => {
+//         if (!sort.contains(e.target)) {
+//             toggle.setAttribute('aria-expanded', 'false');
+//             menu.classList.remove('catalog-sort__menu--open');
+//         }
+//     });
+// });
 
 // Категории
 document.querySelectorAll('.categories__toggle').forEach(btn => {
@@ -422,92 +687,92 @@ document.addEventListener('click', function(e) {
 
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Infinite Scroll: Script loaded');
+// document.addEventListener('DOMContentLoaded', function() {
+//     console.log('Infinite Scroll: Script loaded');
     
-    let isLoading = false;
-    const dataElement = document.getElementById('infinite-scroll-data');
-    const loader = document.getElementById('infinite-scroll-loader');
+//     let isLoading = false;
+//     const dataElement = document.getElementById('infinite-scroll-data');
+//     const loader = document.getElementById('infinite-scroll-loader');
     
-    if (!dataElement) return;
+//     if (!dataElement) return;
     
-    let currentPage = parseInt(dataElement.dataset.page);
-    const maxPages = parseInt(dataElement.dataset.maxPages);
-    const categoryId = dataElement.dataset.category;
-    const ajaxUrl = dataElement.dataset.ajaxUrl;
+//     let currentPage = parseInt(dataElement.dataset.page);
+//     const maxPages = parseInt(dataElement.dataset.maxPages);
+//     const categoryId = dataElement.dataset.category;
+//     const ajaxUrl = dataElement.dataset.ajaxUrl;
 
-    function loadMoreProducts() {
-        if (isLoading || currentPage > maxPages) return;
+//     function loadMoreProducts() {
+//         if (isLoading || currentPage > maxPages) return;
         
-        isLoading = true;
-        console.log('Loading page:', currentPage);
+//         isLoading = true;
+//         console.log('Loading page:', currentPage);
         
-        if (loader) loader.style.display = 'block';
+//         if (loader) loader.style.display = 'block';
         
-        const formData = new FormData();
-        formData.append('action', 'load_more_products');
-        formData.append('page', currentPage);
-        formData.append('posts_per_page', 12);
-        if (categoryId) {
-            formData.append('category', categoryId);
-        }
+//         const formData = new FormData();
+//         formData.append('action', 'load_more_products');
+//         formData.append('page', currentPage);
+//         formData.append('posts_per_page', 12);
+//         if (categoryId) {
+//             formData.append('category', categoryId);
+//         }
         
-        fetch(ajaxUrl, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success && data.data.html) {
-                const productsContainer = document.getElementById('products-container');
-                if (productsContainer) {
-                    productsContainer.insertAdjacentHTML('beforeend', data.data.html);
+//         fetch(ajaxUrl, {
+//             method: 'POST',
+//             body: formData
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data.success && data.data.html) {
+//                 const productsContainer = document.getElementById('products-container');
+//                 if (productsContainer) {
+//                     productsContainer.insertAdjacentHTML('beforeend', data.data.html);
                     
-                    // Создаем новый наблюдатель для последнего элемента
-                    setTimeout(() => {
-                        const lastProduct = productsContainer.lastElementChild;
-                        if (lastProduct) {
-                            observer.observe(lastProduct);
-                        }
-                    }, 100);
-                }
+//                     // Создаем новый наблюдатель для последнего элемента
+//                     setTimeout(() => {
+//                         const lastProduct = productsContainer.lastElementChild;
+//                         if (lastProduct) {
+//                             observer.observe(lastProduct);
+//                         }
+//                     }, 100);
+//                 }
                 
-                currentPage++;
-                dataElement.dataset.page = currentPage;
+//                 currentPage++;
+//                 dataElement.dataset.page = currentPage;
                 
-                if (currentPage > maxPages) {
-                    observer.disconnect();
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        })
-        .finally(() => {
-            isLoading = false;
-            if (loader) loader.style.display = 'none';
-        });
-    }
+//                 if (currentPage > maxPages) {
+//                     observer.disconnect();
+//                 }
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         })
+//         .finally(() => {
+//             isLoading = false;
+//             if (loader) loader.style.display = 'none';
+//         });
+//     }
 
-    // Используем Intersection Observer для наблюдения за последним товаром
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !isLoading && currentPage <= maxPages) {
-                console.log('Last product is visible, loading more...');
-                loadMoreProducts();
-            }
-        });
-    }, {
-        rootMargin: '100px' // Начинаем загрузку за 100px до появления элемента
-    });
+//     // Используем Intersection Observer для наблюдения за последним товаром
+//     const observer = new IntersectionObserver((entries) => {
+//         entries.forEach(entry => {
+//             if (entry.isIntersecting && !isLoading && currentPage <= maxPages) {
+//                 console.log('Last product is visible, loading more...');
+//                 loadMoreProducts();
+//             }
+//         });
+//     }, {
+//         rootMargin: '100px' // Начинаем загрузку за 100px до появления элемента
+//     });
 
-    // Начинаем наблюдение за последним товаром
-    const productsContainer = document.getElementById('products-container');
-    if (productsContainer && productsContainer.lastElementChild) {
-        observer.observe(productsContainer.lastElementChild);
-        console.log('Observer started watching last product');
-    }
-});
+//     // Начинаем наблюдение за последним товаром
+//     const productsContainer = document.getElementById('products-container');
+//     if (productsContainer && productsContainer.lastElementChild) {
+//         observer.observe(productsContainer.lastElementChild);
+//         console.log('Observer started watching last product');
+//     }
+// });
 
 document.addEventListener('click', function(e) {
     // Проверяем, был ли клик по кнопке плюс или минус

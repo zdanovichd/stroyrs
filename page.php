@@ -11,9 +11,16 @@ defined('ABSPATH') || exit;
 
 <body>
     <?php get_header() ?>
-    <main>
+    <main class="page">
        
-    <?php the_content(); ?>
+    <section class="breadcrumbs" aria-label="Навигация — хлебные крошки">
+        <nav aria-label="breadcrumb">
+            <?php woocommerce_breadcrumb(); ?>
+        </nav>
+    </section>
+    <section class="page__content">
+        <?php the_content(); ?>
+    </section>
 
     </main>
     <?php get_footer() ?>
