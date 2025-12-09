@@ -199,9 +199,9 @@ get_template_part('template-parts/head');
                                 <?php
                                 $variations = $product->get_available_variations();
 
-                                echo '<pre>';
-                                print_r($variations);
-                                echo '</pre>';
+                                // echo '<pre>';
+                                // print_r($variations);
+                                // echo '</pre>';
                                 $variation_data = [];
 
                                 foreach ($variations as $variation) {
@@ -212,9 +212,9 @@ get_template_part('template-parts/head');
 
                                     $unit = $attrs['attribute_pa_edinicza'] ?? '';
 
-                                    echo '<pre>';
-                                    print_r($unit);
-                                    echo '</pre>';
+                                    // echo '<pre>';
+                                    // print_r($unit);
+                                    // echo '</pre>';
                                     if (! $unit) continue;
 
                                     $regular_price = (float) $var_obj->get_regular_price();
@@ -238,9 +238,9 @@ get_template_part('template-parts/head');
                                         foreach ($variations as $variation) :
                                             $var_obj = wc_get_product($variation['variation_id']);
                                             $attrs = $variation['attributes'];
-                                            echo '<pre>';
-                                            print_r($attrs);
-                                            echo '</pre>';
+                                            // echo '<pre>';
+                                            // print_r($attrs);
+                                            // echo '</pre>';
 
                                             $unit = $attrs['attribute_pa_edinicza'] ?? '';
                                             if (! $unit || empty($variation_data[$unit])) continue;
