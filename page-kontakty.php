@@ -123,7 +123,7 @@ get_template_part('template-parts/head');
                 </div>
                 <div class="requisites__links">
                     <a class="requisites__link requisites__link-accent" href="#">[Скачать реквизиты в PDF]</a>
-                    <a class="requisites__link" href="/politika-konfidentsialnosti">Политика конфиденциальности</a>
+                    <a class="requisites__link" href="<?php echo get_privacy_policy_url(); ?>">Политика конфиденциальности</a>
                     <a class="requisites__link" href="/polzovatelskoe-soglashenie">Пользовательское соглашение</a>
                 </div>
             </div>

@@ -83,7 +83,15 @@ defined('ABSPATH') || exit;
                                     <td class="product-thumbnail">
                                         <?php echo $product_permalink ? sprintf('<a href="%s">%s</a>', esc_url($product_permalink), $_product->get_image()) : $_product->get_image(); ?>
                                     </td>
-                                    <td class="product-name"><?php echo wp_kses_post($_product->get_name()); ?></td>
+                                    <td class="product-name">
+                                        <?php
+                                        if (!$product_permalink) {
+                                            echo wp_kses_post(apply_filters('woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key) . '&nbsp;');
+                                        } else {
+                                            echo wp_kses_post(apply_filters('woocommerce_cart_item_name', sprintf('<a href="%s">%s</a>', esc_url($product_permalink), $_product->get_name()), $cart_item, $cart_item_key));
+                                        }
+                                        ?>
+                                    </td>
                                     <td class="product-price"><?php echo wc_price($_product->get_price()); ?></td>
                                     <td class="product-quantity">
                                         <?php
@@ -123,156 +131,239 @@ defined('ABSPATH') || exit;
     <?php get_footer(); ?>
     <?php wp_footer(); ?>
 
-    <script>
-        jQuery(document).ready(function($) {
-            // Функция для обновления корзины
-            function updateCart($input) {
-                var $tr = $input.closest('tr');
-                var cart_item_key = $tr.data('cart_item_key');
-                var quantity = parseInt($input.val()) || 0;
+<script>
+jQuery(document).ready(function($) {
+    // Функция для обновления корзины
+    function updateCart($input) {
+        var $tr = $input.closest('tr');
+        var cart_item_key = $tr.data('cart_item_key');
+        var quantity = parseInt($input.val()) || 0;
 
-                $.ajax({
-                    url: "<?php echo admin_url('admin-ajax.php'); ?>",
-                    type: 'POST',
-                    data: {
-                        action: 'custom_update_cart_quantity',
-                        cart_item_key: cart_item_key,
-                        quantity: quantity,
-                        nonce: '<?php echo wp_create_nonce("cart-ajax-nonce"); ?>'
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#cart-items-body').html(response.data.cart_tbody);
-                            $('#cart-collaterals').html(response.data.cart_totals);
-                            updateBulkActions(); // Обновляем состояние кнопок
-                        } else {
-                            console.error('Error:', response.data);
-                            location.reload();
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error);
-                        location.reload();
-                    }
-                });
-            }
-
-            // Обработчик для кнопок +/-
-            $('body').on('click', '.plus, .minus', function() {
-                var $input = $(this).siblings('input.qty');
-                setTimeout(function() {
-                    updateCart($input);
-                }, 100);
-            });
-
-            // Обработчик прямого изменения количества
-            $('body').on('change', 'input.qty', function() {
-                updateCart($(this));
-            });
-
-            // Обработчик удаления товара
-            $('body').on('click', 'a.remove', function(e) {
-                e.preventDefault();
-                var $tr = $(this).closest('tr');
-                var cart_item_key = $tr.data('cart_item_key');
-
-                $.ajax({
-                    url: "<?php echo admin_url('admin-ajax.php'); ?>",
-                    type: 'POST',
-                    data: {
-                        action: 'custom_remove_cart_item',
-                        cart_item_key: cart_item_key,
-                        nonce: '<?php echo wp_create_nonce("cart-ajax-nonce"); ?>'
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#cart-items-body').html(response.data.cart_tbody);
-                            $('#cart-collaterals').html(response.data.cart_totals);
-                            updateBulkActions(); // Обновляем состояние кнопок
-                        } else {
-                            console.error('Error:', response.data);
-                            location.reload();
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error);
-                        location.reload();
-                    }
-                });
-            });
-
-            // Функция для обновления состояния массовых действий
-            function updateBulkActions() {
-                var $checkboxes = $('.cart-item-checkbox');
-                var $checked = $checkboxes.filter(':checked');
-
-                if ($checked.length > 0) {
-                    $('#bulk-remove-items').show();
+        $.ajax({
+            url: "<?php echo admin_url('admin-ajax.php'); ?>",
+            type: 'POST',
+            data: {
+                action: 'custom_update_cart_quantity',
+                cart_item_key: cart_item_key,
+                quantity: quantity,
+                nonce: '<?php echo wp_create_nonce("cart-ajax-nonce"); ?>'
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('#cart-items-body').html(response.data.cart_tbody);
+                    $('#cart-collaterals').html(response.data.cart_totals);
+                    updateBulkActions(); // Обновляем состояние кнопок
+                    
+                    // ОБНОВЛЯЕМ МИНИ-КОРЗИНУ И СЧЕТЧИК
+                    updateMiniCartAndCounter(response.data.items_count);
                 } else {
-                    $('#bulk-remove-items').hide();
+                    console.error('Error:', response.data);
+                    location.reload();
                 }
-
-                // Обновляем состояние "Выбрать все"
-                var allChecked = ($checkboxes.length > 0 && $checkboxes.length === $checked.length);
-                $('#select-all-items').prop('checked', allChecked);
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', error);
+                location.reload();
             }
-
-            // Обработчик для "Выбрать все"
-            $('#select-all-items').on('change', function() {
-                $('.cart-item-checkbox').prop('checked', $(this).prop('checked'));
-                updateBulkActions();
-            });
-
-            // Обработчик для отдельных чекбоксов
-            $('body').on('change', '.cart-item-checkbox', function() {
-                updateBulkActions();
-            });
-
-            // Обработчик массового удаления
-            $('#bulk-remove-items').on('click', function() {
-                var selectedItems = [];
-                $('.cart-item-checkbox:checked').each(function() {
-                    selectedItems.push($(this).val());
-                });
-
-                if (selectedItems.length === 0) {
-                    alert('Выберите товары для удаления');
-                    return;
-                }
-
-                // if (!confirm('Удалить выбранные товары?')) {
-                //     return;
-                // }
-
-                $.ajax({
-                    url: "<?php echo admin_url('admin-ajax.php'); ?>",
-                    type: 'POST',
-                    data: {
-                        action: 'custom_bulk_remove_cart_items',
-                        cart_item_keys: selectedItems,
-                        nonce: '<?php echo wp_create_nonce("cart-ajax-nonce"); ?>'
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#cart-items-body').html(response.data.cart_tbody);
-                            $('#cart-collaterals').html(response.data.cart_totals);
-                            updateBulkActions();
-                        } else {
-                            console.error('Error:', response.data);
-                            location.reload();
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error);
-                        location.reload();
-                    }
-                });
-            });
-
-            // Инициализация состояния кнопок при загрузке
-            updateBulkActions();
         });
-    </script>
+    }
+
+    // Функция для обновления мини-корзины и счетчика
+    function updateMiniCartAndCounter(itemsCount) {
+        // 1. Обновляем счетчик
+        updateCartCounter(itemsCount);
+        
+        // 2. Обновляем мини-корзину через WooCommerce фрагменты
+        if (typeof wc_cart_fragments_params !== 'undefined') {
+            $(document.body).trigger('wc_fragment_refresh');
+        }
+    }
+
+    // Функция для обновления счетчика корзины
+    function updateCartCounter(itemsCount) {
+        var count = parseInt(itemsCount) || 0;
+        
+        // Обновляем все счетчики на странице
+        $('.cart-count').each(function() {
+            var $counter = $(this);
+            
+            // Обновляем текст и data-атрибут
+            if (count > 0) {
+                $counter.text(count).css('display', 'flex');
+                $counter.attr('data-count', count);
+            } else {
+                $counter.text('').css('display', 'none');
+                $counter.attr('data-count', 0);
+            }
+            
+            // Добавляем анимацию обновления
+            $counter.addClass('updated');
+            setTimeout(function() {
+                $counter.removeClass('updated');
+            }, 500);
+        });
+        
+        // Также можно обновить элементы с другими классами, если они есть
+        $('.mini-cart-count, .header-cart-count').each(function() {
+            var $counter = $(this);
+            if (count > 0) {
+                $counter.text(count).show();
+            } else {
+                $counter.text('').hide();
+            }
+        });
+    }
+
+    // Обработчик для кнопок +/-
+    $('body').on('click', '.plus, .minus', function() {
+        var $input = $(this).siblings('input.qty');
+        setTimeout(function() {
+            updateCart($input);
+        }, 100);
+    });
+
+    // Обработчик прямого изменения количества
+    $('body').on('change', 'input.qty', function() {
+        updateCart($(this));
+    });
+
+    // Обработчик удаления товара - ИСПОЛЬЗУЕМ ДЕЛЕГИРОВАНИЕ
+    $('body').on('click', 'a.remove', function(e) {
+        e.preventDefault();
+        var $tr = $(this).closest('tr');
+        var cart_item_key = $tr.data('cart_item_key');
+
+        $.ajax({
+            url: "<?php echo admin_url('admin-ajax.php'); ?>",
+            type: 'POST',
+            data: {
+                action: 'custom_remove_cart_item',
+                cart_item_key: cart_item_key,
+                nonce: '<?php echo wp_create_nonce("cart-ajax-nonce"); ?>'
+            },
+            success: function(response) {
+                if (response.success) {
+                    if (response.data.items_count == 0) {
+                        // Если корзина пуста, обновляем счетчик и перезагружаем
+                        updateCartCounter(0);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 500);
+                    } else {
+                        // Обновляем таблицу, кнопки и счетчик
+                        $('#cart-items-body').html(response.data.cart_tbody);
+                        $('#cart-collaterals').html(response.data.cart_totals);
+                        updateBulkActions();
+                        updateCartCounter(response.data.items_count);
+                    }
+                } else {
+                    console.error('Error:', response.data);
+                    location.reload();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', error);
+                location.reload();
+            }
+        });
+    });
+
+    // Функция для обновления состояния массовых действий
+    function updateBulkActions() {
+        var $checkboxes = $('.cart-item-checkbox');
+        var $checked = $checkboxes.filter(':checked');
+
+        if ($checked.length > 0) {
+            $('#bulk-remove-items').show();
+        } else {
+            $('#bulk-remove-items').hide();
+        }
+
+        // Обновляем состояние "Выбрать все"
+        var allChecked = ($checkboxes.length > 0 && $checkboxes.length === $checked.length);
+        $('#select-all-items').prop('checked', allChecked);
+    }
+
+    // Обработчик для "Выбрать все" - ДЕЛЕГИРОВАНИЕ НЕ НУЖНО, т.к. этот элемент не перезагружается
+    $(document).on('change', '#select-all-items', function() {
+        $('.cart-item-checkbox').prop('checked', $(this).prop('checked'));
+        updateBulkActions();
+    });
+
+    // Обработчик для отдельных чекбоксов - ИСПОЛЬЗУЕМ ДЕЛЕГИРОВАНИЕ
+    $(document).on('change', '.cart-item-checkbox', function() {
+        updateBulkActions();
+    });
+
+    // Обработчик массового удаления - ДЕЛЕГИРОВАНИЕ НЕ НУЖНО
+    $(document).on('click', '#bulk-remove-items', function(e) {
+        e.preventDefault();
+        
+        var selectedItems = [];
+        $('.cart-item-checkbox:checked').each(function() {
+            selectedItems.push($(this).val());
+        });
+
+        if (selectedItems.length === 0) {
+            alert('Выберите товары для удаления');
+            return;
+        }
+
+        if (!confirm('Удалить выбранные товары из корзины?')) {
+            return;
+        }
+
+        $.ajax({
+            url: "<?php echo admin_url('admin-ajax.php'); ?>",
+            type: 'POST',
+            data: {
+                action: 'custom_bulk_remove_cart_items',
+                cart_item_keys: selectedItems,
+                nonce: '<?php echo wp_create_nonce("cart-ajax-nonce"); ?>'
+            },
+            success: function(response) {
+                if (response.success) {
+                    if (response.data.items_count == 0) {
+                        // Если корзина пуста, обновляем счетчик и перезагружаем
+                        updateCartCounter(0);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 500);
+                    } else {
+                        // Обновляем таблицу, кнопки и счетчик
+                        $('#cart-items-body').html(response.data.cart_tbody);
+                        $('#cart-collaterals').html(response.data.cart_totals);
+                        updateBulkActions();
+                        updateCartCounter(response.data.items_count);
+                    }
+                } else {
+                    console.error('Error:', response.data);
+                    location.reload();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', error);
+                location.reload();
+            }
+        });
+    });
+
+    // Также слушаем стандартные события WooCommerce для надежности
+    $(document.body).on('added_to_cart removed_from_cart', function() {
+        // Получаем актуальное количество через AJAX
+        $.ajax({
+            url: '<?php echo esc_url(home_url('/?wc-ajax=get_cart_contents_count')); ?>',
+            type: 'GET',
+            success: function(count) {
+                updateCartCounter(count);
+            }
+        });
+    });
+
+    // Инициализация состояния кнопок при загрузке
+    updateBulkActions();
+});
+</script>
 </body>
 
 </html>

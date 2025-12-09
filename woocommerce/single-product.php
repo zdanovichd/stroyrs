@@ -504,7 +504,7 @@ get_template_part('template-parts/head');
                             <button type="submit" class="consult__button">Отправить заявку</button>
 
                             <div class="consult__policy">
-                                Нажимая «Отправить заявку», вы принимаете условия <a href="/politika-konfidentsialnosti">Политики конфиденциальности</a> и даете согласие на обработку ваших персональных данных
+                                Нажимая «Отправить заявку», вы принимаете условия <a href="<?php echo get_privacy_policy_url(); ?>">Политики конфиденциальности</a> и даете согласие на обработку ваших персональных данных
                             </div>
                         </div>
                     </form>
@@ -662,42 +662,99 @@ get_template_part('template-parts/head');
             });
 
             // Функция для обновления мини-корзины
-            function updateMiniCart() {
-                return new Promise((resolve, reject) => {
-                    // Способ 1: Используем встроенный механизм WooCommerce
-                    if (typeof wc_cart_fragments_params !== 'undefined' && typeof jQuery !== 'undefined') {
-                        jQuery(document.body).trigger('wc_fragment_refresh');
-                        console.log('Mini-cart updated via WC fragments');
-                        resolve();
-                        return;
-                    }
+function updateMiniCart() {
+    return new Promise((resolve, reject) => {
+        // Способ 1: Используем встроенный механизм WooCommerce
+        if (typeof wc_cart_fragments_params !== 'undefined' && typeof jQuery !== 'undefined') {
+            jQuery(document.body).trigger('wc_fragment_refresh');
+            console.log('Mini-cart updated via WC fragments');
+            
+            // Дополнительно обновляем счетчик вручную
+            setTimeout(() => {
+                updateCartCounter();
+            }, 300);
+            
+            resolve();
+            return;
+        }
 
-                    // Способ 2: Делаем AJAX запрос для обновления фрагментов
-                    fetch('/?wc-ajax=get_refreshed_fragments')
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.fragments) {
-                                // Обновляем все фрагменты на странице
-                                Object.keys(data.fragments).forEach(selector => {
-                                    const elements = document.querySelectorAll(selector);
-                                    elements.forEach(element => {
-                                        element.innerHTML = data.fragments[selector];
-                                    });
-                                });
-                                console.log('Mini-cart updated via fragments AJAX');
-                                resolve();
-                            } else {
-                                reject(new Error('No fragments in response'));
-                            }
-                        })
-                        .catch(error => {
-                            console.warn('Failed to update mini-cart via AJAX:', error);
-                            // Даже если не удалось обновить мини-корзину, товар уже в корзине
-                            resolve();
+        // Способ 2: Делаем AJAX запрос для обновления фрагментов
+        fetch('/?wc-ajax=get_refreshed_fragments')
+            .then(response => response.json())
+            .then(data => {
+                if (data.fragments) {
+                    // Обновляем все фрагменты на странице
+                    Object.keys(data.fragments).forEach(selector => {
+                        const elements = document.querySelectorAll(selector);
+                        elements.forEach(element => {
+                            element.innerHTML = data.fragments[selector];
                         });
+                    });
+                    
+                    // Обновляем счетчик отдельно
+                    updateCartCounter();
+                    
+                    console.log('Mini-cart updated via fragments AJAX');
+                    resolve();
+                } else {
+                    reject(new Error('No fragments in response'));
+                }
+            })
+            .catch(error => {
+                console.warn('Failed to update mini-cart via AJAX:', error);
+                // Пробуем обновить счетчик через другой метод
+                updateCartCounter();
+                resolve();
+            });
+    });
+}
+
+// Новая функция для обновления только счетчика
+// Упрощенная функция обновления счетчика
+function updateCartCounter() {
+    // Используем встроенную функцию WooCommerce
+    if (typeof wc_cart_fragments_params !== 'undefined') {
+        // WooCommerce сам обновит счетчик через фрагменты
+        return;
+    }
+    
+    // Альтернативный способ - делаем простой запрос
+    fetch(window.location.href)
+        .then(response => response.text())
+        .then(html => {
+            // Создаем временный элемент для парсинга
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            
+            // Ищем счетчик в обновленном HTML
+            const newCounter = temp.querySelector('.cart-count');
+            if (newCounter) {
+                const newCount = newCounter.getAttribute('data-count') || 0;
+                
+                // Обновляем все счетчики на странице
+                document.querySelectorAll('.cart-count').forEach(counter => {
+                    counter.setAttribute('data-count', newCount);
+                    
+                    if (parseInt(newCount) > 0) {
+                        counter.textContent = newCount;
+                        counter.style.display = 'flex';
+                    } else {
+                        counter.textContent = '';
+                        counter.style.display = 'none';
+                    }
+                    
+                    // Анимация
+                    counter.classList.add('updated');
+                    setTimeout(() => {
+                        counter.classList.remove('updated');
+                    }, 500);
                 });
             }
-
+        })
+        .catch(error => {
+            console.warn('Failed to update cart counter:', error);
+        });
+}
             // Функция для показа уведомления (опционально)
             function showCartNotification(message) {
                 let notification = document.querySelector('.cart-notification');

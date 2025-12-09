@@ -266,7 +266,10 @@ window.addEventListener('DOMContentLoaded', () => {
         modals.forEach(modal => {
             modal.classList.remove('modal--visible');
         });
-        document.body.style.overflow = ''; // Разблокируем прокрутку страницы
+        document.body.style.overflow = '';
+        document.body.style.height = '';
+        document.documentElement.style.overflow = '';
+        document.documentElement.style.height = '';
     }
 
     openButtons.forEach(button => {
@@ -280,6 +283,9 @@ window.addEventListener('DOMContentLoaded', () => {
                 // Открываем нужное модальное окно
                 modal.classList.add('modal--visible');
                 document.body.style.overflow = 'hidden'; // Блокируем прокрутку страницы
+                document.body.style.height = '100%';
+                document.documentElement.style.overflow = 'hidden';
+                document.documentElement.style.height = '100%';
             }
         });
     });
@@ -290,6 +296,9 @@ window.addEventListener('DOMContentLoaded', () => {
             if (modal) {
                 modal.classList.remove('modal--visible');
                 document.body.style.overflow = ''; // Разблокируем прокрутку страницы
+                document.body.style.height = '';
+                document.documentElement.style.overflow = '';
+                document.documentElement.style.height = '';
             }
         });
     });

@@ -17,9 +17,12 @@
                 <div class="hero__top">
                     <h1 class="hero__title"><span class="hero__title-highlight">Металл</span> для&nbsp;строительства <br>и&nbsp;промышленности</h1>
                     <p class="hero__description">Изготовление, поставка и монтаж металлоконструкций. <br>Широкий
-                        ассортимент металлопроката</p>
+                        ассортимент металлопроката. <br>Производство и поставка металлоконструкции. <br>Комплексная достава строительных материалов</p>
                 </div>
                 <div class="line"></div>
+                <!-- <div class="hero__middle">
+                    <p class="hero__description">Производство и поставка металлоконструкции <br>Комплексная достава строительных материалов</p>
+                </div> -->
                 <div class="hero__bottom">
                     <a class="hero__button hero__button--primary" href="/kalkulyator">
                         Рассчитать <br>стоимость
@@ -384,6 +387,8 @@
                         Наш секрет успеха это крепкий сплочённый коллектив профессионалов. Мы готовы к решению самых
                         сложных задач. Все наши клиенты знают нас, как надёжного, ответственного партнёра уже длительное
                         время.
+                        <br><br>
+                        В нашем распоряжении: Газели до 1,5 тонн загрузки,  5-ти тонные автомобили, длинномеры до 20т, манипуляторы от 3,5т до 12т грузоподъемностью
                     </p>
                     <a href="#" class="button button--red about__button">
                         <span>Узнать больше</span>
@@ -416,13 +421,14 @@
                         <span>дней</span>
                     </div>
                     <div class="about__label">
-                        Можем работать <br>в отсрочку
+                        Отсрочки для <br>постоянных клиентов
+                        <!-- Можем работать <br>в отсрочку -->
                     </div>
                 </div>
 
                 <div class="about__stat about__stat--dark">
-                    <div class="about__number">4+</div>
-                    <div class="about__label">Года на рынке</div>
+                    <div class="about__number  about__number--small"><span>более</span>10<span>лет</span></div>
+                    <div class="about__label">Опыт команды</div>
                 </div>
             </div>
         </section>

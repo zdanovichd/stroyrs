@@ -131,10 +131,42 @@ add_filter('template_include', function($template) {
         }
     }
 
+    // if (is_cart()) {
+    //     $custom_cart = get_stylesheet_directory() . '/woocommerce/cart/cart.php';
+    //     if (file_exists($custom_cart)) {
+    //         return $custom_cart;
+    //     }
+    // }
+
     if (is_cart()) {
-        $custom_cart = get_stylesheet_directory() . '/woocommerce/cart/cart.php';
-        if (file_exists($custom_cart)) {
-            return $custom_cart;
+        if (WC()->cart->is_empty()) {
+            // Шаблон для пустой корзины
+            $empty_cart_template = get_stylesheet_directory() . '/woocommerce/cart/cart-empty.php';
+            if (file_exists($empty_cart_template)) {
+                return $empty_cart_template;
+            }
+        } else {
+            // Шаблон для заполненной корзины
+            $cart_template = get_stylesheet_directory() . '/woocommerce/cart/cart.php';
+            if (file_exists($cart_template)) {
+                return $cart_template;
+            }
+        }
+    }
+
+      // Переопределение оформления заказа
+    if (is_checkout() && !is_wc_endpoint_url('order-received')) {
+        $checkout_template = get_stylesheet_directory() . '/woocommerce/checkout/form-checkout.php';
+        if (file_exists($checkout_template)) {
+            return $checkout_template;
+        }
+    }
+    
+    // Переопределение страницы "Заказ получен"
+    if (is_wc_endpoint_url('order-received')) {
+        $order_received_template = get_stylesheet_directory() . '/woocommerce/checkout/thankyou.php';
+        if (file_exists($order_received_template)) {
+            return $order_received_template;
         }
     }
 
@@ -331,10 +363,16 @@ function custom_bulk_remove_cart_items() {
 // Вспомогательная функция для получения данных корзины
 function get_cart_ajax_data() {
     if (!function_exists('WC') || !WC()->cart) {
-        return ['cart_tbody' => '', 'cart_totals' => ''];
+        return [
+            'cart_tbody' => '', 
+            'cart_totals' => '',
+            'items_count' => 0,
+            'cart_total' => '0',
+            'fragments' => array() // Добавляем фрагменты для мини-корзины
+        ];
     }
 
-    // Формируем tbody
+    // Формируем tbody (ваш существующий код)...
     ob_start();
     foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
         $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
@@ -347,7 +385,17 @@ function get_cart_ajax_data() {
         ?>
         <tr class="woocommerce-cart-form__cart-item" data-cart_item_key="<?php echo esc_attr($cart_item_key); ?>">
             <td class="product-checkbox">
-                <input type="checkbox" class="cart-item-checkbox" value="<?php echo esc_attr($cart_item_key); ?>" name="cart_item[]">
+                <label class="custom-checkbox">
+                                            <input type="checkbox" class="cart-item-checkbox" name="cart_item[]" value="<?php echo esc_attr($cart_item_key); ?>">
+                                            <span class="custom-checkbox__box">
+                                                <svg class="custom-checkbox__icon" viewBox="0 0 14 9" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M13.3657 0.222465C13.6781 0.519093 13.6781 1.00001 13.3657 1.29664L5.93137 8.35507C5.30654 8.94835 4.29347 8.94827 3.66864 8.35507L0.234312 5.09439C-0.0781041 4.79778 -0.0781041 4.31683 0.234312 4.02023C0.546737 3.72362 1.05327 3.72362 1.36569 4.02023L4.80001 7.28091L12.2343 0.222465C12.5467 -0.074155 13.0533 -0.074155 13.3657 0.222465Z"
+                                                        fill="black" />
+                                                </svg>
+                                            </span>
+                                        </label>
             </td>
             <td class="product-thumbnail">
                 <?php
@@ -415,11 +463,32 @@ function get_cart_ajax_data() {
     ob_start();
     woocommerce_cart_totals();
     $cart_totals = ob_get_clean();
+    
+    // Получаем фрагменты для мини-корзины
+    $fragments = array();
+    
+    // Фрагмент для счетчика
+    ob_start();
+    ?>
+    <span class="cart-count" data-count="<?php echo WC()->cart->get_cart_contents_count(); ?>">
+        <?php if (WC()->cart->get_cart_contents_count() > 0) : ?>
+            <?php echo WC()->cart->get_cart_contents_count(); ?>
+        <?php endif; ?>
+    </span>
+    <?php
+    $fragments['.cart-count'] = ob_get_clean();
+    
+    // Если у вас есть мини-корзина с товарами, можно добавить и ее
+    ob_start();
+    woocommerce_mini_cart();
+    $fragments['div.widget_shopping_cart_content'] = '<div class="widget_shopping_cart_content">' . ob_get_clean() . '</div>';
 
     return [
         'cart_tbody' => $cart_tbody,
         'cart_totals' => $cart_totals,
-        'items_count' => WC()->cart->get_cart_contents_count()
+        'items_count' => WC()->cart->get_cart_contents_count(),
+        'cart_total' => WC()->cart->get_cart_total(),
+        'fragments' => $fragments // Добавляем фрагменты
     ];
 }
 
@@ -563,15 +632,15 @@ function get_cart_ajax_data() {
 // }
 
 // Функция для получения приоритетных категорий
-function get_priority_categories() {
-    // Замените ID категорий на нужные вам
-    return [
-        16, // Арматура
-        24, // Труба круглая
-        21, // Труба профильная
-        36, // Швеллер
-    ];
-}
+// function get_priority_categories() {
+//     // Замените ID категорий на нужные вам
+//     return [
+//         16, // Арматура
+//         24, // Труба круглая
+//         21, // Труба профильная
+//         36, // Швеллер
+//     ];
+// }
 
 
 
@@ -587,7 +656,8 @@ function get_priority_categories() {
 //     ];
 // }
 
-// Функция для простой приоритетной сортировки
+
+// Исправленная функция приоритетной сортировки
 function custom_priority_orderby($clauses, $query) {
     global $wpdb;
     
@@ -600,59 +670,255 @@ function custom_priority_orderby($clauses, $query) {
     $priority_categories = get_priority_categories();
     
     if (!empty($priority_categories)) {
-        // Создаем условие для сортировки
-        $case_conditions = "CASE ";
+        // Создаем подзапрос для определения приоритета каждого товара
+        $priority_conditions = "CASE ";
         
         foreach ($priority_categories as $cat_id => $priority) {
-            $case_conditions .= "WHEN (
-                SELECT COUNT(*) FROM {$wpdb->term_relationships} tr
-                INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-                WHERE tr.object_id = {$wpdb->posts}.ID 
+            $priority_conditions .= "WHEN EXISTS (
+                SELECT 1 
+                FROM {$wpdb->term_relationships} AS tr
+                INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+                WHERE tr.object_id = {$wpdb->posts}.ID
                 AND tt.term_id = {$cat_id}
                 AND tt.taxonomy = 'product_cat'
-            ) > 0 THEN {$priority} ";
+            ) THEN {$priority} ";
         }
         
-        $case_conditions .= "ELSE 999 END"; // Все остальные получают низкий приоритет
+        $priority_conditions .= "ELSE 999 END";
         
-        // Добавляем сортировку
-        $clauses['fields'] .= ", ({$case_conditions}) as category_priority";
+        // Добавляем поле приоритета в SELECT
+        $clauses['fields'] .= ", ({$priority_conditions}) as product_priority";
+        
+        // Убираем старый ORDERBY и добавляем новый
+        $clauses['orderby'] = "product_priority ASC, {$wpdb->posts}.menu_order ASC, {$wpdb->posts}.post_title ASC";
+        
+        // Убираем GROUP BY если он есть, он может мешать сортировке
+        if (strpos($clauses['groupby'], $wpdb->posts . '.ID') !== false) {
+            $clauses['groupby'] = "{$wpdb->posts}.ID";
+        }
+    }
+    
+    return $clauses;
+}
+
+// Альтернативный, более надежный вариант
+function custom_priority_orderby_v2($clauses, $query) {
+    global $wpdb;
+    
+    if (is_admin() || !$query->is_main_query() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] !== 'product') {
+        return $clauses;
+    }
+    
+    $priority_categories = get_priority_categories();
+    
+    if (!empty($priority_categories)) {
+        // Создаем LEFT JOIN для каждой приоритетной категории
+        $join_counter = 1;
+        $case_parts = [];
+        
+        foreach ($priority_categories as $cat_id => $priority) {
+            $alias = "pc{$join_counter}";
+            
+            // Добавляем JOIN для категории
+            $clauses['join'] .= " LEFT JOIN (
+                SELECT tr.object_id 
+                FROM {$wpdb->term_relationships} tr
+                INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+                WHERE tt.term_id = {$cat_id}
+                AND tt.taxonomy = 'product_cat'
+                GROUP BY tr.object_id
+            ) AS {$alias} ON {$wpdb->posts}.ID = {$alias}.object_id";
+            
+            // Добавляем условие в CASE
+            $case_parts[] = "WHEN {$alias}.object_id IS NOT NULL THEN {$priority}";
+            
+            $join_counter++;
+        }
+        
+        // Собираем CASE выражение
+        $case_expression = "CASE " . implode(' ', $case_parts) . " ELSE 999 END";
+        
+        // Добавляем в SELECT
+        $clauses['fields'] .= ", {$case_expression} as product_priority";
+        
+        // Обновляем ORDER BY
+        $clauses['orderby'] = "product_priority ASC, {$wpdb->posts}.menu_order ASC, {$wpdb->posts}.post_title ASC";
+    }
+    
+    return $clauses;
+}
+
+// Самый простой и надежный вариант
+function custom_priority_orderby_simple($clauses, $query) {
+    global $wpdb;
+    
+    if (is_admin() || !$query->is_main_query() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] !== 'product') {
+        return $clauses;
+    }
+    
+    $priority_categories = get_priority_categories();
+    
+    if (!empty($priority_categories)) {
+        // Получаем ID категорий в порядке приоритета
+        $cat_ids = array_keys($priority_categories);
+        $cat_ids_string = implode(',', array_map('intval', $cat_ids));
+        
+        // Подзапрос для получения минимального приоритета категории товара
+        $subquery = "(
+            SELECT MIN(
+                CASE 
+                    WHEN tt.term_id IN ({$cat_ids_string}) 
+                    THEN FIND_IN_SET(tt.term_id, '{$cat_ids_string}')
+                    ELSE 999 
+                END
+            )
+            FROM {$wpdb->term_relationships} tr
+            INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+            WHERE tr.object_id = {$wpdb->posts}.ID
+            AND tt.taxonomy = 'product_cat'
+        )";
+        
+        // Добавляем в SELECT
+        $clauses['fields'] .= ", {$subquery} as category_priority";
+        
+        // Обновляем ORDER BY
         $clauses['orderby'] = "category_priority ASC, {$wpdb->posts}.menu_order ASC, {$wpdb->posts}.post_title ASC";
     }
     
     return $clauses;
 }
 
-// Функция для сортировки по умолчанию (приоритетная)
-function custom_default_sorting($query) {
-    // Только для главного запроса товаров на фронтенде
+// Используем самый простой вариант
+function custom_priority_orderby_final($clauses, $query) {
+    global $wpdb;
+    
+    if (is_admin() || !$query->is_main_query() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] !== 'product') {
+        return $clauses;
+    }
+    
+    $priority_categories = get_priority_categories();
+    
+    if (!empty($priority_categories)) {
+        // Создаем CASE выражение
+        $case_parts = ["CASE"];
+        
+        foreach ($priority_categories as $cat_id => $priority) {
+            $case_parts[] = "WHEN EXISTS (
+                SELECT 1 
+                FROM {$wpdb->term_relationships}
+                INNER JOIN {$wpdb->term_taxonomy} ON {$wpdb->term_relationships}.term_taxonomy_id = {$wpdb->term_taxonomy}.term_taxonomy_id
+                WHERE {$wpdb->term_relationships}.object_id = {$wpdb->posts}.ID
+                AND {$wpdb->term_taxonomy}.term_id = {$cat_id}
+                AND {$wpdb->term_taxonomy}.taxonomy = 'product_cat'
+            ) THEN {$priority}";
+        }
+        
+        $case_parts[] = "ELSE 999 END";
+        $case_expression = implode(' ', $case_parts);
+        
+        // Добавляем поле для сортировки
+        $clauses['fields'] .= ", {$case_expression} as sort_priority";
+        
+        // Убираем лишние JOIN если они есть
+        if (empty($clauses['join'])) {
+            // Добавляем минимальный JOIN для работы подзапроса
+            $clauses['join'] = " LEFT JOIN {$wpdb->term_relationships} ON {$wpdb->posts}.ID = {$wpdb->term_relationships}.object_id";
+            $clauses['join'] .= " LEFT JOIN {$wpdb->term_taxonomy} ON {$wpdb->term_relationships}.term_taxonomy_id = {$wpdb->term_taxonomy}.term_taxonomy_id";
+            $clauses['where'] .= " AND {$wpdb->term_taxonomy}.taxonomy = 'product_cat'";
+        }
+        
+        // Обновляем сортировку
+        $clauses['orderby'] = "sort_priority ASC, {$wpdb->posts}.menu_order ASC, {$wpdb->posts}.post_title ASC";
+        
+        // Группируем по ID поста чтобы избежать дубликатов
+        $clauses['groupby'] = "{$wpdb->posts}.ID";
+    }
+    
+    return $clauses;
+}
+
+// Функция для получения приоритетных категорий (улучшенная)
+function get_priority_categories() {
+    // Определяем ID категорий и их приоритет (чем меньше число, тем выше приоритет)
+    $categories = [
+        16 => 1, // Металлопрокат - высший приоритет
+        24 => 2, // Трубы
+        21 => 3, // Арматура
+        36 => 4, // Листовой металл
+        // Добавьте другие категории
+    ];
+    
+    // Проверяем существование категорий
+    $valid_categories = [];
+    foreach ($categories as $cat_id => $priority) {
+        $term = get_term($cat_id, 'product_cat');
+        if ($term && !is_wp_error($term)) {
+            $valid_categories[$cat_id] = $priority;
+        }
+    }
+    
+    return $valid_categories;
+}
+
+// Основная функция для сортировки по умолчанию
+function custom_default_product_sorting($query) {
+    // Только для фронтенда и главного запроса товаров
     if (is_admin() || !$query->is_main_query() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] !== 'product') {
         return;
     }
     
-    // Только если не выбрана другая сортировка через GET параметр
-    if (isset($_GET['sort']) && $_GET['sort'] !== 'default') {
-        return;
-    }
+    // Проверяем параметр сортировки
+    $current_sort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
     
-    // Для главной страницы магазина
-    if (is_shop()) {
+    // Если выбрана сортировка по умолчанию И это главная страница магазина
+    if ($current_sort === 'default' && is_shop()) {
         // Добавляем фильтр для приоритетной сортировки
-        add_filter('posts_clauses', 'custom_priority_orderby', 10, 2);
+        add_filter('posts_clauses', 'custom_priority_orderby_final', 10, 2);
         
-        // Устанавливаем базовую сортировку
+        // Устанавливаем базовые параметры
         $query->set('orderby', 'menu_order title');
         $query->set('order', 'ASC');
+        $query->set('posts_per_page', 12);
+    }
+    
+    // Для других типов сортировки или страниц категорий - стандартная обработка
+    if ($current_sort !== 'default') {
+        switch($current_sort) {
+            case 'price-asc':
+                $query->set('meta_key', '_price');
+                $query->set('orderby', 'meta_value_num title');
+                $query->set('order', 'ASC');
+                break;
+            case 'price-desc':
+                $query->set('meta_key', '_price');
+                $query->set('orderby', 'meta_value_num title');
+                $query->set('order', 'DESC');
+                break;
+            case 'rating-desc':
+                $query->set('meta_key', '_wc_average_rating');
+                $query->set('orderby', 'meta_value_num title');
+                $query->set('order', 'DESC');
+                break;
+            case 'name-asc':
+                $query->set('orderby', 'title');
+                $query->set('order', 'ASC');
+                break;
+            case 'name-desc':
+                $query->set('orderby', 'title');
+                $query->set('order', 'DESC');
+                break;
+        }
     }
 }
-add_action('pre_get_posts', 'custom_default_sorting', 20);
+add_action('pre_get_posts', 'custom_default_product_sorting', 20);
 
 // Удаляем фильтр после выполнения запроса
-add_action('wp', function() {
-    remove_filter('posts_clauses', 'custom_priority_orderby', 10);
-});
+function remove_priority_sorting_filter() {
+    remove_filter('posts_clauses', 'custom_priority_orderby_final', 10);
+}
+add_action('wp', 'remove_priority_sorting_filter');
 
-// Обработчик AJAX для бесконечной прокрутки с поддержкой сортировки
+// AJAX обработчик (обновленный)
 add_action('wp_ajax_load_more_products', 'load_more_products_handler');
 add_action('wp_ajax_nopriv_load_more_products', 'load_more_products_handler');
 
@@ -662,68 +928,62 @@ function load_more_products_handler() {
     $sort = isset($_POST['sort']) ? sanitize_text_field($_POST['sort']) : 'default';
     $category_id = isset($_POST['category']) && !empty($_POST['category']) ? intval($_POST['category']) : 0;
     
-    $args = array(
+    $args = [
         'post_type' => 'product',
         'posts_per_page' => $posts_per_page,
         'post_status' => 'publish',
         'paged' => $page,
         'ignore_sticky_posts' => 1,
-    );
+    ];
     
     // Если передан ID категории
     if ($category_id > 0) {
-        $args['tax_query'] = array(
-            array(
+        $args['tax_query'] = [
+            [
                 'taxonomy' => 'product_cat',
                 'field' => 'id',
                 'terms' => $category_id,
-            )
-        );
+            ]
+        ];
     }
     
-    // Добавляем параметры сортировки
-    switch($sort) {
-        case 'price-asc':
-            $args['meta_key'] = '_price';
-            $args['orderby'] = 'meta_value_num';
-            $args['order'] = 'ASC';
-            break;
-            
-        case 'price-desc':
-            $args['meta_key'] = '_price';
-            $args['orderby'] = 'meta_value_num';
-            $args['order'] = 'DESC';
-            break;
-            
-        case 'rating-desc':
-            $args['meta_key'] = '_wc_average_rating';
-            $args['orderby'] = 'meta_value_num';
-            $args['order'] = 'DESC';
-            break;
-            
-        case 'name-asc':
-            $args['orderby'] = 'title';
-            $args['order'] = 'ASC';
-            break;
-            
-        case 'name-desc':
-            $args['orderby'] = 'title';
-            $args['order'] = 'DESC';
-            break;
-            
-        case 'default':
-        default:
-            // Для главной страницы магазина используем приоритетную сортировку
-            if ($category_id === 0) {
-                add_filter('posts_clauses', 'custom_priority_orderby', 10, 2);
+    // Применяем сортировку
+    if ($sort === 'default' && $category_id === 0) {
+        // Для главной страницы с сортировкой по умолчанию
+        add_filter('posts_clauses', 'custom_priority_orderby_final', 10, 2);
+        $args['orderby'] = 'menu_order title';
+        $args['order'] = 'ASC';
+    } else {
+        // Для других случаев
+        switch($sort) {
+            case 'price-asc':
+                $args['meta_key'] = '_price';
+                $args['orderby'] = 'meta_value_num title';
+                $args['order'] = 'ASC';
+                break;
+            case 'price-desc':
+                $args['meta_key'] = '_price';
+                $args['orderby'] = 'meta_value_num title';
+                $args['order'] = 'DESC';
+                break;
+            case 'rating-desc':
+                $args['meta_key'] = '_wc_average_rating';
+                $args['orderby'] = 'meta_value_num title';
+                $args['order'] = 'DESC';
+                break;
+            case 'name-asc':
+                $args['orderby'] = 'title';
+                $args['order'] = 'ASC';
+                break;
+            case 'name-desc':
+                $args['orderby'] = 'title';
+                $args['order'] = 'DESC';
+                break;
+            default:
                 $args['orderby'] = 'menu_order title';
                 $args['order'] = 'ASC';
-            } else {
-                // Для категорий используем стандартную сортировку
-                $args['orderby'] = 'menu_order title';
-                $args['order'] = 'ASC';
-            }
-            break;
+                break;
+        }
     }
     
     $products = new WP_Query($args);
@@ -740,29 +1000,411 @@ function load_more_products_handler() {
     
     $html = ob_get_clean();
     
-    // Удаляем фильтр после выполнения запроса
-    remove_filter('posts_clauses', 'custom_priority_orderby', 10);
+    // Удаляем фильтр
+    remove_filter('posts_clauses', 'custom_priority_orderby_final', 10);
     
-    wp_send_json_success(array(
+    wp_send_json_success([
         'html' => $html,
         'max_pages' => $products->max_num_pages,
         'current_page' => $page
-    ));
+    ]);
 }
 
-// Дополнительная функция для отладки сортировки
-function debug_priority_sorting($posts, $query) {
-    if (!is_admin() && $query->is_main_query() && isset($query->query_vars['post_type']) && $query->query_vars['post_type'] === 'product') {
-        error_log('Total products: ' . count($posts));
-        foreach ($posts as $post) {
-            $categories = wp_get_post_terms($post->ID, 'product_cat');
-            $cat_names = array_map(function($cat) {
-                return $cat->name . ' (ID: ' . $cat->term_id . ')';
-            }, $categories);
-            error_log('Product ' . $post->ID . ' - ' . $post->post_title . ' - Categories: ' . implode(', ', $cat_names));
+// Функция для отладки
+function debug_product_sorting() {
+    if (is_shop() && (!isset($_GET['sort']) || $_GET['sort'] === 'default')) {
+        echo '<div style="background: #f0f0f0; padding: 10px; margin: 10px 0;">';
+        echo '<h3>Debug: Priority Categories</h3>';
+        
+        $priority_categories = get_priority_categories();
+        echo '<p>Priority categories found: ' . count($priority_categories) . '</p>';
+        
+        foreach ($priority_categories as $cat_id => $priority) {
+            $term = get_term($cat_id, 'product_cat');
+            if ($term) {
+                echo '<p>ID: ' . $cat_id . ' - Name: ' . $term->name . ' - Priority: ' . $priority . '</p>';
+            }
+        }
+        
+        // Показываем текущий запрос
+        global $wp_query;
+        echo '<p>Query vars: ' . print_r($wp_query->query_vars, true) . '</p>';
+        echo '</div>';
+    }
+}
+add_action('woocommerce_before_shop_loop', 'debug_product_sorting');
+
+
+/**
+ * Кастомизация полей оформления заказа
+ */
+add_filter('woocommerce_checkout_fields', 'custom_checkout_fields');
+
+function custom_checkout_fields($fields) {
+    // Убираем все ненужные поля
+    unset($fields['billing']['billing_company']);
+    unset($fields['billing']['billing_country']);
+    unset($fields['billing']['billing_state']);
+    unset($fields['billing']['billing_postcode']);
+    unset($fields['billing']['billing_address_2']);
+    unset($fields['billing']['billing_city']); // если не нужно
+    unset($fields['billing']['billing_last_name']);
+    
+    // Настраиваем оставшиеся поля
+    $fields['billing']['billing_first_name']['label'] = 'ФИО';
+    $fields['billing']['billing_first_name']['placeholder'] = 'ФИО*';
+    $fields['billing']['billing_first_name']['required'] = true;
+    $fields['billing']['billing_first_name']['priority'] = 10;
+    
+    $fields['billing']['billing_phone']['label'] = 'Телефон';
+    $fields['billing']['billing_phone']['placeholder'] = 'Телефон*';
+    $fields['billing']['billing_phone']['required'] = true;
+    $fields['billing']['billing_phone']['priority'] = 20;
+    
+    $fields['billing']['billing_email']['label'] = 'Email';
+    $fields['billing']['billing_email']['placeholder'] = 'Email*';
+    $fields['billing']['billing_email']['required'] = true;
+    $fields['billing']['billing_email']['priority'] = 30;
+    
+    $fields['billing']['billing_address_1']['label'] = 'Адрес доставки';
+    $fields['billing']['billing_address_1']['placeholder'] = 'Адрес доставки*';
+    $fields['billing']['billing_address_1']['required'] = true;
+    $fields['billing']['billing_address_1']['priority'] = 40;
+    
+    // Настраиваем поле комментария
+    $fields['order']['order_comments']['label'] = 'Комментарий к заказу';
+    $fields['order']['order_comments']['placeholder'] = 'Комментарий к заказу';
+    $fields['order']['order_comments']['priority'] = 50;
+    
+    return $fields;
+}
+
+/**
+ * Отключаем создание аккаунта при оформлении заказа
+ */
+add_filter('woocommerce_checkout_registration_enabled', '__return_false');
+
+/**
+ * Разрешаем оформление заказа без регистрации
+ */
+add_filter('woocommerce_checkout_registration_required', '__return_false');
+
+/**
+ * Отключаем обязательную регистрацию для оформления заказа
+ */
+add_filter('woocommerce_checkout_registration_required', '__return_false');
+
+/**
+ * Изменяем текст кнопки оформления заказа
+ */
+add_filter('woocommerce_order_button_text', 'custom_order_button_text');
+
+function custom_order_button_text() {
+    return 'Отправить заявку';
+}
+
+/**
+ * Добавляем текст о политике конфиденциальности перед кнопкой заказа
+ */
+add_action('woocommerce_review_order_before_submit', 'add_privacy_policy_text');
+
+function add_privacy_policy_text() {
+    echo '<div class="checkout__policy" style="margin-bottom: 20px; font-size: 14px; color: #666;">';
+    echo 'Нажимая «Отправить», вы принимаете условия <a href="' . get_privacy_policy_url() . '" target="_blank">Политики конфиденциальности</a> и даете ваше согласие на обработку персональных данных';
+    echo '</div>';
+}
+
+/**
+ * Переопределяем шаблон оформления заказа
+ */
+function custom_checkout_template_include($template) {
+    if (is_checkout() && !is_wc_endpoint_url('order-received')) {
+        $custom_checkout = get_stylesheet_directory() . '/woocommerce/checkout/custom-checkout.php';
+        if (file_exists($custom_checkout)) {
+            return $custom_checkout;
         }
     }
-    return $posts;
+    return $template;
 }
-// add_filter('the_posts', 'debug_priority_sorting', 10, 2);
-?>
+add_filter('template_include', 'custom_checkout_template_include', 99);
+
+/**
+ * Убираем табы логина/регистрации со страницы оформления заказа
+ */
+remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_login_form', 10);
+remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10);
+
+/**
+ * Отключаем проверку на наличие аккаунта при оформлении заказа
+ */
+add_filter('woocommerce_checkout_registration_required', '__return_false');
+
+/**
+ * Убираем опцию создания аккаунта из формы
+ */
+add_filter('woocommerce_create_account_default_checked', '__return_false');
+
+/**
+ * Переопределяем шаблон страницы "Спасибо"
+ */
+function custom_thankyou_template_include($template) {
+    if (is_wc_endpoint_url('order-received')) {
+        $custom_thankyou = get_stylesheet_directory() . '/woocommerce/checkout/thankyou.php';
+        if (file_exists($custom_thankyou)) {
+            return $custom_thankyou;
+        }
+    }
+    return $template;
+}
+add_filter('template_include', 'custom_thankyou_template_include', 99);
+
+/**
+ * Отправляем email администратору при создании заказа
+ */
+add_action('woocommerce_checkout_order_processed', 'send_admin_order_email', 10, 3);
+
+function send_admin_order_email($order_id, $posted_data, $order) {
+    // WooCommerce автоматически отправляет email при создании заказа
+    // Эта функция нужна для дополнительной кастомизации
+    
+    // Можно добавить дополнительные получателей
+    $admin_email = get_option('admin_email');
+    $subject = 'Новая заявка #' . $order_id;
+    
+    // Дополнительная логика если нужно
+}
+
+
+/**
+ * Отключаем валидацию ненужных полей
+ */
+add_filter('woocommerce_checkout_posted_data', 'simplify_checkout_data');
+
+function simplify_checkout_data($data) {
+    // Делаем необязательными некоторые поля
+    $optional_fields = array('billing_last_name', 'billing_company', 'billing_country', 'billing_state', 'billing_postcode', 'billing_city');
+    
+    foreach ($optional_fields as $field) {
+        if (isset($data[$field]) && empty($data[$field])) {
+            unset($data[$field]);
+        }
+    }
+    
+    return $data;
+}
+
+/**
+ * Полностью отключаем платежную систему
+ */
+add_filter('woocommerce_cart_needs_payment', '__return_false');
+add_filter('woocommerce_order_needs_payment', '__return_false');
+
+/**
+ * Убираем все методы оплаты
+ */
+add_filter('woocommerce_available_payment_gateways', 'remove_all_payment_methods');
+
+function remove_all_payment_methods($gateways) {
+    return array(); // Возвращаем пустой массив
+}
+
+/**
+ * Создаем простой обработчик заказа без платежа
+ */
+add_action('woocommerce_checkout_process', 'process_order_without_payment');
+
+function process_order_without_payment() {
+    // Убеждаемся, что метод оплаты установлен
+    if (!isset($_POST['payment_method'])) {
+        $_POST['payment_method'] = 'custom_request';
+    }
+}
+
+/**
+ * Создаем виртуальный метод оплаты
+ */
+add_filter('woocommerce_payment_gateways', 'add_request_payment_gateway');
+
+function add_request_payment_gateway($gateways) {
+    $gateways[] = 'WC_Request_Payment_Gateway';
+    return $gateways;
+}
+
+class WC_Request_Payment_Gateway extends WC_Payment_Gateway {
+    
+    public function __construct() {
+        $this->id = 'request_payment';
+        $this->method_title = 'Заявка';
+        $this->method_description = 'Заявка без онлайн-оплаты';
+        $this->has_fields = false;
+        
+        $this->init_form_fields();
+        $this->init_settings();
+        
+        $this->title = $this->get_option('title');
+        $this->description = $this->get_option('description');
+        $this->enabled = $this->get_option('enabled');
+        
+        add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
+    }
+    
+    public function init_form_fields() {
+        $this->form_fields = array(
+            'enabled' => array(
+                'title'   => 'Включить',
+                'type'    => 'checkbox',
+                'label'   => 'Включить метод "Заявка"',
+                'default' => 'yes'
+            ),
+            'title' => array(
+                'title'       => 'Название',
+                'type'        => 'text',
+                'description' => 'Название метода, которое видит пользователь',
+                'default'     => 'Заявка',
+                'desc_tip'    => true,
+            ),
+            'description' => array(
+                'title'       => 'Описание',
+                'type'        => 'textarea',
+                'description' => 'Описание метода оплаты, которое видит пользователь',
+                'default'     => 'Мы свяжемся с вами для подтверждения заказа',
+                'desc_tip'    => true,
+            ),
+        );
+    }
+    
+    public function process_payment($order_id) {
+        $order = wc_get_order($order_id);
+        
+        // Устанавливаем статус "В обработке"
+        $order->update_status('processing', 'Заявка успешно отправлена');
+        
+        // Очищаем корзину
+        WC()->cart->empty_cart();
+        
+        // Возвращаем успешный редирект
+        return array(
+            'result'   => 'success',
+            'redirect' => $this->get_return_url($order)
+        );
+    }
+    
+    public function is_available() {
+        return $this->enabled === 'yes';
+    }
+}
+
+
+
+/**
+ * Изменяем текст ошибки для полей оформления заказа
+ */
+add_filter('woocommerce_checkout_fields', 'customize_checkout_field_labels_errors');
+
+function customize_checkout_field_labels_errors($fields) {
+    // Убираем "Выставление счёта" из названий полей и ошибок
+    foreach ($fields['billing'] as $key => &$field) {
+        switch ($key) {
+            case 'billing_first_name':
+                $field['label'] = 'ФИО';
+                // Изменяем текст ошибки
+                add_filter('woocommerce_checkout_required_field_notice', function($notice, $field_label) use ($field) {
+                    if ($field_label === $field['label']) {
+                        return 'Поле "ФИО" является обязательным.';
+                    }
+                    return $notice;
+                }, 10, 2);
+                break;
+                
+            case 'billing_phone':
+                $field['label'] = 'Телефон';
+                add_filter('woocommerce_checkout_required_field_notice', function($notice, $field_label) use ($field) {
+                    if ($field_label === $field['label']) {
+                        return 'Поле "Телефон" является обязательным.';
+                    }
+                    return $notice;
+                }, 10, 2);
+                break;
+                
+            case 'billing_email':
+                $field['label'] = 'Email';
+                add_filter('woocommerce_checkout_required_field_notice', function($notice, $field_label) use ($field) {
+                    if ($field_label === $field['label']) {
+                        return 'Поле "Email" является обязательным.';
+                    }
+                    return $notice;
+                }, 10, 2);
+                break;
+                
+            case 'billing_address_1':
+                $field['label'] = 'Адрес доставки';
+                add_filter('woocommerce_checkout_required_field_notice', function($notice, $field_label) use ($field) {
+                    if ($field_label === $field['label']) {
+                        return 'Поле "Адрес доставки" является обязательным.';
+                    }
+                    return $notice;
+                }, 10, 2);
+                break;
+        }
+    }
+    
+    return $fields;
+}
+
+/**
+ * Убираем "Выставление счёта" из всех сообщений об ошибках
+ */
+add_filter('woocommerce_checkout_required_field_notice', 'remove_billing_from_error_messages', 10, 2);
+
+function remove_billing_from_error_messages($notice, $field_label) {
+    // Убираем "Выставление счёта" из всех сообщений об ошибках
+    $notice = str_replace('Выставление счёта', 'Поле', $notice);
+    $notice = str_replace('Оплата', 'Поле', $notice);
+    $notice = str_replace('Поле ', '', $notice); // Убираем лишнее "Поле"
+    
+    // Делаем сообщения более понятными
+    if (strpos($notice, 'является обязательным полем') !== false) {
+        $field_name = str_replace(' является обязательным полем.', '', $notice);
+        $notice = 'Поле "' . trim($field_name) . '" является обязательным.';
+    }
+    
+    return $notice;
+}
+
+/**
+ * Глобально убираем "Выставление счёта" из всех текстов WooCommerce
+ */
+add_filter('gettext', 'remove_billing_text', 20, 3);
+
+function remove_billing_text($translated_text, $text, $domain) {
+    if ($domain === 'woocommerce') {
+        // Заменяем "Выставление счёта" на пустую строку или "Поле"
+        $translated_text = str_replace('Выставление счёта', '', $translated_text);
+        $translated_text = str_replace('Оплата', '', $translated_text);
+        $translated_text = str_replace('Billing', '', $translated_text);
+        
+        // Исправляем остатки
+        $translated_text = preg_replace('/\s+/', ' ', $translated_text); // Убираем двойные пробелы
+        $translated_text = trim($translated_text);
+        
+        // Если текст начинается с лишнего пробела или знака препинания
+        if (strpos($translated_text, ' ') === 0) {
+            $translated_text = substr($translated_text, 1);
+        }
+        
+        // Если осталось " является обязательным полем", добавляем "Поле"
+        if (strpos($translated_text, 'является обязательным полем') !== false) {
+            $translated_text = 'Поле ' . $translated_text;
+        }
+    }
+    
+    return $translated_text;
+}
+
+// AJAX обработчик для получения количества товаров в корзине
+add_action('wp_ajax_get_cart_contents_count', 'get_cart_contents_count_ajax');
+add_action('wp_ajax_nopriv_get_cart_contents_count', 'get_cart_contents_count_ajax');
+function get_cart_contents_count_ajax() {
+    echo WC()->cart->get_cart_contents_count();
+    wp_die();
+}
