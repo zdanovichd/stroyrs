@@ -11,7 +11,7 @@
         <section class="hero">
             <!-- <img class="hero__banner" src="<?php //echo get_template_directory_uri(); ?>/assets/img/banner.webp" alt=""> -->
             
-            <img class="hero__banner" src="<?php echo get_template_directory_uri(); ?>/assets/img/первый экран-2.jpg" alt="">
+            <img class="hero__banner" src="<?php echo get_template_directory_uri(); ?>/assets/img/hero_banner.webp" alt="">
             <div class="overlay overlay-hero"></div>
             <div class="hero__wrapper">
                 <div class="hero__top">
@@ -160,7 +160,7 @@
                 <div class="swiper-wrapper">
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/71d3debfe5770f702575ab5ed74c08be5b0c9e93.jpg" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/71d3debfe5770f702575ab5ed74c08be5b0c9e93.webp" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
@@ -176,7 +176,7 @@
 
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/2de8c231d98b089186a82d9516ef02d180a506fa.jpg" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/2de8c231d98b089186a82d9516ef02d180a506fa.webp" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
@@ -192,7 +192,7 @@
 
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/71d3debfe5770f702575ab5ed74c08be5b0c9e93.jpg" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/71d3debfe5770f702575ab5ed74c08be5b0c9e93.webp" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
@@ -208,7 +208,7 @@
 
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/2de8c231d98b089186a82d9516ef02d180a506fa.jpg" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/2de8c231d98b089186a82d9516ef02d180a506fa.webp" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
@@ -224,7 +224,7 @@
 
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/71d3debfe5770f702575ab5ed74c08be5b0c9e93.jpg" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/71d3debfe5770f702575ab5ed74c08be5b0c9e93.webp" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
