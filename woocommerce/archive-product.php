@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 
-<?php 
-    get_template_part('template-parts/head');
+<?php
+get_template_part('template-parts/head');
 ?>
 
 <body>
@@ -33,64 +33,64 @@
                             ?>
                         </p>
                     </div>
-                    
+
                     <!-- Блок сортировки -->
                     <!-- В секции сортировки обновите выбор по умолчанию -->
-<div class="catalog-sort" data-sort>
-    <button class="catalog-sort__toggle" aria-haspopup="listbox"
-        aria-labelledby="catalog-sort-label catalog-sort-current" aria-expanded="false"
-        type="button">
-        <span class="catalog-sort__current" id="catalog-sort-current">
-            <?php 
-            $sort_options = [
-                'default' => 'По умолчанию',
-                'price-asc' => 'Сначала дешевле',
-                'price-desc' => 'Сначала дороже',
-                'rating-desc' => 'По рейтингу',
-                'name-asc' => 'От А до Я',
-                'name-desc' => 'От Я до А'
-            ];
-            
-            $current_sort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
-            echo isset($sort_options[$current_sort]) ? $sort_options[$current_sort] : 'По умолчанию';
-            ?>
-        </span>
-        <svg class="catalog-sort__icon" viewBox="0 0 24 24" fill="none"
-            xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-            <path d="M16 18V6M16 6L20 10.125M16 6L12 10.125" stroke="#E8364B" stroke-width="1.5"
-                stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M8 6V18M8 18L12 13.875M8 18L4 13.875" stroke="#E8364B" stroke-width="1.5"
-                stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-    </button>
+                    <div class="catalog-sort" data-sort>
+                        <button class="catalog-sort__toggle" aria-haspopup="listbox"
+                            aria-labelledby="catalog-sort-label catalog-sort-current" aria-expanded="false"
+                            type="button">
+                            <span class="catalog-sort__current" id="catalog-sort-current">
+                                <?php
+                                $sort_options = [
+                                    'default' => 'По умолчанию',
+                                    'price-asc' => 'Сначала дешевле',
+                                    'price-desc' => 'Сначала дороже',
+                                    'rating-desc' => 'По рейтингу',
+                                    'name-asc' => 'От А до Я',
+                                    'name-desc' => 'От Я до А'
+                                ];
 
-    <ul class="catalog-sort__menu" role="listbox" aria-labelledby="catalog-sort-label"
-        tabindex="-1">
-        <li class="catalog-sort__option <?php echo ($current_sort == 'default') ? 'catalog-sort__option--selected' : ''; ?>" 
-            role="option" aria-selected="<?php echo ($current_sort == 'default') ? 'true' : 'false'; ?>" 
-            data-value="default">По умолчанию</li>
-        <li class="catalog-sort__option <?php echo ($current_sort == 'price-asc') ? 'catalog-sort__option--selected' : ''; ?>" 
-            role="option" aria-selected="<?php echo ($current_sort == 'price-asc') ? 'true' : 'false'; ?>" 
-            data-value="price-asc">Сначала дешевле</li>
-        <li class="catalog-sort__option <?php echo ($current_sort == 'price-desc') ? 'catalog-sort__option--selected' : ''; ?>" 
-            role="option" aria-selected="<?php echo ($current_sort == 'price-desc') ? 'true' : 'false'; ?>" 
-            data-value="price-desc">Сначала дороже</li>
-        <li class="catalog-sort__option <?php echo ($current_sort == 'rating-desc') ? 'catalog-sort__option--selected' : ''; ?>" 
-            role="option" aria-selected="<?php echo ($current_sort == 'rating-desc') ? 'true' : 'false'; ?>" 
-            data-value="rating-desc">По рейтингу</li>
-        <li class="catalog-sort__option <?php echo ($current_sort == 'name-asc') ? 'catalog-sort__option--selected' : ''; ?>" 
-            role="option" aria-selected="<?php echo ($current_sort == 'name-asc') ? 'true' : 'false'; ?>" 
-            data-value="name-asc">От А до Я</li>
-        <li class="catalog-sort__option <?php echo ($current_sort == 'name-desc') ? 'catalog-sort__option--selected' : ''; ?>" 
-            role="option" aria-selected="<?php echo ($current_sort == 'name-desc') ? 'true' : 'false'; ?>" 
-            data-value="name-desc">От Я до А</li>
-    </ul>
-</div>
+                                $current_sort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
+                                echo isset($sort_options[$current_sort]) ? $sort_options[$current_sort] : 'По умолчанию';
+                                ?>
+                            </span>
+                            <svg class="catalog-sort__icon" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                                <path d="M16 18V6M16 6L20 10.125M16 6L12 10.125" stroke="#E8364B" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M8 6V18M8 18L12 13.875M8 18L4 13.875" stroke="#E8364B" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+
+                        <ul class="catalog-sort__menu" role="listbox" aria-labelledby="catalog-sort-label"
+                            tabindex="-1">
+                            <li class="catalog-sort__option <?php echo ($current_sort == 'default') ? 'catalog-sort__option--selected' : ''; ?>"
+                                role="option" aria-selected="<?php echo ($current_sort == 'default') ? 'true' : 'false'; ?>"
+                                data-value="default">По умолчанию</li>
+                            <li class="catalog-sort__option <?php echo ($current_sort == 'price-asc') ? 'catalog-sort__option--selected' : ''; ?>"
+                                role="option" aria-selected="<?php echo ($current_sort == 'price-asc') ? 'true' : 'false'; ?>"
+                                data-value="price-asc">Сначала дешевле</li>
+                            <li class="catalog-sort__option <?php echo ($current_sort == 'price-desc') ? 'catalog-sort__option--selected' : ''; ?>"
+                                role="option" aria-selected="<?php echo ($current_sort == 'price-desc') ? 'true' : 'false'; ?>"
+                                data-value="price-desc">Сначала дороже</li>
+                            <li class="catalog-sort__option <?php echo ($current_sort == 'rating-desc') ? 'catalog-sort__option--selected' : ''; ?>"
+                                role="option" aria-selected="<?php echo ($current_sort == 'rating-desc') ? 'true' : 'false'; ?>"
+                                data-value="rating-desc">По рейтингу</li>
+                            <li class="catalog-sort__option <?php echo ($current_sort == 'name-asc') ? 'catalog-sort__option--selected' : ''; ?>"
+                                role="option" aria-selected="<?php echo ($current_sort == 'name-asc') ? 'true' : 'false'; ?>"
+                                data-value="name-asc">От А до Я</li>
+                            <li class="catalog-sort__option <?php echo ($current_sort == 'name-desc') ? 'catalog-sort__option--selected' : ''; ?>"
+                                role="option" aria-selected="<?php echo ($current_sort == 'name-desc') ? 'true' : 'false'; ?>"
+                                data-value="name-desc">От Я до А</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="catalog__content">
                     <!-- Фильтры и сайдбар остаются без изменений -->
-                    
+
                     <aside class="catalog-sidebar" aria-label="Фильтры каталога">
 
                         <!-- Категории -->
@@ -275,115 +275,112 @@
                     <!-- СПИСОК ТОВАРОВ -->
                     <section class="catalog-grid" aria-labelledby="catalog-grid-title">
                         <?php
-// Получаем текущую сортировку из URL
-$current_sort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
+                        // Удаляем все лишние HTML обертки WooCommerce
+                        remove_action('woocommerce_before_shop_loop', 'woocommerce_output_all_notices', 10);
+                        remove_action('woocommerce_before_shop_loop', 'woocommerce_result_count', 20);
+                        remove_action('woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30);
+                        remove_action('woocommerce_before_shop_loop', 'woocommerce_output_all_notices', 10);
+                        remove_action('woocommerce_before_shop_loop', 'woocommerce_result_count', 20);
 
-// Определяем параметры запроса
-$args = [
-    'post_type' => 'product',
-    'posts_per_page' => 12,
-    'post_status' => 'publish',
-    'paged' => max(1, get_query_var('paged')),
-    'ignore_sticky_posts' => 1,
-];
+                        // Удаляем стандартные обертки товаров
+                        remove_action('woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10);
+                        remove_action('woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5);
+                        remove_action('woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10);
+                        remove_action('woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10);
+                        remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_show_product_loop_sale_flash', 10);
+                        remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10);
+                        remove_action('woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_rating', 5);
+                        remove_action('woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10);
 
-// Добавляем сортировку
-switch($current_sort) {
-    case 'price-asc':
-        $args['meta_key'] = '_price';
-        $args['orderby'] = 'meta_value_num';
-        $args['order'] = 'ASC';
-        break;
-        
-    case 'price-desc':
-        $args['meta_key'] = '_price';
-        $args['orderby'] = 'meta_value_num';
-        $args['order'] = 'DESC';
-        break;
-        
-    case 'rating-desc':
-        $args['meta_key'] = '_wc_average_rating';
-        $args['orderby'] = 'meta_value_num';
-        $args['order'] = 'DESC';
-        break;
-        
-    case 'name-asc':
-        $args['orderby'] = 'title';
-        $args['order'] = 'ASC';
-        break;
-        
-    case 'name-desc':
-        $args['orderby'] = 'title';
-        $args['order'] = 'DESC';
-        break;
-        
-    case 'default':
-    default:
-        // Для главной страницы магазина
-        if (is_shop()) {
-            $args['orderby'] = 'menu_order title';
-            $args['order'] = 'ASC';
-        } elseif (is_product_category()) {
-            // Для категорий тоже используем menu_order
-            $args['orderby'] = 'menu_order title';
-            $args['order'] = 'ASC';
-        }
-        break;
-}
+                        // Получаем текущую сортировку
+                        $current_sort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
 
-// Добавляем фильтр по категории если мы в категории
-if (is_product_category()) {
-    $current_category = get_queried_object();
-    $args['tax_query'] = [
-        [
-            'taxonomy' => 'product_cat',
-            'field' => 'id',
-            'terms' => $current_category->term_id,
-        ]
-    ];
-}
+                        // Изменяем параметры сортировки перед началом цикла
+                        if ($current_sort !== 'default') {
+                            switch ($current_sort) {
+                                case 'price-asc':
+                                    add_filter('woocommerce_get_catalog_ordering_args', function ($args) {
+                                        $args['orderby'] = 'meta_value_num';
+                                        $args['order'] = 'ASC';
+                                        $args['meta_key'] = '_price';
+                                        return $args;
+                                    });
+                                    break;
+                                case 'price-desc':
+                                    add_filter('woocommerce_get_catalog_ordering_args', function ($args) {
+                                        $args['orderby'] = 'meta_value_num';
+                                        $args['order'] = 'DESC';
+                                        $args['meta_key'] = '_price';
+                                        return $args;
+                                    });
+                                    break;
+                                case 'rating-desc':
+                                    add_filter('woocommerce_get_catalog_ordering_args', function ($args) {
+                                        $args['orderby'] = 'meta_value_num';
+                                        $args['order'] = 'DESC';
+                                        $args['meta_key'] = '_wc_average_rating';
+                                        return $args;
+                                    });
+                                    break;
+                                case 'name-asc':
+                                    add_filter('woocommerce_get_catalog_ordering_args', function ($args) {
+                                        $args['orderby'] = 'title';
+                                        $args['order'] = 'ASC';
+                                        return $args;
+                                    });
+                                    break;
+                                case 'name-desc':
+                                    add_filter('woocommerce_get_catalog_ordering_args', function ($args) {
+                                        $args['orderby'] = 'title';
+                                        $args['order'] = 'DESC';
+                                        return $args;
+                                    });
+                                    break;
+                            }
+                        }
 
-// Применяем фильтр для приоритетной сортировки если это главная страница и сортировка по умолчанию
-if (is_shop() && $current_sort === 'default') {
-    add_filter('posts_clauses', 'custom_priority_orderby', 10, 2);
-}
+                        // Устанавливаем количество товаров на странице
+                        add_filter('loop_shop_per_page', function () {
+                            return 12; // или ваше значение
+                        }, 20);
 
-$products = new WP_Query($args);
+                        echo '<div class="catalog-grid__items" id="products-container">';
 
-// Убираем фильтр после создания запроса
-remove_filter('posts_clauses', 'custom_priority_orderby', 10);
+                        if (have_posts()) {
+                            while (have_posts()) {
+                                the_post();
+                                // Используем ваш шаблон товара
+                                wc_get_template_part('content', 'product');
+                            }
+                        } else {
+                            do_action('woocommerce_no_products_found');
+                        }
 
-if ($products->have_posts()) {
-    echo '<div class="catalog-grid__items" id="products-container">';
-    while ($products->have_posts()) {
-        $products->the_post();
-        wc_get_template_part('content', 'product');
-    }
-    echo '</div>';
-    
-    // Добавляем данные для бесконечной прокрутки
-    if ($products->max_num_pages > 1) {
-        $category_id = '';
-        if (isset($current_category) && is_product_category()) {
-            $category_id = $current_category->term_id;
-        }
-        
-        echo '<div id="infinite-scroll-data" 
-              data-page="2" 
-              data-max-pages="' . $products->max_num_pages . '" 
-              data-category="' . $category_id . '"
-              data-sort="' . $current_sort . '"
-              data-ajax-url="' . admin_url('admin-ajax.php') . '"></div>';
-        echo '<div id="infinite-scroll-loader" style="display: none; text-align: center; padding: 20px;">
-                <div>Загрузка товаров...</div>
-              </div>';
-    }
-    
-    wp_reset_postdata();
-} else {
-    echo __('No products found');
-}
-?>
+                        echo '</div>';
+
+                        // Добавляем данные для бесконечной прокрутки
+                        global $wp_query;
+                        if ($wp_query->max_num_pages > 1) {
+                            $category_id = '';
+                            if (is_product_category()) {
+                                $current_category = get_queried_object();
+                                $category_id = $current_category->term_id;
+                            }
+
+                            echo '<div id="infinite-scroll-data" 
+                            data-page="2" 
+                            data-max-pages="' . $wp_query->max_num_pages . '" 
+                            data-category="' . $category_id . '"
+                            data-sort="' . $current_sort . '"
+                            data-ajax-url="' . admin_url('admin-ajax.php') . '"></div>';
+                                            echo '<div id="infinite-scroll-loader" style="display: none; text-align: center; padding: 20px;">
+                            <div>Загрузка товаров...</div>
+                            </div>';
+                        }
+
+                        // Сбрасываем запрос
+                        wp_reset_postdata();
+                        ?>
                     </section>
                 </div>
             </div>
@@ -730,29 +727,15 @@ if ($products->have_posts()) {
             </div>
         </section>
 
-        <section class="partners">
-            <div class="partners__wrapper">
-                <div class="partners__header">
-                    <h2 class="partners__title">
-                        Наши <span>партнеры</span>
-                    </h2>
-                </div>
-                <div class="partners__content">
-                    <div class="partner">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/sberbank.svg" alt="СберБанк">
-                    </div>
-                    <div class="partner">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/metserv.svg" alt="Металл Сервис">
-                    </div>
-                    <div class="partner">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/dipos.svg" alt="Дипос">
-                    </div>
-                    <div class="partner">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/evraz.svg" alt="Евраз">
-                    </div>
-                </div>
-            </div>
-        </section>
+        <?php
+        get_template_part(
+            'template-parts/partners',
+            '',
+            array(
+                'title' => 'Наши <span>партнеры</span>',
+            )
+        );
+        ?>
     </main>
     <?php get_footer() ?>
     <?php wp_footer() ?>

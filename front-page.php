@@ -11,7 +11,7 @@
         <section class="hero">
             <!-- <img class="hero__banner" src="<?php //echo get_template_directory_uri(); ?>/assets/img/banner.webp" alt=""> -->
             
-            <img class="hero__banner" src="<?php echo get_template_directory_uri(); ?>/assets/img/hero_banner.webp" alt="">
+            <img class="hero__banner" fetchpriority="high" src="<?php echo get_template_directory_uri(); ?>/assets/img/hero_banner.webp" alt="">
             <div class="overlay overlay-hero"></div>
             <div class="hero__wrapper">
                 <div class="hero__top">
@@ -176,7 +176,7 @@
 
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/2de8c231d98b089186a82d9516ef02d180a506fa.webp" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/metalloprokat.webp" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
@@ -192,7 +192,7 @@
 
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/71d3debfe5770f702575ab5ed74c08be5b0c9e93.webp" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/rabocii-v-sinem-stroitel-nom-sleme.webp" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
@@ -208,7 +208,7 @@
 
                     <article class="project-card swiper-slide">
                         <a href="#" class="project-card__link">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/2de8c231d98b089186a82d9516ef02d180a506fa.webp" alt="" class="project-card__image" />
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/bol-soi-staleliteinyi-sklad.webp" alt="" class="project-card__image" />
 
                             <div class="project-card__content">
                                 <div class="project-card__header">
@@ -433,29 +433,15 @@
             </div>
         </section>
 
-        <section class="partners">
-            <div class="partners__wrapper">
-                <div class="partners__header">
-                    <h2 class="partners__title">
-                        Наши <span>партнеры</span>
-                    </h2>
-                </div>
-                <div class="partners__content">
-                    <div class="partner">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/sberbank.svg" alt="СберБанк">
-                    </div>
-                    <div class="partner">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/metserv.svg" alt="Металл Сервис">
-                    </div>
-                    <div class="partner">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/dipos.svg" alt="Дипос">
-                    </div>
-                    <div class="partner">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/evraz.svg" alt="Евраз">
-                    </div>
-                </div>
-            </div>
-        </section>
+         <?php 
+            get_template_part(
+                'template-parts/partners', 
+                '',
+                array(
+                    'title' => 'Наши <span>партнеры</span>',
+                )
+            );
+        ?>
 
         <?php 
             get_template_part(

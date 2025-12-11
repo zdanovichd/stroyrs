@@ -20,9 +20,114 @@ global $product;
         </div>
 
         <?php
-        // Реальная цена товара
+        // Получаем единицу измерения
+        $unit = '';
+        $unit_suffix = '';
+        
+        // Для вариативных товаров берем из атрибута
+        if ($product->is_type('variable')) {
+            $variations = $product->get_available_variations();
+            if (!empty($variations)) {
+                $first_variation = $variations[0];
+                $var_obj = wc_get_product($first_variation['variation_id']);
+                $attrs = $first_variation['attributes'];
+                $unit = $attrs['attribute_pa_edinicza'] ?? '';
+                
+                // Определяем суффикс для вариативного товара
+                switch ($unit) {
+                    case 'metr':
+                    case 'метр':
+                        $unit_suffix = 'м.п.';
+                        break;
+                    case 'ton':
+                    case 'tonna':
+                    case 'тонна':
+                        $unit_suffix = 'т.';
+                        break;
+                    default:
+                        $unit_suffix = 'шт';
+                        break;
+                }
+            }
+        } 
+        // Для простых товаров берем из мета-поля или таксономии
+        elseif ($product->is_type('simple')) {
+            // Способ 1: из мета-поля
+            $unit_meta = get_post_meta($product->get_id(), '_unit_measurement', true);
+            
+            // Способ 2: из таксономии (если используете)
+            if (empty($unit_meta)) {
+                $unit_terms = wp_get_post_terms($product->get_id(), 'pa_edinicza');
+                if (!is_wp_error($unit_terms) && !empty($unit_terms)) {
+                    $unit = $unit_terms[0]->name;
+                }
+            } else {
+                $unit = $unit_meta;
+            }
+            
+            // Определяем суффикс для простого товара
+            switch ($unit) {
+                case 'м':
+                case 'м.':
+                case 'm':
+                    $unit_label = 'Цена за метр';
+                    $unit_suffix = 'м.п.';
+                    break;
+                case 'metr':
+                case 'метр':
+                case 'Метр':
+                case 'м.п.':
+                case 'mp':
+                    $unit_label = 'Цена за метр погонный';
+                    $unit_suffix = 'м.п.';
+                    break;
+                case 'ton':
+                case 'tonna':
+                case 'тонна':
+                case 'Тонна':
+                    $unit_label = 'Цена за тонну';
+                    $unit_suffix = 'т.';
+                    break;
+                case 'kg':
+                case 'kilogram':
+                case 'килограмм':
+                case 'кг':
+                    $unit_label = 'Цена за килограмм';
+                    $unit_suffix = 'кг';
+                    break;
+                case 'р':
+                case 'р.':
+                case 'p':
+                case 'p.':
+                    $unit_label = 'Цена за р';
+                    $unit_suffix = 'р.';
+                    break;
+                case 'sqm':
+                case 'square_meter':
+                case 'квадратный_метр':
+                case 'm2':
+                case 'м2':
+                    $unit_label = 'Цена за квадратный метр';
+                    $unit_suffix = 'м²';
+                    break;
+                case 'piece':
+                case 'sht':
+                case 'шт':
+                case 'штука':
+                default:
+                    $unit_label = 'Стоимость';
+                    $unit_suffix = 'шт';
+                    break;
+            }
+        }
+        
+        // Если единица измерения все еще пустая, ставим по умолчанию
+        if (empty($unit_suffix)) {
+            $unit_suffix = 'шт';
+        }
+        
         if ($product->is_on_sale()) {
-            ?>
+        ?>
             <div class="product-card__price product-card__price-sale">
                 <span class="product-card__sale">
                     <span class="product-card__sale-label">
@@ -31,71 +136,76 @@ global $product;
                         </svg>
                     </span>
                     <span class="product-card__sale-value">
-                        <?php 
-                            if ($product->is_type('variable')) {
-                                echo wc_price($product->get_variation_sale_price('min'));
-                            } else {
-                                echo wc_price($product->get_sale_price());
-                            }
+                        <?php
+                        if ($product->is_type('variable')) {
+                            echo 'от ' . wc_price($product->get_variation_sale_price('min'));
+                        } else {
+                            echo wc_price($product->get_sale_price());
+                        }
                         ?>
+                        <span class="product-card__unit">/<?php echo esc_html($unit_suffix); ?></span>
                     </span>
                 </span>
                 <span class="product-card__price-value">
-                    <?php 
-                        if ($product->is_type('variable')) {
-                            echo wc_price($product->get_variation_regular_price('min'));
-                        } else {
-                            echo wc_price($product->get_regular_price());
-                        }
+                    <?php
+                    if ($product->is_type('variable')) {
+                        echo wc_price($product->get_variation_regular_price('min'));
+                    } else {
+                        echo wc_price($product->get_regular_price());
+                    }
                     ?>
+                    <span class="product-card__unit">/<?php echo esc_html($unit_suffix); ?></span>
                 </span>
-            <?php
+            </div>
+        <?php
         } else {
             // Обычная цена
-            ?>
-                <div class="product-card__price">
-                    <span class="product-card__price-value">
-                        <?php 
-                            if ($product->is_type('variable')) {
-                                echo wc_price($product->get_variation_price('min'));
-                            } else {
-                                echo wc_price($product->get_price());
-                            }
-                        ?>
-                    </span>
-                </div>
-            <?php
+        ?>
+            <div class="product-card__price">
+                <span class="product-card__price-value">
+                    <?php
+                    if ($product->is_type('variable')) {
+                        echo 'от ' . wc_price($product->get_variation_price('min'));
+                    } else {
+                        echo wc_price($product->get_price());
+                    }
+                    ?>
+                    <span class="product-card__unit">/<?php echo esc_html($unit_suffix); ?></span>
+                </span>
+            </div>
+        <?php
         }
+        ?>
+    
+        <div class="product-card__buttons">
+            <?php
+            // Рабочая кнопка добавления в корзину
+            if ($product->is_purchasable() && $product->is_in_stock()) {
+                echo apply_filters(
+                    'woocommerce_loop_add_to_cart_link',
+                    sprintf(
+                        '<a href="%s" data-quantity="1" class="%s" %s data-unit_suffix="%s">%s</a>',
+                        esc_url($product->add_to_cart_url()),
+                        esc_attr('product-card__button'),
+                        $product->get_type() == 'simple' ? 'data-product_id="' . $product->get_id() . '" data-product_sku="' . $product->get_sku() . '"' : '',
+                        esc_attr($unit_suffix),
+                        esc_html('Добавить в корзину')
+                    ),
+                    $product
+                );
+            } else {
+                echo '<a href="' . get_permalink() . '" class="product-card__button product-card__button--view">Подробнее</a>';
+            }
             ?>
-            </div>
-            <div class="product-card__buttons">
-                <?php
-                // Рабочая кнопка добавления в корзину
-                if ($product->is_purchasable() && $product->is_in_stock()) {
-                    echo apply_filters(
-                        'woocommerce_loop_add_to_cart_link',
-                        sprintf(
-                            '<a href="%s" data-quantity="1" class="%s" %s>%s</a>',
-                            esc_url($product->add_to_cart_url()),
-                            esc_attr('product-card__button'),
-                            $product->get_type() == 'simple' ? 'data-product_id="' . $product->get_id() . '" data-product_sku="' . $product->get_sku() . '"' : '',
-                            esc_html('Добавить в корзину')
-                        ),
-                        $product
-                    );
-                } else {
-                    echo '<a href="' . get_permalink() . '" class="product-card__button product-card__button--view">Подробнее</a>';
-                }
-                ?>
 
-                <button class="product-card__favorite">
-                    <svg viewBox="0 0 27 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M13.25 3.46424C10.7508 0.57516 6.57469 -0.317692 3.44338 2.32784C0.312054 4.97337 -0.128793 9.39654 2.33025 12.5255C4.37478 15.1268 10.5622 20.6136 12.5901 22.3894C12.817 22.5881 12.9304 22.6874 13.0628 22.7264C13.1782 22.7605 13.3046 22.7605 13.4202 22.7264C13.5525 22.6874 13.6658 22.5881 13.8928 22.3894C15.9207 20.6136 22.1081 15.1268 24.1527 12.5255C26.6117 9.39654 26.2246 4.94554 23.0395 2.32784C19.8543 -0.289863 15.7492 0.57516 13.25 3.46424Z"
-                            fill="white" stroke="black" stroke-width="1.5"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </button>
-            </div>
+            <button class="product-card__favorite">
+                <svg viewBox="0 0 27 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M13.25 3.46424C10.7508 0.57516 6.57469 -0.317692 3.44338 2.32784C0.312054 4.97337 -0.128793 9.39654 2.33025 12.5255C4.37478 15.1268 10.5622 20.6136 12.5901 22.3894C12.817 22.5881 12.9304 22.6874 13.0628 22.7264C13.1782 22.7605 13.3046 22.7605 13.4202 22.7264C13.5525 22.6874 13.6658 22.5881 13.8928 22.3894C15.9207 20.6136 22.1081 15.1268 24.1527 12.5255C26.6117 9.39654 26.2246 4.94554 23.0395 2.32784C19.8543 -0.289863 15.7492 0.57516 13.25 3.46424Z"
+                        fill="white" stroke="black" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
     </div>
 </article>

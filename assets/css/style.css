@@ -1697,6 +1697,8 @@ select {
 
 .partner img {
     width: 80%;
+    max-height: 80%;
+    object-fit: contain;
 }
 
 .consult {
@@ -3612,6 +3614,7 @@ select {
     display: flex;
     flex-direction: row;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .product-card__sale {

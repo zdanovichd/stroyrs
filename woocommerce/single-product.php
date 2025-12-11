@@ -169,185 +169,247 @@ get_template_part('template-parts/head');
 
                     </div>
                     <div class="product__buy-block">
-                        <div class="product__buy-top">
-                            <div class="product__availability">
-                                <?php
-                                if ($product->is_in_stock()) {
-                                    echo '<p class="in-stock">В наличии</p>';
-                                } elseif ($product->is_on_backorder()) {
-                                    echo '<p class="on-backorder">Под заказ</p>';
-                                } else {
-                                    echo '<p class="out-of-stock">Нет в наличии</p>';
-                                }
-                                ?>
-                            </div>
-                            <button class="product-card__favorite">
-                                <svg viewBox="0 0 27 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M13.25 3.46424C10.7508 0.57516 6.57469 -0.317692 3.44338 2.32784C0.312054 4.97337 -0.128793 9.39654 2.33025 12.5255C4.37478 15.1268 10.5622 20.6136 12.5901 22.3894C12.817 22.5881 12.9304 22.6874 13.0628 22.7264C13.1782 22.7605 13.3046 22.7605 13.4202 22.7264C13.5525 22.6874 13.6658 22.5881 13.8928 22.3894C15.9207 20.6136 22.1081 15.1268 24.1527 12.5255C26.6117 9.39654 26.2246 4.94554 23.0395 2.32784C19.8543 -0.289863 15.7492 0.57516 13.25 3.46424Z"
-                                        fill="white" stroke="black" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </button>
-                        </div>
+    <div class="product__buy-top">
+        <div class="product__availability">
+            <?php
+            if ($product->is_in_stock()) {
+                echo '<p class="in-stock">В наличии</p>';
+            } elseif ($product->is_on_backorder()) {
+                echo '<p class="on-backorder">Под заказ</p>';
+            } else {
+                echo '<p class="out-of-stock">Нет в наличии</p>';
+            }
+            ?>
+        </div>
+        <button class="product-card__favorite">
+            <svg viewBox="0 0 27 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M13.25 3.46424C10.7508 0.57516 6.57469 -0.317692 3.44338 2.32784C0.312054 4.97337 -0.128793 9.39654 2.33025 12.5255C4.37478 15.1268 10.5622 20.6136 12.5901 22.3894C12.817 22.5881 12.9304 22.6874 13.0628 22.7264C13.1782 22.7605 13.3046 22.7605 13.4202 22.7264C13.5525 22.6874 13.6658 22.5881 13.8928 22.3894C15.9207 20.6136 22.1081 15.1268 24.1527 12.5255C26.6117 9.39654 26.2246 4.94554 23.0395 2.32784C19.8543 -0.289863 15.7492 0.57516 13.25 3.46424Z"
+                    fill="white" stroke="black" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+    </div>
 
-                        <div class="product__prices">
+    <div class="product__prices">
+        <?php if ($product->is_type('variable')) : ?>
+            <?php
+            $variations = $product->get_available_variations();
+            $variation_data = [];
 
-                            <?php if ($product->is_type('variable')) : ?>
+            foreach ($variations as $variation) {
+                $var_obj = wc_get_product($variation['variation_id']);
+                if (! $var_obj) continue;
 
-                                <?php
-                                $variations = $product->get_available_variations();
+                $attrs = $variation['attributes'];
+                $unit = $attrs['attribute_pa_edinicza'] ?? '';
+                
+                if (! $unit) continue;
 
-                                // echo '<pre>';
-                                // print_r($variations);
-                                // echo '</pre>';
-                                $variation_data = [];
+                $regular_price = (float) $var_obj->get_regular_price();
+                $sale_price    = (float) $var_obj->get_sale_price();
+                $active_price  = (float) $var_obj->get_price();
 
-                                foreach ($variations as $variation) {
-                                    $var_obj = wc_get_product($variation['variation_id']);
-                                    if (! $var_obj) continue;
+                $variation_data[$unit] = [
+                    'label'         => $unit === 'metr' ? 'Цена за метр' : 'Цена за тонну',
+                    'regular_price' => $regular_price,
+                    'sale_price'    => $sale_price,
+                    'active_price'  => $active_price,
+                    'suffix'        => $unit === 'metr' ? 'м.п.' : 'т.',
+                ];
+            }
+            ?>
 
-                                    $attrs = $variation['attributes'];
+            <?php if (! empty($variation_data)) : ?>
+                <div class="product__price-group">
+                    <?php
+                    $first_key = array_key_first($variation_data);
+                    foreach ($variations as $variation) :
+                        $var_obj = wc_get_product($variation['variation_id']);
+                        $attrs = $variation['attributes'];
+                        
+                        $unit = $attrs['attribute_pa_edinicza'] ?? '';
+                        if (! $unit || empty($variation_data[$unit])) continue;
 
-                                    $unit = $attrs['attribute_pa_edinicza'] ?? '';
+                        $data = $variation_data[$unit];
+                        $checked = $unit === $first_key ? 'checked' : '';
+                        $is_sale = $data['sale_price'] && $data['sale_price'] < $data['regular_price'];
 
-                                    // echo '<pre>';
-                                    // print_r($unit);
-                                    // echo '</pre>';
-                                    if (! $unit) continue;
+                        // вес (если есть)
+                        $weight = (float) $var_obj->get_weight();
 
-                                    $regular_price = (float) $var_obj->get_regular_price();
-                                    $sale_price    = (float) $var_obj->get_sale_price();
-                                    $active_price  = (float) $var_obj->get_price();
-
-                                    $variation_data[$unit] = [
-                                        'label'         => $unit === 'metr' ? 'Цена за метр' : 'Цена за тонну',
-                                        'regular_price' => $regular_price,
-                                        'sale_price'    => $sale_price,
-                                        'active_price'  => $active_price,
-                                        'suffix'        => $unit === 'metr' ? 'м.п.' : 'т.',
-                                    ];
-                                }
-                                ?>
-
-                                <?php if (! empty($variation_data)) : ?>
-                                    <div class="product__price-group">
-                                        <?php
-                                        $first_key = array_key_first($variation_data);
-                                        foreach ($variations as $variation) :
-                                            $var_obj = wc_get_product($variation['variation_id']);
-                                            $attrs = $variation['attributes'];
-                                            // echo '<pre>';
-                                            // print_r($attrs);
-                                            // echo '</pre>';
-
-                                            $unit = $attrs['attribute_pa_edinicza'] ?? '';
-                                            if (! $unit || empty($variation_data[$unit])) continue;
-
-                                            $data = $variation_data[$unit];
-                                            $checked = $unit === $first_key ? 'checked' : '';
-                                            $is_sale = $data['sale_price'] && $data['sale_price'] < $data['regular_price'];
-
-                                            // вес (если есть)
-                                            $weight = (float) $var_obj->get_weight();
-
-                                            $attr_slug = '';
-                                            if (isset($attrs['attribute_pa_edinicza'])) {
-                                                $term = get_term_by('name', $attrs['attribute_pa_edinicza'], 'pa_edinicza');
-                                                if ($term) {
-                                                    $attr_slug = $term->slug; // <- этот slug нужен для AJAX
-                                                }
-                                                // print_r($attr_slug);
-                                            }
-
-
-
-                                        ?>
-                                            <label class="product__unit-option">
-                                                <input
-                                                    type="radio"
-                                                    name="unit"
-                                                    value="<?php echo esc_attr($unit); ?>"
-                                                    <?php echo $checked; ?>
-                                                    class="product__unit-input"
-                                                    data-attribute_pa_edinicza="<?php echo esc_attr($attrs['attribute_pa_edinicza']); ?>"
-                                                    data-price="<?php echo esc_attr($data['active_price']); ?>"
-                                                    data-variation_id="<?php echo esc_attr($variation['variation_id']); ?>"
-                                                    data-weight="1"
-                                                    data-weight_suffix="<?php echo esc_html($data['suffix']); ?>">
-                                                <div class="product__unit-inner">
-                                                    <span class="product__unit-label"><?php echo esc_html($data['label']); ?>:</span>
-
-                                                    <div class="product__unit-wrapper">
-                                                        <span class="product__unit-price">
-                                                            <span class="product__unit-value"><?php echo wc_price($data['active_price']); ?></span>
-                                                            <span class="product__unit-suffix">/<?php echo esc_html($data['suffix']); ?></span>
-                                                        </span>
-                                                        <?php if ($is_sale) : ?>
-                                                            <span class="product__unit-regular">
-                                                                <span class="product__unit-value"><?php echo wc_price($data['regular_price']); ?></span>
-                                                                <span class="product__unit-suffix">/<?php echo esc_html($data['suffix']); ?></span>
-                                                            </span>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                </div>
-                                            </label>
-                                        <?php endforeach; ?>
-                                    </div>
-                                <?php endif; ?>
-
-                            <?php elseif ($product->is_type('simple')) : ?>
-
-                                <div class="product__price-group product__price-group-simple">
-                                    <span class="product__unit-label">Стоимость:</span>
-                                    <div class="product__unit-wrapper">
-                                        <span class="product__unit-price">
-                                            <span class="product__unit-value"><?php echo wc_price($product->get_sale_price()); ?></span>
+                        $attr_slug = '';
+                        if (isset($attrs['attribute_pa_edinicza'])) {
+                            $term = get_term_by('name', $attrs['attribute_pa_edinicza'], 'pa_edinicza');
+                            if ($term) {
+                                $attr_slug = $term->slug;
+                            }
+                        }
+                    ?>
+                        <label class="product__unit-option">
+                            <input
+                                type="radio"
+                                name="unit"
+                                value="<?php echo esc_attr($unit); ?>"
+                                <?php echo $checked; ?>
+                                class="product__unit-input"
+                                data-attribute_pa_edinicza="<?php echo esc_attr($attrs['attribute_pa_edinicza']); ?>"
+                                data-price="<?php echo esc_attr($data['active_price']); ?>"
+                                data-variation_id="<?php echo esc_attr($variation['variation_id']); ?>"
+                                data-weight="1"
+                                data-weight_suffix="<?php echo esc_html($data['suffix']); ?>">
+                            <div class="product__unit-inner">
+                                <span class="product__unit-label"><?php echo esc_html($data['label']); ?>:</span>
+                                <div class="product__unit-wrapper">
+                                    <span class="product__unit-price">
+                                        <span class="product__unit-value"><?php echo wc_price($data['active_price']); ?></span>
+                                        <span class="product__unit-suffix">/<?php echo esc_html($data['suffix']); ?></span>
+                                    </span>
+                                    <?php if ($is_sale) : ?>
+                                        <span class="product__unit-regular">
+                                            <span class="product__unit-value"><?php echo wc_price($data['regular_price']); ?></span>
+                                            <span class="product__unit-suffix">/<?php echo esc_html($data['suffix']); ?></span>
                                         </span>
-                                        <?php if ($product->is_on_sale()) : ?>
-                                            <span class="product__unit-regular">
-                                                <span class="product__unit-value"><?php echo wc_price($product->get_regular_price()); ?></span>
-                                            </span>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-
-                            <?php endif; ?>
-
-                        </div>
-
-
-                        <div class="product__divider"></div>
-
-                        <div class="product__summary">
-                            <?php woocommerce_quantity_input(); ?>
-                            <div class="product__totals">
-                                <div class="product__total">
-                                    <span class="product__total-label">Общая сумма:</span>
-                                    <span class="product__total-value">5 000 ₽</span>
-                                </div>
-                                <div class="product__weight">
-                                    <span class="product__weight-label">Вес:</span>
-                                    <span class="product__weight-value">10 кг</span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
 
-
-                        </div>
-
-                        <div class="product__actions">
-                            <button
-                                class="product__button product__button_primary"
-                                type="button"
-                                data-price="<?php echo $product->get_price(); ?>"
-                                data-weight="<?php echo $product->get_weight(); ?>"
-                                data-weight_suffix="кг">
-                                Добавить в корзину
-                            </button>
-                            <button class="product__button product__button_secondary" type="button">Купить в один клик</button>
-                        </div>
+        <?php elseif ($product->is_type('simple')) : ?>
+            <?php
+            // Получаем единицы измерения для простого товара
+            // Способ 1: из мета-поля (если храните в метаполе)
+            // $unit_meta = get_post_meta($product->get_id(), '_unit_measurement', true);
+            
+            // Способ 2: из атрибута товара (если создали таксономию для простых товаров)
+            $terms = wp_get_post_terms($product->get_id(), 'pa_edinicza');
+            $unit_meta = !empty($terms) ? $terms[0]->name : '';
+            
+            // Устанавливаем значения по умолчанию
+            $unit = !empty($unit_meta) ? $unit_meta : 'шт'; // по умолчанию "шт"
+            $unit_label = '';
+            $unit_suffix = '';
+            
+            // Определяем лейбл и суффикс в зависимости от единицы измерения
+            switch ($unit) {
+                case 'м':
+                case 'м.':
+                case 'm':
+                    $unit_label = 'Цена за метр';
+                    $unit_suffix = 'м.п.';
+                    break;
+                case 'metr':
+                case 'метр':
+                case 'Метр':
+                case 'м.п.':
+                case 'mp':
+                    $unit_label = 'Цена за метр погонный';
+                    $unit_suffix = 'м.п.';
+                    break;
+                case 'ton':
+                case 'tonna':
+                case 'тонна':
+                case 'Тонна':
+                    $unit_label = 'Цена за тонну';
+                    $unit_suffix = 'т.';
+                    break;
+                case 'kg':
+                case 'kilogram':
+                case 'килограмм':
+                case 'кг':
+                    $unit_label = 'Цена за килограмм';
+                    $unit_suffix = 'кг';
+                    break;
+                case 'р':
+                case 'р.':
+                case 'p':
+                case 'p.':
+                    $unit_label = 'Цена за р';
+                    $unit_suffix = 'р.';
+                    break;
+                case 'sqm':
+                case 'square_meter':
+                case 'квадратный_метр':
+                case 'm2':
+                case 'м2':
+                    $unit_label = 'Цена за квадратный метр';
+                    $unit_suffix = 'м²';
+                    break;
+                case 'piece':
+                case 'sht':
+                case 'шт':
+                case 'штука':
+                default:
+                    $unit_label = 'Стоимость';
+                    $unit_suffix = 'шт';
+                    break;
+            }
+            
+            $regular_price = (float) $product->get_regular_price();
+            $sale_price = (float) $product->get_sale_price();
+            $active_price = (float) $product->get_price();
+            $is_sale = $sale_price && $sale_price < $regular_price;
+            ?>
+            
+            <div class="product__price-group product__price-group-simple">
+                <div class="product__unit-inner">
+                    <span class="product__unit-label"><?php echo esc_html($unit_label); ?>:</span>
+                    <div class="product__unit-wrapper">
+                        <span class="product__unit-price">
+                            <span class="product__unit-value"><?php echo wc_price($active_price); ?></span>
+                            <?php if ($unit_suffix) : ?>
+                                <span class="product__unit-suffix">/<?php echo esc_html($unit_suffix); ?></span>
+                            <?php endif; ?>
+                        </span>
+                        <?php if ($is_sale && $regular_price > 0) : ?>
+                            <span class="product__unit-regular">
+                                <span class="product__unit-value"><?php echo wc_price($regular_price); ?></span>
+                                <?php if ($unit_suffix) : ?>
+                                    <span class="product__unit-suffix">/<?php echo esc_html($unit_suffix); ?></span>
+                                <?php endif; ?>
+                            </span>
+                        <?php endif; ?>
                     </div>
+                </div>
+            </div>
+
+        <?php endif; ?>
+    </div>
+
+    <div class="product__divider"></div>
+
+    <div class="product__summary">
+        <?php woocommerce_quantity_input(); ?>
+        <div class="product__totals">
+            <div class="product__total">
+                <span class="product__total-label">Общая сумма:</span>
+                <span class="product__total-value">5 000 ₽</span>
+            </div>
+            <div class="product__weight">
+                <span class="product__weight-label">Вес:</span>
+                <span class="product__weight-value">10 кг</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="product__actions">
+        <button
+            class="product__button product__button_primary"
+            type="button"
+            data-price="<?php echo $product->get_price(); ?>"
+            data-weight="<?php echo $product->get_weight(); ?>"
+            data-weight_suffix="кг"
+            data-unit="<?php echo esc_attr($unit); ?>"
+            data-unit_suffix="<?php echo esc_attr($unit_suffix); ?>">
+            Добавить в корзину
+        </button>
+        <button class="product__button product__button_secondary" type="button">Купить в один клик</button>
+    </div>
+</div>
                 </div>
             </div>
         </section>
@@ -372,72 +434,72 @@ get_template_part('template-parts/head');
                 <div class="product-tabs__panel product-tabs__panel--active" id="description">
                     <!-- <h3 class="product-tabs__title">Описание товара</h3> -->
                     <div class="product-tabs__text">
-                        <?php 
-                        
+                        <?php
+
                         if (get_the_content()) {
                             the_content();
                         } else {
-                            echo the_title()." — надёжный металлопрокат по ГОСТу, востребованный в строительстве и промышленности. Продукция сертифицирована и соответствует требованиям стандартов качества.";
+                            echo the_title() . " — надёжный металлопрокат по ГОСТу, востребованный в строительстве и промышленности. Продукция сертифицирована и соответствует требованиям стандартов качества.";
                             echo "<br>";
                             echo "Работаем напрямую с заводами-изготовителями, поэтому предлагаем честные цены даже на небольшие объёмы. В наличии популярные типоразмеры, возможна резка под ваш заказ. Отгрузка в день обращения и быстрая доставка.";
                             echo "<br>";
                             echo "Уточните наличие и актуальную стоимость у менеджера — поможем быстро подобрать нужный прокат и организовать поставку.";
                         }
-                        
 
-                        
-                        
-                        
+
+
+
+
                         ?>
                     </div>
                 </div>
 
                 <div class="product-tabs__panel" id="characteristics">
                     <section class="product-specs">
-                            <!-- <p class="product-specs__title">Характеристики:</p> -->
+                        <!-- <p class="product-specs__title">Характеристики:</p> -->
 
-                            <dl class="product-specs__list">
-                                <?php
-                                $attributes = $product->get_attributes();
+                        <dl class="product-specs__list">
+                            <?php
+                            $attributes = $product->get_attributes();
 
-                                foreach ($attributes as $attribute) {
-                                    // Пропускаем вариативные атрибуты если нужно
-                                    if ($attribute->get_variation()) continue;
+                            foreach ($attributes as $attribute) {
+                                // Пропускаем вариативные атрибуты если нужно
+                                if ($attribute->get_variation()) continue;
 
-                                    $name = wc_attribute_label($attribute->get_name());
-                                    $values = array();
+                                $name = wc_attribute_label($attribute->get_name());
+                                $values = array();
 
-                                    if ($attribute->is_taxonomy()) {
-                                        $terms = wp_get_post_terms($product->get_id(), $attribute->get_name());
-                                        foreach ($terms as $term) {
-                                            $values[] = $term->name;
-                                        }
-                                    } else {
-                                        $values = $attribute->get_options();
+                                if ($attribute->is_taxonomy()) {
+                                    $terms = wp_get_post_terms($product->get_id(), $attribute->get_name());
+                                    foreach ($terms as $term) {
+                                        $values[] = $term->name;
                                     }
-
-                                    if (!empty($values)) {
-                                        echo '<div class="product-specs__item">';
-                                        echo '<dt class="product-specs__name">' . esc_html($name) . '</dt>';
-                                        echo '<dd class="product-specs__value">' . esc_html(implode(', ', $values)) . '</dd>';
-                                        echo '</div>';
-                                    }
+                                } else {
+                                    $values = $attribute->get_options();
                                 }
 
-                                // Если атрибутов нет, показываем сообщение
-                                if (empty($attributes)) {
-                                    echo '<div class="product-specs__empty">Характеристики отсутствуют</div>';
+                                if (!empty($values)) {
+                                    echo '<div class="product-specs__item">';
+                                    echo '<dt class="product-specs__name">' . esc_html($name) . '</dt>';
+                                    echo '<dd class="product-specs__value">' . esc_html(implode(', ', $values)) . '</dd>';
+                                    echo '</div>';
                                 }
-                                ?>
-                            </dl>
+                            }
 
-                            <!-- <a href="#product-attributes" class="product-specs__more-link" data-tab="specifications">
+                            // Если атрибутов нет, показываем сообщение
+                            if (empty($attributes)) {
+                                echo '<div class="product-specs__empty">Характеристики отсутствуют</div>';
+                            }
+                            ?>
+                        </dl>
+
+                        <!-- <a href="#product-attributes" class="product-specs__more-link" data-tab="specifications">
                                 <span class="product-specs__more-text">показать еще</span><span>...</span>
                             </a> -->
-                        </section>
+                    </section>
                 </div>
 
-                
+
 
                 <div class="product-tabs__panel" id="delivery">
                     <!-- <h3 class="product-tabs__title">Доставка и оплата</h3> -->
@@ -450,7 +512,7 @@ get_template_part('template-parts/head');
                     <div class="product-tabs__text">
                         <p>Отзывов пока нет</p>
                     </div>
-                    
+
                     <!-- <h3 class="product-tabs__title">Отзывы покупателей</h3> -->
                 </div>
             </div>
@@ -662,99 +724,99 @@ get_template_part('template-parts/head');
             });
 
             // Функция для обновления мини-корзины
-function updateMiniCart() {
-    return new Promise((resolve, reject) => {
-        // Способ 1: Используем встроенный механизм WooCommerce
-        if (typeof wc_cart_fragments_params !== 'undefined' && typeof jQuery !== 'undefined') {
-            jQuery(document.body).trigger('wc_fragment_refresh');
-            console.log('Mini-cart updated via WC fragments');
-            
-            // Дополнительно обновляем счетчик вручную
-            setTimeout(() => {
-                updateCartCounter();
-            }, 300);
-            
-            resolve();
-            return;
-        }
+            function updateMiniCart() {
+                return new Promise((resolve, reject) => {
+                    // Способ 1: Используем встроенный механизм WooCommerce
+                    if (typeof wc_cart_fragments_params !== 'undefined' && typeof jQuery !== 'undefined') {
+                        jQuery(document.body).trigger('wc_fragment_refresh');
+                        console.log('Mini-cart updated via WC fragments');
 
-        // Способ 2: Делаем AJAX запрос для обновления фрагментов
-        fetch('/?wc-ajax=get_refreshed_fragments')
-            .then(response => response.json())
-            .then(data => {
-                if (data.fragments) {
-                    // Обновляем все фрагменты на странице
-                    Object.keys(data.fragments).forEach(selector => {
-                        const elements = document.querySelectorAll(selector);
-                        elements.forEach(element => {
-                            element.innerHTML = data.fragments[selector];
-                        });
-                    });
-                    
-                    // Обновляем счетчик отдельно
-                    updateCartCounter();
-                    
-                    console.log('Mini-cart updated via fragments AJAX');
-                    resolve();
-                } else {
-                    reject(new Error('No fragments in response'));
-                }
-            })
-            .catch(error => {
-                console.warn('Failed to update mini-cart via AJAX:', error);
-                // Пробуем обновить счетчик через другой метод
-                updateCartCounter();
-                resolve();
-            });
-    });
-}
+                        // Дополнительно обновляем счетчик вручную
+                        setTimeout(() => {
+                            updateCartCounter();
+                        }, 300);
 
-// Новая функция для обновления только счетчика
-// Упрощенная функция обновления счетчика
-function updateCartCounter() {
-    // Используем встроенную функцию WooCommerce
-    if (typeof wc_cart_fragments_params !== 'undefined') {
-        // WooCommerce сам обновит счетчик через фрагменты
-        return;
-    }
-    
-    // Альтернативный способ - делаем простой запрос
-    fetch(window.location.href)
-        .then(response => response.text())
-        .then(html => {
-            // Создаем временный элемент для парсинга
-            const temp = document.createElement('div');
-            temp.innerHTML = html;
-            
-            // Ищем счетчик в обновленном HTML
-            const newCounter = temp.querySelector('.cart-count');
-            if (newCounter) {
-                const newCount = newCounter.getAttribute('data-count') || 0;
-                
-                // Обновляем все счетчики на странице
-                document.querySelectorAll('.cart-count').forEach(counter => {
-                    counter.setAttribute('data-count', newCount);
-                    
-                    if (parseInt(newCount) > 0) {
-                        counter.textContent = newCount;
-                        counter.style.display = 'flex';
-                    } else {
-                        counter.textContent = '';
-                        counter.style.display = 'none';
+                        resolve();
+                        return;
                     }
-                    
-                    // Анимация
-                    counter.classList.add('updated');
-                    setTimeout(() => {
-                        counter.classList.remove('updated');
-                    }, 500);
+
+                    // Способ 2: Делаем AJAX запрос для обновления фрагментов
+                    fetch('/?wc-ajax=get_refreshed_fragments')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.fragments) {
+                                // Обновляем все фрагменты на странице
+                                Object.keys(data.fragments).forEach(selector => {
+                                    const elements = document.querySelectorAll(selector);
+                                    elements.forEach(element => {
+                                        element.innerHTML = data.fragments[selector];
+                                    });
+                                });
+
+                                // Обновляем счетчик отдельно
+                                updateCartCounter();
+
+                                console.log('Mini-cart updated via fragments AJAX');
+                                resolve();
+                            } else {
+                                reject(new Error('No fragments in response'));
+                            }
+                        })
+                        .catch(error => {
+                            console.warn('Failed to update mini-cart via AJAX:', error);
+                            // Пробуем обновить счетчик через другой метод
+                            updateCartCounter();
+                            resolve();
+                        });
                 });
             }
-        })
-        .catch(error => {
-            console.warn('Failed to update cart counter:', error);
-        });
-}
+
+            // Новая функция для обновления только счетчика
+            // Упрощенная функция обновления счетчика
+            function updateCartCounter() {
+                // Используем встроенную функцию WooCommerce
+                if (typeof wc_cart_fragments_params !== 'undefined') {
+                    // WooCommerce сам обновит счетчик через фрагменты
+                    return;
+                }
+
+                // Альтернативный способ - делаем простой запрос
+                fetch(window.location.href)
+                    .then(response => response.text())
+                    .then(html => {
+                        // Создаем временный элемент для парсинга
+                        const temp = document.createElement('div');
+                        temp.innerHTML = html;
+
+                        // Ищем счетчик в обновленном HTML
+                        const newCounter = temp.querySelector('.cart-count');
+                        if (newCounter) {
+                            const newCount = newCounter.getAttribute('data-count') || 0;
+
+                            // Обновляем все счетчики на странице
+                            document.querySelectorAll('.cart-count').forEach(counter => {
+                                counter.setAttribute('data-count', newCount);
+
+                                if (parseInt(newCount) > 0) {
+                                    counter.textContent = newCount;
+                                    counter.style.display = 'flex';
+                                } else {
+                                    counter.textContent = '';
+                                    counter.style.display = 'none';
+                                }
+
+                                // Анимация
+                                counter.classList.add('updated');
+                                setTimeout(() => {
+                                    counter.classList.remove('updated');
+                                }, 500);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.warn('Failed to update cart counter:', error);
+                    });
+            }
             // Функция для показа уведомления (опционально)
             function showCartNotification(message) {
                 let notification = document.querySelector('.cart-notification');
@@ -789,10 +851,10 @@ function updateCartCounter() {
                 // Убираем активный класс у всех кнопок и панелей
                 document.querySelectorAll('.product-tabs__button').forEach(btn => btn.classList.remove('product-tabs__button--active'));
                 document.querySelectorAll('.product-tabs__panel').forEach(panel => panel.classList.remove('product-tabs__panel--active'));
-                
+
                 // Добавляем активный класс нажатой кнопке
                 button.classList.add('product-tabs__button--active');
-                
+
                 // Показываем соответствующую панель
                 const tabId = button.getAttribute('data-tab');
                 document.getElementById(tabId).classList.add('product-tabs__panel--active');

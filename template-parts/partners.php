@@ -9,16 +9,19 @@
         </div>
         <div class="partners__content">
             <div class="partner">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/sberbank.svg" alt="СберБанк">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/severstal.svg" alt="">
             </div>
             <div class="partner">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/metserv.svg" alt="Металл Сервис">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/mmk.svg" alt="">
             </div>
             <div class="partner">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/dipos.svg" alt="Дипос">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/tmk-group.svg" alt="">
             </div>
             <div class="partner">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/evraz.svg" alt="Евраз">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/nlmk.svg" alt="">
+            </div>
+            <div class="partner">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/partners/evraz.svg" alt="">
             </div>
         </div>
     </div>
