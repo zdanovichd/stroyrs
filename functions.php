@@ -6,6 +6,155 @@ function woocommerce_support() {
     add_theme_support( 'woocommerce' );
 }
 
+// Отключаем новый блоковый WooCommerce, оставляя классический
+function use_classic_woocommerce() {
+    // Отключаем блоковые шорткоды
+    add_filter('woocommerce_legacy_checkout_enabled', '__return_true');
+    add_filter('woocommerce_enable_legacy_cart', '__return_true');
+    
+    // Отключаем блоковые скрипты
+    add_action('wp_enqueue_scripts', function() {
+        wp_dequeue_style('wc-blocks-style');
+        wp_dequeue_script('wc-blocks');
+        remove_action('wp_head', 'wc_block_assets_prefetch');
+    }, 100);
+}
+add_action('init', 'use_classic_woocommerce');
+
+// Убираем только frontend-скрипты Gutenberg
+function remove_gutenberg_frontend() {
+    // Удаляем ВСЕ prefetch ссылки
+    remove_action('wp_head', 'wp_resource_hints', 2);
+    
+    // Удаляем скрипты блоков
+    add_action('wp_enqueue_scripts', function() {
+        // Блоковые скрипты
+        wp_dequeue_script('wp-dom-ready');
+        wp_dequeue_script('wp-primitives');
+        wp_dequeue_script('wp-warning');
+        wp_dequeue_script('wp-polyfill');
+        wp_dequeue_script('wp-hooks');
+        wp_dequeue_script('wp-i18n');
+        wp_dequeue_script('wp-a11y');
+        wp_dequeue_script('wp-dom');
+        
+        // React и зависимости (если не используются)
+        wp_dequeue_script('react');
+        wp_dequeue_script('react-dom');
+        wp_dequeue_script('wp-react');
+        
+        // Стили блоков
+        wp_dequeue_style('wp-block-library');
+        wp_dequeue_style('wp-block-library-theme');
+        wp_dequeue_style('global-styles');
+    }, 100);
+}
+add_action('init', 'remove_gutenberg_frontend');
+
+function remove_wordpress_bloat() {
+    // Убираем версию WordPress
+    remove_action('wp_head', 'wp_generator');
+    
+    // Убираем Emoji
+    remove_action('wp_head', 'print_emoji_detection_script', 7);
+    remove_action('wp_print_styles', 'print_emoji_styles');
+    remove_action('admin_print_scripts', 'print_emoji_detection_script');
+    remove_action('admin_print_styles', 'print_emoji_styles');
+    
+    // Убираем RSD, WLW, короткие ссылки
+    remove_action('wp_head', 'rsd_link');
+    remove_action('wp_head', 'wlwmanifest_link');
+    remove_action('wp_head', 'wp_shortlink_wp_head');
+    
+    // Убираем REST API ссылку
+    remove_action('wp_head', 'rest_output_link_wp_head');
+    
+    // Убираем oEmbed
+    remove_action('wp_head', 'wp_oembed_add_discovery_links');
+    remove_action('wp_head', 'wp_oembed_add_host_js');
+    
+    // Убираем feed ссылки
+    remove_action('wp_head', 'feed_links', 2);
+    remove_action('wp_head', 'feed_links_extra', 3);
+    
+    // Убираем стили блоков (Gutenberg)
+    add_action('wp_enqueue_scripts', function() {
+        wp_dequeue_style('wp-block-library');
+        wp_dequeue_style('wp-block-library-theme');
+        wp_dequeue_style('global-styles');
+        wp_dequeue_style('classic-theme-styles');
+        wp_dequeue_style('dashicons');
+        wp_dequeue_style('admin-bar');
+    }, 999);
+    
+    // Убираем скрипты WordPress
+    add_action('wp_enqueue_scripts', function() {
+        // Отключаем jQuery если не нужен
+        // if (!is_admin()) {
+        //     wp_deregister_script('jquery');
+        //     wp_dequeue_script('jquery');
+        //     wp_deregister_script('jquery-migrate');
+        //     wp_dequeue_script('jquery-migrate');
+        // }
+        
+        // Убираем Emoji скрипт
+        wp_dequeue_script('wp-emoji');
+    }, 999);
+    
+    // Убираем prefetch ссылки
+    remove_action('wp_head', 'wp_resource_hints', 2);
+    
+    // Убираем инлайн стили
+    add_action('wp_print_styles', function() {
+        wp_dequeue_style('wp-emoji-styles');
+        wp_dequeue_style('admin-bar-inline-css');
+        wp_dequeue_style('classic-theme-styles-inline-css');
+        wp_dequeue_style('woocommerce-inline-inline-css');
+        wp_dequeue_style('wp-img-auto-sizes-contain-inline-css');
+    }, 999);
+}
+add_action('init', 'remove_wordpress_bloat');
+
+function disable_woocommerce_completely() {
+    // Если WooCommerce не используется ВООБЩЕ
+    if (class_exists('WooCommerce')) {
+        // Удаляем все стили WooCommerce
+        add_action('wp_enqueue_scripts', function() {
+            // wp_dequeue_style('woocommerce-layout');
+            wp_dequeue_style('woocommerce-smallscreen');
+            // wp_dequeue_style('woocommerce-general');
+            wp_dequeue_style('woocommerce-inline');
+            wp_dequeue_style('brands-styles');
+            // wp_dequeue_style('wc-blocks-style');
+            
+            // Удаляем все скрипты WooCommerce
+            // wp_dequeue_script('wc-add-to-cart');
+            // wp_dequeue_script('wc-jquery-blockui');
+            // wp_dequeue_script('wc-js-cookie');
+            // wp_dequeue_script('woocommerce-js');
+            // wp_dequeue_script('wc-cart-fragments');
+            // wp_dequeue_script('wc-cart');
+            // wp_dequeue_script('wc-checkout');
+        }, 999);
+        
+        // Убираем prefetch WooCommerce
+        remove_action('wp_head', 'wc_block_assets_prefetch');
+        
+        // Убираем meta генератор WooCommerce
+        remove_action('wp_head', 'wc_generator_tag');
+    }
+}
+add_action('wp', 'disable_woocommerce_completely');
+
+
+// В functions.php
+function specific_page_styles() {
+    // Или по slug/названию
+    if (is_page('kalkulyator')) { // slug страницы
+        wp_enqueue_style('kalkulyator-css', get_template_directory_uri() . '/assets/css/kalkulyator.css');
+    }
+}
+add_action('wp_enqueue_scripts', 'specific_page_styles');
 
 // В functions.php добавляем кастомизацию хлебных крошек
 add_filter('woocommerce_breadcrumb_defaults', 'custom_woocommerce_breadcrumbs');

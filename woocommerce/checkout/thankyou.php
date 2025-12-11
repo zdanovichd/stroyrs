@@ -23,6 +23,8 @@ defined('ABSPATH') || exit;
         </section>
 
         <section class="thankyou__section">
+
+            <h1 class="checkout__title">Заказ принят</h1>
             <div class="thankyou__content">
                
                 

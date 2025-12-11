@@ -19,9 +19,6 @@ get_template_part('template-parts/head');
         </nav>
     </section>
 
-    <!-- <section class="uslugi">
-        <h1 class="uslugi__title">Корзина</h1>
-    </section> -->
     <section class="uslugi">
         <div class="uslugi__wrapper">
             <div class="uslugi__header">
@@ -31,69 +28,53 @@ get_template_part('template-parts/head');
                     </h1>
                 </div>
             </div>
+            
             <div class="caclulator_box" style="margin: auto !important;">
-                <div class="header_top">
-                    <ul class="">
-                        <li>
-                            <a id="calc_menu" class="header_box calc_menu active_link" onclick="handleTabClicked(event)">Калькулятор металлопроката онлайн</a>
-                        </li>
-                    </ul>
-                </div>
                 <div class="tabs_box calc_menu active_tab">
                     <div class="col-md-4 left_calc">
                         <div class="choice_calc">
-                            <div id="weigth_calc" class="weigth_calc_choice active_c">Расчет веса</div>
-                            <div id="length_calc" class="length_calc_choice">Расчет длины</div>
+                            <div id="weigth_calc" hidden class="weigth_calc_choice">Расчет веса</div>
+                            <div id="length_calc" class="length_calc_choice active_c">Расчет длины</div>
                         </div>
-                        <div class="typingText">Тип проката</div>
+                        <div class="typingText">Категории товара</div>
                         <div class="cat_metal">
                             <label id="circleid" class="cat_steel add_cat_steel" title="Круг проволока катанка">
-                                <img class="steel_icon" src="/images/circle_icon.png" alt="Круг/пруток">
                                 <input class="hidenShow" type="radio" id="checked1" name="prokat" value="prokat1" onclick="showDivCircle('prokat1')" checked="">
-                                Круг/пруток
+                                Круг/Пруток
                             </label>
                             <label id="squre" class="cat_steel" title="Квадрат">
-                                <img class="steel_icon" src="/images/square_icon.png" alt="Квадрат">
                                 <input class="hidenShow" type="radio" id="checked2" name="prokat" value="prokat2" onclick="showDivCircle('prokat2')">
                                 Квадрат
                             </label>
                             <label id="hexahedron" class="cat_steel" title="Шестигранник">
-                                <img class="steel_icon" src="/images/hexahedron_icon.png" alt="Шестигранник">
                                 <input class="hidenShow" type="radio" id="checked3" name="prokat" value="prokat3" onclick="showDivCircle('prokat3')">
                                 Шестигранник
                             </label>
                             <label id="corner" class="cat_steel" title="Уголок">
-                                <img class="steel_icon" src="/images/corner_icon.png" alt="Уголок">
                                 <input class="hidenShow" type="radio" id="checked4" name="prokat" value="prokat4" onclick="showDivCircle('prokat4')">
                                 Уголок
                             </label>
                             <label id="ribbon" class="cat_steel" title="Лента">
-                                <img class="steel_icon" src="/images/ribbon_icon.png" alt="Лента">
                                 <input class="hidenShow" type="radio" id="checked5" name="prokat" value="prokat5" onclick="showDivCircle('prokat5')">
                                 Лента
                             </label>
                             <label id="beam" class="cat_steel" title="Балка/Двутавр">
-                                <img class="steel_icon" src="/images/beam_icon.png" alt="Балка/Двутавр">
                                 <input class="hidenShow" type="radio" id="checked6" name="prokat" value="prokat6" onclick="showDivCircle('prokat6')">
                                 Балка/Двутавр
                             </label>
                             <label id="pipe" class="cat_steel" title="Труба">
-                                <img class="steel_icon" src="/images/pipe_icon.png" alt="Труба">
                                 <input class="hidenShow" type="radio" id="checked7" name="prokat" value="prokat7" onclick="showDivCircle('prokat7')">
                                 Труба
                             </label>
                             <label id="plate" class="cat_steel" title="Лист/Плита">
-                                <img class="steel_icon" src="/images/plate_icon.png" alt="Лист/Плита">
                                 <input class="hidenShow" type="radio" id="checked8" name="prokat" value="prokat8" onclick="showDivCircle('prokat8')">
                                 Лист/Плита
                             </label>
                             <label id="channel" class="cat_steel" title="Швеллер">
-                                <img class="steel_icon" src="/images/channel_icon.png" alt="Швеллер">
                                 <input class="hidenShow" type="radio" id="checked9" name="prokat" value="prokat9" onclick="showDivCircle('prokat9')">
                                 Швеллер
                             </label>
                             <label id="profile_pipe" class="cat_steel" title="Труба профильная">
-                                <img class="steel_icon" src="/images/profile_pipe_icon.png" alt="Труба профильная">
                                 <input class="hidenShow" type="radio" id="checked10" name="prokat" value="prokat10" onclick="showDivCircle('prokat10')">
                                 Труба профильная
                             </label>
@@ -220,19 +201,24 @@ get_template_part('template-parts/head');
                                 </div>
                             </div>
                             <div id="prokat" class="cont_rigt">
-                                <div class="subtitleBox">
-                                    <span class="subtitle">Расчет</span>
-                                    <span id="subtitle" class="subtitle"> веса</span>
-                                    <span id="subtitle2" class="subtitle"> круга</span>
+                                <div class="cont_rigt_left">
+                                    <div class="subtitleBox">
+                                        <span class="subtitle">Расчет</span>
+                                        <span id="subtitle" class="subtitle"> длины</span>
+                                        <span id="subtitle2" class="subtitle"> круга</span>:
+                                    </div>
+                                    <div class="img_type">
+                                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/calc/круг.png" alt="">
+                                    </div>
                                 </div>
                                 <div class="row prokat1" id="divprokat1" style="display: flex;">
-                                    <div class="col-md-7 drawCol">
-                                        <div class="img_type"></div>
-                                    </div>
+                                    <!-- <div class="col-md-7 drawCol">
+                                        
+                                    </div> -->
                                     <div class="col-md-5">
                                         <div class="gr_st">
                                             <label class="diamInput" for="diameter">(D) Диаметр (мм):</label>
-                                            <input type="text" id="diameter">
+                                            <input type="text" id="diameter" placeholder="0">
                                         </div>
                                     </div>
                                 </div>
@@ -243,7 +229,7 @@ get_template_part('template-parts/head');
                                     <div class="col-md-5">
                                         <div class="gr_st">
                                             <label class="diamInput" for="withIn">(a) Ширина (мм):</label>
-                                            <input type="text" id="withIn">
+                                            <input type="text" id="withIn" placeholder="0">
                                         </div>
                                     </div>
                                 </div>
@@ -254,7 +240,7 @@ get_template_part('template-parts/head');
                                     <div class="col-md-5">
                                         <div class="gr_st">
                                             <label class="diamInput" for="hexahedronInp">(a) Диаметр (мм):</label>
-                                            <input type="text" id="hexahedronInp">
+                                            <input type="text" id="hexahedronInp" placeholder="0">
                                         </div>
                                     </div>
                                 </div>
@@ -265,15 +251,15 @@ get_template_part('template-parts/head');
                                     <div class="col-md-5">
                                         <div class="gr_st">
                                             <label class="diamInput" for="cornerWidth">(a) Ширина (мм):</label>
-                                            <input type="text" id="cornerWidth">
+                                            <input type="text" id="cornerWidth" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="cornerHeigth">(b) Высота (мм):</label>
-                                            <input type="text" id="cornerHeigth">
+                                            <input type="text" id="cornerHeigth" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="cornerThickness">(t) Толщина стенки (мм):</label>
-                                            <input type="text" id="cornerThickness">
+                                            <input type="text" id="cornerThickness" placeholder="0">
                                         </div>
                                     </div>
                                 </div>
@@ -284,11 +270,11 @@ get_template_part('template-parts/head');
                                     <div class="col-md-5">
                                         <div class="gr_st">
                                             <label class="diamInput" for="ribbonWidth">(a) Ширина ленты (мм):</label>
-                                            <input type="text" id="ribbonWidth">
+                                            <input type="text" id="ribbonWidth" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="ribbonHeigth">Толщина ленты (мм):</label>
-                                            <input type="text" id="ribbonHeigth">
+                                            <input type="text" id="ribbonHeigth" placeholder="0">
                                         </div>
                                         <div class="gr_st grarea">
                                             <div class="weight_calc">Площадь</div>
@@ -304,19 +290,19 @@ get_template_part('template-parts/head');
                                     <div class="col-md-5">
                                         <div class="gr_st">
                                             <label class="diamInput" for="beamHeigth">(h) Высота балки (мм):</label>
-                                            <input type="text" id="beamHeigth">
+                                            <input type="text" id="beamHeigth" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="beamWidth">(b) Ширина балки (мм):</label>
-                                            <input type="text" id="beamWidth">
+                                            <input type="text" id="beamWidth" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="lintelLintThick">(s) Толщина перемычки (мм):</label>
-                                            <input type="text" id="lintelLintThick">
+                                            <input type="text" id="lintelLintThick" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="beamShelfThick">(t) Толщина полок (мм):</label>
-                                            <input type="text" id="beamShelfThick">
+                                            <input type="text" id="beamShelfThick" placeholder="0">
                                         </div>
                                     </div>
                                 </div>
@@ -327,11 +313,11 @@ get_template_part('template-parts/head');
                                     <div class="col-md-5">
                                         <div class="gr_st">
                                             <label class="diamInput" for="pipeDiam">(D) Диаметр (мм):</label>
-                                            <input type="text" id="pipeDiam">
+                                            <input type="text" id="pipeDiam" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="pipeThickness">(t) Толщина стенки (мм):</label>
-                                            <input type="text" id="pipeThickness">
+                                            <input type="text" id="pipeThickness" placeholder="0">
                                         </div>
                                     </div>
                                 </div>
@@ -342,20 +328,20 @@ get_template_part('template-parts/head');
                                     <div class="col-md-5">
                                         <div class="gr_st">
                                             <label class="diamInput" for="plateThickness">(t) Толщина листа (мм):</label>
-                                            <input type="text" id="plateThickness">
+                                            <input type="text" id="plateThickness" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="plateWidth">(a) Ширина листа (мм):</label>
-                                            <input type="text" id="plateWidth">
+                                            <input type="text" id="plateWidth" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="plateNumber">Количество (шт):</label>
-                                            <input type="text" id="plateNumber">
+                                            <input type="text" id="plateNumber" placeholder="0">
                                         </div>
                                         <div class="gr_st grarea">
                                             <div class="weight_calc">Площадь</div>
                                             <div id="area2">0</div>
-                                            <div class="kg_calc">м2</div>
+                                            <div class="kg_calc">м<sup>2</sup></div>
                                         </div>
                                     </div>
                                 </div>
@@ -366,19 +352,19 @@ get_template_part('template-parts/head');
                                     <div class="col-md-5">
                                         <div class="gr_st">
                                             <label class="diamInput" for="channelHeigth">(h) Высота (мм):</label>
-                                            <input type="text" id="channelHeigth">
+                                            <input type="text" id="channelHeigth" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="channelWidth">(b) Ширина (мм):</label>
-                                            <input type="text" id="channelWidth">
+                                            <input type="text" id="channelWidth" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="channelThicknessShelf">(t) Толщина полки (мм):</label>
-                                            <input type="text" id="channelThicknessShelf">
+                                            <input type="text" id="channelThicknessShelf" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="channelThickness">(s) Толщина стенки (мм):</label>
-                                            <input type="text" id="channelThickness">
+                                            <input type="text" id="channelThickness" placeholder="0">
                                         </div>
                                     </div>
                                 </div>
@@ -389,47 +375,59 @@ get_template_part('template-parts/head');
                                     <div class="col-md-5">
                                         <div class="gr_st">
                                             <label class="diamInput" for="profilePipeWidth">(a) Ширина трубы (мм):</label>
-                                            <input type="text" id="profilePipeWidth">
+                                            <input type="text" id="profilePipeWidth" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="profilePipeHeigth">(b) Высота трубы (мм):</label>
-                                            <input type="text" id="profilePipeHeigth">
+                                            <input type="text" id="profilePipeHeigth" placeholder="0">
                                         </div>
                                         <div class="gr_st">
                                             <label class="diamInput" for="profilePipeThickness">(t) Толщина стенки (мм):</label>
-                                            <input type="text" id="profilePipeThickness">
+                                            <input type="text" id="profilePipeThickness" placeholder="0">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="container lineLength">
+                        <div class="container lineLength"> </div>
+                        <div class="container forLinkSt">
                             <div class="row">
                                 <div class="col-md-7 left_rescol">
-                                    <div class="lengthSteel" id="lenmain">
+                                    <div class="lengthSteel lenmain" id="lenmain">
                                         <label class="Forlength" for="length">(L) Длина (м):</label>
-                                        <input type="text" id="length">
+                                        <input type="text" id="length" placeholder="0">
                                     </div>
-                                    <div class="lengthSteelPlate lenPlate" id="lenmainPlate">
+                                    <div class="lengthSteelPlate lenPlate lenmain" id="lenmainPlate">
                                         <label class="Forlength" for="lengthPlate">(b) Длина (мм):</label>
-                                        <input type="text" id="lengthPlate">
+                                        <input type="text" id="lengthPlate" placeholder="0">
                                     </div>
-                                    <div class="lengthSteel lenmain" id="weightTogle">
+                                    <div class="lengthSteel" id="weightTogle">
                                         <label class="Forlength" for="weightCount">Вес (кг):</label>
-                                        <input type="text" id="weightCount">
+                                        <input type="text" id="weightCount" placeholder="0">
                                     </div>
                                     <div class="PriceSteel">
                                         <label class="ForPrice" for="Price">Цена (руб/кг):</label>
-                                        <input type="text" id="Price">
+                                        <input type="text" id="Price" placeholder="0">
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7"></div>
+                                <div class="col-md-5 bottom_rescol">
+                                    <div class="btn_res">
+                                        <button id="calculate" class="lenmain">Рассчитать</button>
+                                        <button id="calculate2" class="button button--red">Рассчитать</button>
                                     </div>
                                 </div>
                                 <div class="col-md-5 right_rescol">
-                                    <div class="result_box" id="resultBox">
+                                    <span>Результат:</span>
+                                    <div class="result_box lenmain" id="resultBox">
                                         <div class="weight_calc">Вес</div>
                                         <div id="result">0.00</div>
                                         <div class="kg_calc">кг.</div>
                                     </div>
-                                    <div class="result_box lenmain" id="resultLengthBox">
+                                    <div class="result_box" id="resultLengthBox">
                                         <div class="weight_calc">Длина</div>
                                         <div id="resultLength">0.000</div>
                                         <div class="kg_calc">м.</div>
@@ -440,17 +438,7 @@ get_template_part('template-parts/head');
                                         <div class="kg_calc">руб.</div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="container forLinkSt">
-                            <div class="row">
-                                <div class="col-md-7"></div>
-                                <div class="col-md-5 bottom_rescol">
-                                    <div class="btn_res">
-                                        <button id="calculate">Рассчитать</button>
-                                        <button class="lenmain" id="calculate2">Рассчитать</button>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -483,7 +471,6 @@ get_template_part('template-parts/head');
                 weigthCalc.classList.add("active_c");
                 lengthCalc.classList.remove("active_c");
                 weightTogle.classList.add("lenmain");
-                lenmain.classList.remove("lenmain");
                 resultBox.classList.remove("lenmain");
                 resultLengthBox.classList.add("lenmain");
                 subtitle.innerHTML = "веса";
@@ -493,12 +480,20 @@ get_template_part('template-parts/head');
                 weigthCalc.classList.remove("active_c");
                 lengthCalc.classList.add("active_c");
                 weightTogle.classList.remove("lenmain");
-                lenmain.classList.add("lenmain");
                 resultBox.classList.add("lenmain");
                 resultLengthBox.classList.remove("lenmain");
                 subtitle.innerHTML = "длины";
             }
         }
+        
+        // Автоматически активируем вкладку "Расчет длины" при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            var lengthCalc = document.getElementById("length_calc");
+            if (lengthCalc) {
+                // Программно кликаем на кнопку "Расчет длины"
+                lengthCalc.click();
+            }
+        });
     </script>
     <script>
         //others
@@ -546,91 +541,92 @@ get_template_part('template-parts/head');
         var InptValue9 = document.getElementById("checked9");
         var InptValue10 = document.getElementById("checked10");
 
-        var lenmain = document.getElementById("lenmain");
-        var lenmainPlate = document.getElementById("lenmainPlate");
-
         if (InptValue.checked) {
             customDiv.style.display = "flex";
             circleid.classList.add("add_cat_steel");
-            subtitle.innerHTML = " веса";
             subtitle2.innerHTML = " круга"
-            lenmain.classList.remove("lenmain");
-            lenmainPlate.classList.add("lenPlate");
         }
         if (InptValue2.checked) {
             customDiv2.style.display = "flex";
             squre.classList.add("add_cat_steel");
-            subtitle.innerHTML = " веса";
             subtitle2.innerHTML = " квадрата";
-            lenmain.classList.remove("lenmain");
-            lenmainPlate.classList.add("lenPlate");
         }
         if (InptValue3.checked) {
             customDiv3.style.display = "flex";
             hexahedron.classList.add("add_cat_steel");
-            subtitle.innerHTML = " веса";
             subtitle2.innerHTML = " шестигранника";
-            lenmain.classList.remove("lenmain");
-            lenmainPlate.classList.add("lenPlate");
         }
         if (InptValue4.checked) {
             customDiv4.style.display = "flex";
             corner.classList.add("add_cat_steel");
-            subtitle.innerHTML = " веса";
             subtitle2.innerHTML = " уголка";
-            lenmain.classList.remove("lenmain");
-            lenmainPlate.classList.add("lenPlate");
         }
         if (InptValue5.checked) {
             customDiv5.style.display = "flex";
             ribbon.classList.add("add_cat_steel");
-            subtitle.innerHTML = " веса";
             subtitle2.innerHTML = " ленты";
-            lenmain.classList.remove("lenmain");
-            lenmainPlate.classList.add("lenPlate");
         }
         if (InptValue6.checked) {
             customDiv6.style.display = "flex";
             beam.classList.add("add_cat_steel");
-            subtitle.innerHTML = " веса";
             subtitle2.innerHTML = " балки";
-            lenmain.classList.remove("lenmain");
-            lenmainPlate.classList.add("lenPlate");
         }
         if (InptValue7.checked) {
             customDiv7.style.display = "flex";
             pipe.classList.add("add_cat_steel");
-            subtitle.innerHTML = " веса";
             subtitle2.innerHTML = " трубы";
-            lenmain.classList.remove("lenmain");
-            lenmainPlate.classList.add("lenPlate");
         }
         if (InptValue8.checked) {
             customDiv8.style.display = "flex";
             plate.classList.add("add_cat_steel");
-            subtitle.innerHTML = " веса";
             subtitle2.innerHTML = " листа";
-            lenmain.classList.add("lenmain");
-            lenmainPlate.classList.remove("lenPlate");
         }
         if (InptValue9.checked) {
             customDiv9.style.display = "flex";
             channel.classList.add("add_cat_steel");
-            subtitle.innerHTML = " веса";
             subtitle2.innerHTML = " швеллера";
-            lenmain.classList.remove("lenmain");
-            lenmainPlate.classList.add("lenPlate");
         }
         if (InptValue10.checked) {
             customDiv10.style.display = "flex";
             profile_pipe.classList.add("add_cat_steel");
-            subtitle.innerHTML = " веса";
             subtitle2.innerHTML = " профильной трубы";
-            lenmain.classList.remove("lenmain");
-            lenmainPlate.classList.add("lenPlate");
         }
 
         function showDivCircle(inputValue) {
+
+            const imageMap = {
+                'prokat1': 'круг.png',
+                'prokat2': 'квадрат.png',
+                'prokat3': 'шестигранник.png',
+                'prokat4': 'уголок.png',
+                'prokat5': 'лента.png',
+                'prokat6': 'балка.png',
+                'prokat7': 'труба.png',
+                'prokat8': 'лист.png',
+                'prokat9': 'швеллер.png',
+                'prokat10': 'профиль.png'
+            };
+
+            const imgElement = document.querySelector('.img_type img');
+            if (imgElement && imageMap[inputValue]) {
+                imgElement.src = '<?php echo get_template_directory_uri(); ?>/assets/img/calc/' + imageMap[inputValue];
+                
+                // Обновляем alt текст
+                const altTexts = {
+                    'prokat1': 'Круглый профиль',
+                    'prokat2': 'Квадратный профиль',
+                    'prokat3': 'Шестигранный профиль',
+                    'prokat4': 'Уголок',
+                    'prokat5': 'Стальная лента',
+                    'prokat6': 'Двутавровая балка',
+                    'prokat7': 'Труба',
+                    'prokat8': 'Лист металла',
+                    'prokat9': 'Швеллер',
+                    'prokat10': 'Профильная труба'
+                };
+                imgElement.alt = altTexts[inputValue] || 'Изображение профиля';
+            }
+
             var div1 = document.getElementById("divprokat1");
             var div2 = document.getElementById("divprokat2");
             var div3 = document.getElementById("divprokat3");
@@ -641,6 +637,8 @@ get_template_part('template-parts/head');
             var div8 = document.getElementById("divprokat8");
             var div9 = document.getElementById("divprokat9");
             var div10 = document.getElementById("divprokat10");
+
+            
 
             if (inputValue === "prokat1") {
                 div1.style.display = "flex";
@@ -664,9 +662,6 @@ get_template_part('template-parts/head');
                 channel.classList.remove("add_cat_steel");
                 profile_pipe.classList.remove("add_cat_steel");
                 subtitle2.innerHTML = " круга";
-                lenmain.classList.remove("lenmain");
-                lenmainPlate.classList.add("lenPlate");
-                lenmain.classList.remove("lenmainList");
                 checkForActiveC();
             } else if (inputValue === "prokat2") {
                 div1.style.display = "none";
@@ -690,9 +685,6 @@ get_template_part('template-parts/head');
                 channel.classList.remove("add_cat_steel");
                 profile_pipe.classList.remove("add_cat_steel");
                 subtitle2.innerHTML = " квадрата";
-                lenmain.classList.remove("lenmain");
-                lenmainPlate.classList.add("lenPlate");
-                lenmain.classList.remove("lenmainList");
                 checkForActiveC();
             } else if (inputValue === "prokat3") {
                 div1.style.display = "none";
@@ -716,9 +708,6 @@ get_template_part('template-parts/head');
                 channel.classList.remove("add_cat_steel");
                 profile_pipe.classList.remove("add_cat_steel");
                 subtitle2.innerHTML = " шестигранника";
-                lenmain.classList.remove("lenmain");
-                lenmainPlate.classList.add("lenPlate");
-                lenmain.classList.remove("lenmainList");
                 checkForActiveC();
             } else if (inputValue === "prokat4") {
                 div1.style.display = "none";
@@ -742,9 +731,6 @@ get_template_part('template-parts/head');
                 channel.classList.remove("add_cat_steel");
                 profile_pipe.classList.remove("add_cat_steel");
                 subtitle2.innerHTML = " уголка";
-                lenmain.classList.remove("lenmain");
-                lenmainPlate.classList.add("lenPlate");
-                lenmain.classList.remove("lenmainList");
                 checkForActiveC();
             } else if (inputValue === "prokat5") {
                 div1.style.display = "none";
@@ -768,9 +754,6 @@ get_template_part('template-parts/head');
                 channel.classList.remove("add_cat_steel");
                 profile_pipe.classList.remove("add_cat_steel");
                 subtitle2.innerHTML = " ленты";
-                lenmain.classList.remove("lenmain");
-                lenmainPlate.classList.add("lenPlate");
-                lenmain.classList.remove("lenmainList");
                 checkForActiveC();
             } else if (inputValue === "prokat6") {
                 div1.style.display = "none";
@@ -794,9 +777,6 @@ get_template_part('template-parts/head');
                 channel.classList.remove("add_cat_steel");
                 profile_pipe.classList.remove("add_cat_steel");
                 subtitle2.innerHTML = " балки";
-                lenmain.classList.remove("lenmain");
-                lenmainPlate.classList.add("lenPlate");
-                lenmain.classList.remove("lenmainList");
                 checkForActiveC();
             } else if (inputValue === "prokat7") {
                 div1.style.display = "none";
@@ -820,9 +800,6 @@ get_template_part('template-parts/head');
                 channel.classList.remove("add_cat_steel");
                 profile_pipe.classList.remove("add_cat_steel");
                 subtitle2.innerHTML = " трубы";
-                lenmain.classList.remove("lenmain");
-                lenmainPlate.classList.add("lenPlate");
-                lenmain.classList.remove("lenmainList");
                 checkForActiveC();
             } else if (inputValue === "prokat8") {
                 div1.style.display = "none";
@@ -846,8 +823,6 @@ get_template_part('template-parts/head');
                 channel.classList.remove("add_cat_steel");
                 profile_pipe.classList.remove("add_cat_steel");
                 subtitle2.innerHTML = " листа";
-                lenmainPlate.classList.remove("lenPlate");
-                lenmain.classList.add("lenmainList");
                 checkForActiveC();
             } else if (inputValue === "prokat9") {
                 div1.style.display = "none";
@@ -871,9 +846,6 @@ get_template_part('template-parts/head');
                 channel.classList.add("add_cat_steel");
                 profile_pipe.classList.remove("add_cat_steel");
                 subtitle2.innerHTML = " швеллера";
-                lenmain.classList.remove("lenmain");
-                lenmainPlate.classList.add("lenPlate");
-                lenmain.classList.remove("lenmainList");
                 checkForActiveC();
             } else if (inputValue === "prokat10") {
                 div1.style.display = "none";
@@ -897,9 +869,6 @@ get_template_part('template-parts/head');
                 channel.classList.remove("add_cat_steel");
                 profile_pipe.classList.add("add_cat_steel");
                 subtitle2.innerHTML = " профильной трубы";
-                lenmain.classList.remove("lenmain");
-                lenmainPlate.classList.add("lenPlate");
-                lenmain.classList.remove("lenmainList");
                 checkForActiveC();
             }
         }
@@ -928,18 +897,14 @@ get_template_part('template-parts/head');
         // select choice count weight or length
         var weigthCalc = document.getElementById("weigth_calc");
         var lengthCalc = document.getElementById("length_calc");
-        var lenmainCalc = document.getElementById("lenmain");
         var weightTogle = document.getElementById("weightTogle");
-        var lenmain = document.getElementById("lenmain");
         var resultBox = document.getElementById("resultBox");
         var resultLengthBox = document.getElementById("resultLengthBox");
-        var lenmainPlate = document.getElementById("lenmainPlate");
         var resultReset = document.getElementById("result");
         var resultLengthReset = document.getElementById("resultLength");
         var resultWeigth = document.getElementById("resultWeigth");
         var weightCount = document.getElementById("weightCount");
         var Price = document.getElementById("Price");
-        var length = document.getElementById("length");
         var calculateDivBtn = document.getElementById("calculate");
         var calculateDivBtn2 = document.getElementById("calculate2");
 
@@ -947,17 +912,14 @@ get_template_part('template-parts/head');
             weigthCalc.classList.add("active_c");
             lengthCalc.classList.remove("active_c");
             weightTogle.classList.add("lenmain");
-            lenmain.classList.remove("lenmain");
             resultBox.classList.remove("lenmain");
             resultLengthBox.classList.add("lenmain");
-            lenmainPlate.classList.remove("lenmain");
             subtitle.innerHTML = " веса";
             resultReset.innerHTML = "0.00";
             resultLengthReset.innerHTML = "0.000";
             resultWeigth.innerHTML = "0.00";
             weightCount.value = "";
             Price.value = "";
-            length.value = "";
             calculateDivBtn2.classList.add("lenmain");
             calculateDivBtn.classList.remove("lenmain");
         });
@@ -966,700 +928,22 @@ get_template_part('template-parts/head');
             weigthCalc.classList.remove("active_c");
             lengthCalc.classList.add("active_c");
             weightTogle.classList.remove("lenmain");
-            lenmain.classList.add("lenmain");
             resultBox.classList.add("lenmain");
             resultLengthBox.classList.remove("lenmain");
-            lenmainPlate.classList.add("lenmain");
             subtitle.innerHTML = " длины";
             resultReset.innerHTML = "0.00";
             resultLengthReset.innerHTML = "0.000";
             resultWeigth.innerHTML = "0.00";
             weightCount.value = "";
             Price.value = "";
-            length.value = "";
             calculateDivBtn.classList.add("lenmain");
             calculateDivBtn2.classList.remove("lenmain");
         });
+        
+        
     </script>
     <script src="<?php echo get_template_directory_uri(); ?>/assets/js/metallcalculate.js"></script>
-    <style>
-        /* metal calculate */
-.caclulator_box {
-    max-width: 800px;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    font-size: 14px;
-    border-radius: 0 0 5px 5px;
-}
-#result {
-    font-weight: 600;
-    display: inline-block;
-    font-size: 16px;
-}
-#resultLength {
-    font-weight: 600;
-    display: inline-block;
-    font-size: 16px;
-}
-#area {
-    font-weight: 600;
-    display: inline-block;
-    font-size: 16px;
-}
-#area2 {
-    font-weight: 600;
-    display: inline-block;
-    font-size: 16px;
-}
-#calculate {
-    width: 100%;
-    height: 35px;
-    background-color: #41BD81;
-    color: #fff;
-    border: solid;
-    border-radius: 7px;
-    margin: 10px 0 0 0;
-}
-#calculate2 {
-    width: 100%;
-    height: 35px;
-    background-color: #41BD81;
-    color: #fff;
-    border: solid;
-    border-radius: 7px;
-    margin: 10px 0 0 0;
-}
-.result_box {
-    display: inline-block;
-}
-.weight_calc {
-    font-weight: 600;
-    color: #555;
-    font-size: 13px;
-    display: inline-block;
-    margin-right: 3px;
-}
-.kg_calc {
-    font-weight: 600;
-    display: inline-block;
-}
-.caclulator_box {
-    margin-top: 40px !important;
-    border: 1px solid #dedddd;
-    box-shadow: 0 1px 16px rgb(0 0 0 / 25%);
-}
-.left_calc {
-    background-color: #f3f3f3e6;
-    padding: 25px 12px;
-    display: block !important;
-    border-radius: 0 0 5px 5px;
-}
-.rigth_calc {
-    padding: 20px 0 20px 0 !important;
-}
-.type_steel {
-    margin-right: 30px;
-}
-.cat_metal {
-    display: grid;
-    font-size: 13px;
-}
-#diameter {
-    width: 100%;
-}
-.img_type {
-    background-image: url(/images/circle_steel.png);
-    background-repeat: no-repeat;
-    height: 200px;
-    margin: auto;
-}
-.img_type2 {
-    background-image: url(/images/square_steel.png);
-    background-repeat: no-repeat;
-    height: 200px;
-    margin: auto;
-}
-.img_type3 {
-    background-image: url(/images/hexahedron_steel.png);
-    background-repeat: no-repeat;
-    height: 200px;
-    margin: auto;
-}
-.img_type4 {
-    background-image: url(/images/corner_steel.png);
-    background-repeat: no-repeat;
-    height: 200px;
-    margin: auto;
-}
-.img_type5 {
-    background-image: url(/images/ribbon_steel.png);
-    background-repeat: no-repeat;
-    height: 200px;
-    margin: auto;
-}
-.img_type6 {
-    background-image: url(/images/beam_steel.png);
-    background-repeat: no-repeat;
-    height: 200px;
-    margin: auto;
-}
-.img_type7 {
-    background-image: url(/images/pipe_steel.png);
-    background-repeat: no-repeat;
-    height: 200px;
-    margin: auto;
-}
-.img_type8 {
-    background-image: url(/images/plate_steel.png);
-    background-repeat: no-repeat;
-    height: 200px;
-    margin: auto;
-}
-.img_type9 {
-    background-image: url(/images/channel_metall_steel.png);
-    background-repeat: no-repeat;
-    height: 200px;
-    margin: auto;
-}
-.img_type10 {
-    background-image: url(/images/profile_pipe_steel.png);
-    background-repeat: no-repeat;
-    height: 200px;
-    margin: auto;
-}
-.typingText {
-    font-weight: 600;
-    margin-bottom: 8px;
-}
-.diamInput {
-    font-weight: 600;
-}
-.lengthSteel {
-    font-weight: 600;
-}
-.lengthSteelPlate {
-    font-weight: 600;
-}
-.Forlength {
-    width: 100px;
-}
-.ForPrice {
-    width: 100px;
-}
-.typeMetall {
-    display: inline-block;
-    font-weight: 600;
-    width: 100%;
-    font-size: 13px;
-}
-.typeMetall > select {
-    width: 100%;
-}
-.steelGrade {
-    display: inline-block;
-    font-weight: 600;
-    width: 100%;
-    font-size: 13px;
-}
-.steelGrade > select {
-    width: 100%;
-}
-.prokat1 {
-    min-height: 260px;
-}
-.title_widget {
-    font-weight: 600;
-    margin-bottom: 10px;
-}
-.form_block_widget {
-    margin-bottom: 20px;
-}
-.text_area_widget textarea {
-    width: 100%;
-    border: none;
-    background: #f5f5f5;
-    font-size: 14px;
-    padding: 10px;
-    margin-top: 10px;
-    color: #d63384;
-}
-.text_area_widget textarea :active, :hover, :focus {
-    outline: 0;
-    outline-offset: 0;
-}
-.text_widget {
-    font-size: 14px;
-}
-.widget_main_box {
-    max-width: 900px;
-    margin: auto;
-}
-.form_block_widget input {
-    display: flex;
-    margin-bottom: 10px;
-    width: 50%;
-    border: 1px solid #8999;
-}
-.form_block_widget label {
-    font-size: 14px;
-}
-#btn_widget {
-    margin: 10px 0;
-    background: #41BD81;
-    color: #fff;
-    border: none;
-    font-size: 14px;
-    padding: 5px 25px;
-    border-radius: 3px;
-    width: 200px;
-}
-.code_widget {
-    display: none;
-}
-.demo_block_widget {
-    margin-bottom: 40px;
-}
-.demo_block_widget img {
-    max-width: 600px;
-}
-.href_calculator_metal {
-    position: absolute;
-    margin-top: 10px;
-    left: 15px;
-}
-.href_calculator_metal a {
-    text-decoration: none;
-    color: #8999;
-    font-size: 12px;
-}
-.href_calculator_metal a:hover {
-    color: #7888;
-}
-.forLinkSt {
-    position: relative;
-}
-.get_figet_metallCalc {
-    justify-content: center;
-    display: flex;
-    margin-top: 10px;
-}
-.get_figet_metallCalc a {
-    text-decoration: underline;
-    color: #0f6f8a;
-    font-size: 13px;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-}
-.get_figet_metallCalc a:hover {
-    color: #164b5a;
-}
-.errorMessage_widget {
-    color: #d60000;
-    font-size: 14px;
-}
-.descr_widget {
-    font-size: 13px;
-    margin-bottom: 10px;
-}
-@media (max-width: 1200px) {
-    .add_calc {
-        height: auto !important;
-    }
-    .stretch_banner {
-        display: block;
-    }
-    .banner_content_calc {
-        margin: 0 !important;
-    }
-    .banner_img_calc {
-        display: none;
-    }
-}
-@media (max-width: 992px) {
-    .weight_calc {
-        display: block;
-    }
-}
-@media (max-width: 700px) {
-    .typeMetall {
-        margin-bottom: 15px;
-        display: grid;
-    }
-    .steelGrade {
-        margin-bottom: 15px;
-        display: grid;
-    }
-    .lengthSteel {
-        margin: 0 10px 15px 10px;
-        display: grid;
-    }
-    .lengthSteelPlate {
-        margin: 0 10px 15px 10px;
-        display: grid;
-    }
-    .PriceSteel {
-        margin: 0 10px 15px 10px !important;
-        display: grid;
-    }
-    .gr_st {
-        display: grid;
-    }
-    .grarea {
-        display: block;
-    }
-    .type_steel {
-        margin: 0;
-    }
-    #calculate {
-        width: 100%;
-        height: 35px;
-        margin-top: 10px;
-    }
-    #calculate2 {
-        width: 100%;
-        height: 35px;
-        margin-top: 10px;
-    }
-    .caclulator_box {
-        margin-left: 10px !important;
-        margin-right: 10px !important;
-    }
-    .prokat1 {
-        height: 100%;
-        display: grid;
-        min-height: auto;
-    }
-    .cat_metal {
-        display: flex;
-        overflow: scroll;
-        font-size: 12px;
-    }
-    .cat_steel {
-        margin: 0 5px 0 0;
-        padding: 5px 15px 0 15px;
-        text-align: center;
-    }
-    ::-webkit-scrollbar {
-      display: none;
-    }
-    .drawCol > div {
-        display: none;
-    }
-    .left_rescol {
-        padding: 0 !important;
-    }
-    .head_calc {
-        font-size: 21px;
-    }
-    .left_calc {
-        width: 100%;
-        display: grid !important;
-    }
-    .active_tab {
-        display: grid !important;
-    }
-    .prom_cont {
-        margin: 0px !important;
-        padding: 0px !important;
-        max-width: 100% !important;
-    }
-    .promotion_banner img {
-        border-radius: 0 !important;
-    }
-    .promotion_banner {
-        width: auto !important;
-    }
-    .desctop-prom-banner {
-        display: none;
-    }
-    .mobile-prom-banner {
-        display: block !important;
-    }
-    .close_banner {
-        width: 15px !important;
-        height: 17px !important;
-        top: 12px !important;
-        right: 12px !important;
-    }
-}
-.header_top {
-    background-color: #009CF0;
-    padding: 0px !important;
-    border-radius: 5px 5px 0 0;
-}
-.header_top > ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    font-size: 14px;
-}
-.active_link {
-    background-color: #2589d1 !important;
-    color: #fff !important;
-    border-radius: 5px 0 0 0;
-}
-.header_box {
-    color: #e0e0e0;
-    padding: 5px 13px;
-    text-decoration: none;
-    display: flex;
-}
-.header_box:hover {
-    cursor: pointer;
-    background-color: #2589d1;
-    color: #fff;
-    border-radius: 5px 5px 0 0;
-}
-@media screen and (max-width: 767px) {
-    .header_box {
-        font-size: 12px;
-    }
-}
-.steel_icon {
-    width: 38px;
-}
-.cat_steel {
-    border: 1px solid #888;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
-.add_cat_steel {
-    border: 1px solid #009CF0;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    background-color: #fff;
-}
-.hidenShow {
-    display: none;
-}
-.lineLength {
-    background-color: #f3f3f3e6;
-    margin: 20px 0 0 0;
-    padding: 10px 0 10px 0;
-}
-.subtitleBox {
-    margin: 15px 0 20px 0;
-    color: #009CF0;
-    font-weight: 600;
-    border-bottom: 1px solid #009CF0;
-}
-.metall_calc_icon {
-    width: 52px;
-    text-align: center;
-}
-.mainbox {
-    margin-bottom: 80px;
-}
-.gr_st {
-    margin: 0 0 10px 0;
-    font-size: 13px;
-}
-.gr_st > input {
-    width: 100%;
-    margin: 0 0 10px 0;
-    font-size: 13px;
-}
-.bottom_rescol {
-    padding: 0 !important;
-}
-.drawCol {
-    margin: 10px 0 10px 0 !important;
-}
-.left_rescol {
-    font-size: 13px;
-}
-.PriceSteel {
-    font-weight: 600;
-    margin: 10px 0 0 0;
-}
-.result_boxPrice {
-    margin: 10px 0 0 0;
-}
-#resultWeigth {
-    font-weight: 600;
-    display: inline-block;
-    font-size: 16px;
-}
-#steelType {
-    display: block;
-}
-.calc_metall_icon {
-    font-size: 13px;
-    font-weight: 600;
-    position: absolute;
-    top: 109px;
-    border: 1px solid #d6d6d6;
-    border-radius: 8px;
-    transition: all .4s;
-    width: 195.99px;
-}
-.calc_metall_icon:hover {
-    transform: translateY(-4px);
-    transition: all .4s;
-}
-#castIron {
-    display: none;
-}
-#aluminum {
-    display: none;
-}
-#bronze {
-    display: none;
-}
-#brass {
-    display: none;
-}
-#stainlessSteel {
-    display: none;
-}
-#copper {
-    display: none;
-}
-#titanium {
-    display: none;
-}
-.lenmain {
-    display: none;
-}
-.lenmainList {
-    display: none !important;
-}
-.lenPlate {
-    display: none;
-}
-.header_content_calc {
-    font-size: 21px;
-    color: #000;
-    font-weight: 600;
-    padding: 10px 7px 0 0;
-    display: inline-block;
-}
-.cont_calc {
-    font-size: 14px;
-    margin: 10px 0;
-    list-style-type: none;
-}
-.cont_calc2 {
-    font-size: 14px;
-    margin: 0 0 40px 0;
-}
-.topbar_link_calc {
-    text-decoration: none;
-    color: #000;
-    display: flex;
-    flex-direction: column;
-    padding: 11px;
-    align-items: center;
-    border-radius: 8px;
-}
-.topbar_link_calc:hover {
-    color: #d60000;
-}
-.calcHref {
-    text-decoration: none;
-    font-size: 14px;
-    color: #009CF0;
-}
-.calcHref:hover {
-    color: #d60000;
-}
-.calcUl {
-    list-style-type: none;
-    margin: 0 0 40px 0;
-}
-.calcUl > li > ul {
-    list-style-type: none;
-}
-.add_calc {
-    background-color: #eaf7ff;
-    height: 196px;
-    margin: 0 0 20px 0;
-    border-radius: 8px;
-}
-.img_banner_calc > .srcImgCalc{
-    height: 160px;
-}
-.stretch_banner {
-    align-items: stretch;
-    justify-content: space-between;
-    display: flex;
-    padding: 16px;
-}
-.banner_content_calc {
-    padding: 16px;
-    margin: 0 0 0 120px;
-}
-.title_banner_calc {
-    font-size: 26px;
-    font-weight: 600;
-}
-.text_banner_calc {
-    font-size: 15px;
-    margin: 0 0 40px 0;
-}
-.banner_img_calc {
-    margin: 0 120px 0 0;
-}
-.also_head {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 20px 0 0 0;
-}
-.tabs_box {
-    display: none;
-    padding: 0 !important;
-}
-.active_tab {
-    display: flex;
-}
-.choice_calc {
-    display: flex;
-    text-align: center;
-    border: 1px solid #888;
-    border-radius: 5px;
-    margin: 0 0 8px 0;
-    font-size: 13px;
-}
-.weigth_calc_choice {
-    width: 50%;
-    height: 23px;
-    cursor: pointer;
-    line-height: 22px;
-    border-radius: 5px 0 0 5px;
-    border-right: 1px solid #888;
-}
-.length_calc_choice {
-    width: 50%;
-    cursor: pointer;
-    height: 23px;
-    line-height: 22px;
-    border-radius: 0 5px 5px 0;
-}
-.active_c {
-    background: #fff;
-    cursor: auto;
-    color: #009CF0;
-}
-#length_radio {
-    display: none;
-}
-#weight_radio {
-    display: none;
-}
-.calc_main_box {
-    font-size: 14px;
-}
-.h3_calc {
-    font-size: 18px;
-    color: #000;
-    font-weight: 600;
-    padding: 10px 7px 0 0;
-    display: inline-block;
-}
-    </style>
+    
 </body>
 
 </html>

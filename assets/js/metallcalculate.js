@@ -4,12 +4,19 @@ document.getElementById("calculate2").addEventListener("click", calculate2);
 var weightCalc = document.getElementById("weigth_calc");
 var lengthCalc = document.getElementById("length_calc");
 
+// Автоматически запускаем клик на "Расчет длины" при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            lengthCalc.click();
+        });
+
 weightCalc.addEventListener("click", function() {
   document.getElementById("calculate").addEventListener("click", calculate);
 });
 lengthCalc.addEventListener("click", function() {
   document.getElementById("calculate2").addEventListener("click", calculate2);
 });
+
+
 
 function calculate() {
   var circle = document.getElementById("checked1");
@@ -2126,6 +2133,7 @@ function calculate() {
 }
 
 function calculate2() {
+  console.log('click');
   var circle = document.getElementById("checked1");
   var squre = document.getElementById("checked2");
   var hexahedron = document.getElementById("checked3");
@@ -4249,6 +4257,7 @@ for (var i = 0; i < checkboxes.length; i++) {
   }
 }
 
+document.addEventListener('DOMContentLoaded', function() {
 // function choise material type and type steel metall
 var materialType = document.getElementById("materialType");
 var steelType = document.getElementById("steelType");
@@ -4259,6 +4268,11 @@ var brass = document.getElementById("brass");
 var stainlessSteel = document.getElementById("stainlessSteel");
 var copper = document.getElementById("copper");
 var titanium = document.getElementById("titanium");
+
+if (!materialType) {
+        console.error("Элемент materialType не найден!");
+        return;
+    }
 
 materialType.addEventListener("change", function () {
   const selectedType = materialType.value;
@@ -4337,7 +4351,7 @@ materialType.addEventListener("change", function () {
     titanium.style.display = "block";
   }
 });
-
+});
 // switch tabs
 function handleTabClicked(event) {
   const tabCategory = event.target.id;
