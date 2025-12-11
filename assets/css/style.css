@@ -4134,17 +4134,21 @@ select {
 }
 
 
-/* Кастомный индикатор радио-кнопки */
 .product__unit-inner {
     display: flex;
     flex-direction: column;
     /* align-items: center; */
     gap: .125rem;
-    padding-left: 2rem;
     position: relative;
 }
+/* Кастомный индикатор радио-кнопки */
+.product__price-group:not(.product__price-group-simple) .product__unit-inner {
+    
+    padding-left: 2rem;
+    
+}
 
-.product__unit-inner::before {
+.product__price-group:not(.product__price-group-simple) .product__unit-inner::before {
     content: '';
     position: absolute;
     left: 0;
@@ -4158,7 +4162,7 @@ select {
     transition: var(--transition-default);
 }
 
-.product__unit-inner::after {
+.product__price-group:not(.product__price-group-simple) .product__unit-inner::after {
     content: '';
     position: absolute;
     left: .25rem;
@@ -4172,12 +4176,12 @@ select {
 }
 
 /* Индикатор выбранного состояния */
-.product__unit-input:checked+.product__unit-inner::before {
+.product__price-group:not(.product__price-group-simple) .product__unit-input:checked+.product__unit-inner::before {
     border-color: var(--color-accent);
     background: #fff;
 }
 
-.product__unit-input:checked+.product__unit-inner::after {
+.product__price-group:not(.product__price-group-simple) .product__unit-input:checked+.product__unit-inner::after {
     transform: translateY(-50%) scale(1);
 }
 
