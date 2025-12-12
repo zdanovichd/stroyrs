@@ -2528,12 +2528,12 @@ select {
     width: 36.375rem;
     min-width: 36.375rem;
     background-color: var(--color-accent);
-    padding: 3.125rem 1.875rem;
+    padding: 3.125rem 1.875rem 1.875rem;
 }
 
 .footer__right {
     width: 100%;
-    padding: 3.125rem 1.875rem;
+    padding: 3.125rem 1.875rem 1.875rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -5111,9 +5111,15 @@ th.product-quantity {
     display: none;
 }
 
+
+
 @media screen and (max-width:47.9375rem) {
     html {
         font-size: calc(100vw / 24.375);
+    }
+
+    body {
+        padding-bottom: 4rem;
     }
 
     .header {

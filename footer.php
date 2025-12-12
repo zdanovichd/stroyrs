@@ -133,7 +133,16 @@
                             <li><a href="/product-category/profnastil/">Профнастил (профлист)</a></li>
                         </ul>
                     </div>
+
+                    
                 </div>
+                <div class="mobile_madeby">
+                        <noindex>
+                            <?php 
+                                get_template_part('template-parts/madeby');
+                            ?>
+                        </noindex>
+                    </div>
                 <div class="footer__nav-inner">
                     <div class="footer__links">
                         <a href="/polzovatelskoe-soglashenie" class="footer__link">Пользовательское соглашение</a>
@@ -203,6 +212,9 @@
                             </svg>
                         </a>
                     </div>
+                    <?php 
+                        get_template_part('template-parts/madeby');
+                    ?>
                 </div>
             </div>
 
